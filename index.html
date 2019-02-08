@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<!-- This version works with Metamask and can invoke the wallet. It does not have all the functions yet -->
+<html>
+<script language="javascript" type="text/javascript" src="web3.min.js"></script>
+<!--  -->
+
+<head>
+<link href="https://fonts.googleapis.com/css?family=Zilla+Slab|Stalinist+One" rel="stylesheet">
+<!-- <link href="https://fonts.googleapis.com/css?family=BioRhyme|Josefin+Slab|Zilla+Slab" rel="stylesheet"> -->
+<style>
+
+body {
+  background-color: gold;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Stalinist One";
+  background-color: red;
+}
+
+h1, h2 {
+  text-shadow: 2px 2px 0 white, -2px -2px 0 white;
+}
+
+h3, h4, h5, h6 {
+  text-shadow: 1px 1px 0 white, -1px -1px 0 white;
+}
+
+table {
+  background-color: white;
+  padding-left: 4px;
+  padding-right: 4px;
+
+}
+
+th {
+  font-family: "Stalinist One";
+  background-color: lightgray;
+}
+
+tr.hist:nth-child(even) {
+  background-color: lightgray;
+}
+
+tr.hist:nth-child(odd) {
+  border: 2px lightgray;
+}
+
+tr.hist:hover {
+  background-color: black;
+  color: white;
+}
+
+td.bignum {
+  font-family: "Stalinist One";
+  text-shadow: 2px 2px 0 red, -2px -2px 0 red;
+  text-align: center;
+  font-size: 300%;
+}
+
+td.midnum {
+  font-family: "Stalinist One";
+  text-shadow: 1px 1px 0 red, -1px -1px 0 red;
+  text-align: center;
+  font-size: 200%;
+}
+
+div.a {
+  font-family: "Zilla Slab"
+}
+
+</style></head>
+
+<center>
+<h1>INF1-CG Value Creation and Trading<br>For Learning and Progress!</h1>
+</center>
+<body>
+<br>
+<div class="a" align="center"><table><tr><td id="status1">You don't seem to be logged in to MetaMask</td></tr>
+<tr><td id="status2"></td></tr></table></div>
+<div class="a" id="regaddrres"></div>
+
+<div class="a" id="create_admin"></div>
+
+<div class="a"id="remove_admin" ></div>
+
+
+<div class="a" id="register_num"></div>
+
+<div class="a" id="register_addr"></div>
+
+<div class="a" id="distribute"></div>
+
+<div class="a" id="student_view"></div>
+
+
+<div class="a" style="font-size:80%">Ethereum Smart Contract powered by geth, remix, truffle, and MetaMask. Lovingly coded by the exceptionally smart and attractive people of the Blockchain Technologies Laboratory at the University of Edinburgh, and made available under a CC-BY-SA-3.0 license. </div><div id="owner" style="font-size:80%"></div>
+</body>
+</html>
+<!--  -->
+
+<script>
+
+// Define a service provider, i.e. connect to the blockchain via web3
+var web3;
+if (typeof web3 !== 'undefined') {
+  web3 = new Web3(web3.currentProvider);console.log("web3.currentProvider");
+}
+else {
+  // set the provider you want
+  console.log("http://localhost:8545");
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+}
+
+// Check if Metamask has been Enjected
+if (window.web3.currentProvider.isMetaMask) {
+  console.log("MetaMask has been injected");
+}
+else{
+  console.log("MetaMask has not been injected");
+}
+
+
+//------------
+
+// The contract's ABI
+var abi = [
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "new_admin",
+				"type": "address"
+			}
+		],
+		"name": "add_admin",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "std_addr",
+				"type": "address"
+			},
+			{
+				"name": "numOf_tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "distribute_token",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "transaction_id",
+				"type": "uint256"
+			},
+			{
+				"name": "score",
+				"type": "int256"
+			}
+		],
+		"name": "leave_feedback",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "std_addr",
+				"type": "address"
+			},
+			{
+				"name": "std_num",
+				"type": "uint256"
+			}
+		],
+		"name": "register_std_addr",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "std_num",
+				"type": "uint256"
+			}
+		],
+		"name": "register_std_num",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "admin",
+				"type": "address"
+			}
+		],
+		"name": "remove_admin",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"name": "recipient_address",
+				"type": "address"
+			},
+			{
+				"name": "_reason",
+				"type": "string"
+			}
+		],
+		"name": "send_token",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "admin",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "max_score",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "min_score",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "reputations",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "student_token_balance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalNum_transactions",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "totalNumOf_tokens_traded",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "transactions",
+		"outputs": [
+			{
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"name": "reciever",
+				"type": "address"
+			},
+			{
+				"name": "reason",
+				"type": "string"
+			},
+			{
+				"name": "TokenSender_feedback",
+				"type": "int256"
+			},
+			{
+				"name": "TokenReciever_feedback",
+				"type": "int256"
+			},
+			{
+				"name": "transaction_ID",
+				"type": "uint256"
+			},
+			{
+				"name": "numOf_tokens",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "valid_admins",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "valid_student_addr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "valid_student_num",
+		"outputs": [
+			{
+				"name": "validStudent_num",
+				"type": "bool"
+			},
+			{
+				"name": "token_assigned",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+
+const status_txt = {
+  "NA": "Your account is not registered with the INF1-CG Value Creation and Trading scheme. If you are a student on INF1-CG, or think you should be an admin, please email your coinbase address to <a href='mailto:vcat.owner@inf.ed.ac.uk'>vcat.owner@inf.ed.ac.uk</a>.</p>",
+  "ST": "Your status is: STUDENT",
+  "AD": "Your status is ADMIN",
+  "OW": "Your status is OWNER",
+  "XX": "If you are a current INF1-CG student, it is a requirement of the course " +
+  "that you participate in VCaT, the Value Creation and Trading scheme. To do this," +
+  " you will need to install MetaMask in your browser..."
+}
+
+var user = {
+  "account": web3.eth.coinbase,
+  "account_ch": false,
+  "status": "XX",
+  "status_ch": false,
+  "balance": null,
+  "balance_ch": false,
+  "totaltr": null,
+  "totaltr_ch": false,
+  "rep": null,
+  "rep_ch": false,
+  "trans_hist": [],
+  "sender_fbk_ch": [],
+  "receiver_fbk_ch": []
+}
+
+/* A nice helper function that updates a variable in the user model, IFF the
+variable needs to be updated. If the variable is changed, a flag is set indicating
+that this has happened, so the data on the page can be updated. DO NOT use this
+to modify the transaction history*/
+
+function modify_user(to_change, new_val) {
+  if (user[to_change] != new_val) {
+    user[to_change] = new_val
+    user[to_change+"_ch"] = true
+  }
+}
+
+/* A nice helper function that updates the text in an element, IFF the text needs
+to be updated. */
+function update_element(id, content) {
+  if(document.getElementById(id).innerHTML != content){
+    document.getElementById(id).innerHTML = content
+  }
+}
+
+
+
+/* Function which checks the status of the current account number on the contract,
+setting `status` variable as either "NA", "ST" (student), "AD" (admin), or "OW"
+(owner) */
+function update_status(acc_no){
+  if(!acc_no){
+    // handles the case where acc_no is null. No need to be calling the contract
+    // if it is.
+    modify_user("status", "NA")
+    return;
+  }
+  myContract.owner.call(function(error, result){
+    // Get the owner address; if it's the same as acc_no, the user is the OWNER
+    if(error) {
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error)
+    }
+    else {
+      if(acc_no.toUpperCase()==result.toUpperCase()){
+        modify_user("status", "OW")
+      }
+      else{
+        myContract.valid_admins.call(acc_no, function(error, result){
+          // Check if acc_no is an admin account, if so, status is "AD"
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            if(result){
+              modify_user("status", "AD")
+            }
+            else {
+              myContract.valid_student_addr.call(acc_no, function(error, result){
+                // Check if acc_no is valid student, if so, status is "ST", if not,
+                // then by this point we've exhausted all the possibilities for
+                // it being a registered account, so status is "NA"
+                if(error) {
+                  alert("Error: Was not able to communicate with contract :(")
+                  console.log(error)
+                }
+                else {
+                  if(result){
+                    modify_user("status", "ST")
+                  }
+                  else{
+                    modify_user("status", "NA")
+                  }
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+}
+
+function update(acc_no) {
+  if (is_address(acc_no) && acc_no.toUpperCase() == user["account"].toUpperCase()){
+    update_element("status1", "You are logged in as " + user["account"] );
+    update_element("status2", status_txt[user["status"]]);
+    stud_token_bal();
+    totalNumOf_tokens_traded();
+    reputations();
+  }
+  else {
+    update_element("status1", "Waiting for data from MetaMask");
+  }
+}
+
+var ins = web3.eth.contract(abi);
+// note that "0xbb301f712427e22f9ae4fae60d99d594b4dc6455" is the address of the contract on the blockchain
+var myContract = ins.at("0xbb301f712427e22f9ae4fae60d99d594b4dc6455");
+
+
+update_status(user["account"] );
+update(user["account"] );
+get_owner();
+
+
+// in UI, the user needs to provide its address in order to invoke a function.
+//We need to make sure all below functions that invoke the contract function check if the
+//user has loged in. the register_std_num() belows does so. However, those function that only reads
+// the staet of the contract (in other words those that use .call()) do not need to chehck that.
+
+// REMOVED function logIn(){}
+// This has been replaced with the MetaMask autodetection below
+
+// There are a few html elements common to the Owner and Admin screens, so
+// rather than repeat them, let's define them as string constants up front
+
+const reg_num_html = "<br><label for='stud_num'>Student Number:</label><input " +
+  "type='text' id='stud_num' placeholder='e.g. 5467'></input><br><br><button  " +
+  "onclick='register_std_num()'>Register Student's Number</button><p " +
+  "id='regnumres'></p><br><br>"
+
+const reg_addr_html = "<br><label for='stud_num2'>Student Number:</label><input"  +
+  "type='text' id='stud_num2' placeholder='e.g. 5467'><label for='stud_addr'>"  +
+  "Student\'s Address:</label><input type='text' id='stud_addr' placeholder='e.g. "  +
+  "0x6bac436758904dc3675880ac400aac6badd16758'></input><br><br><button  "  +
+  "onclick='register_std_addr()'>Register Student's Address</button><p "  +
+  "id='regaddrres'></p><br><br>"
+
+const distrib_html = "<br><label for='redistribute'>Number of Cognocents:</label>"  +
+  "<input type='text' id='redistribute' placeholder='e.g. 3'><label "  +
+  "for='recip_addr2'>Recipient\'s Address:</label><input type='text' "  +
+  "id='recip_addr2' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'>"  +
+  "</input><br><br><button  onclick='distribute_token()'>Distribute Cognocents"  +
+  "</button><p id='redistributed'></p><br><br>"
+
+window.setInterval(function(){
+  /* This repeats every half-second, first updating the page's user model, then
+  the page itself */
+  // 1: update user model
+  modify_user("account", web3.eth.coinbase);
+  update_status(user["account"]);
+  stud_token_bal();
+  totalNumOf_tokens_traded();
+  reputations();
+  if(user.status == "ST") {
+    get_transactions()
+  }
+  // 2. update page
+  if(user.account_ch){
+    update_element("status1", "You are logged in as " + user["account"] );
+    user.account_ch = false;
+    user.balance = null;
+    user.balance_ch = true;
+    user.totaltr = null;
+    user.totaltr_ch = true;
+    user.rep = null;
+    user.rep_ch = true;
+    user.trans_hist = [];
+    user.sender_fbk_ch = [];
+    user.receiver_fbk_ch = [];
+    if(document.getElementById("transactions")) {
+      document.getElementById("transactions").innerHTML = "  <tr>" +
+      "    <th width=5%>#</th>" +
+      "    <th width=30%>Sender</th>" +
+      "    <th width=30%>Receiver</th>" +
+      "    <th width=5%>Amount</th>" +
+      "    <th width=15%>Sender<br>Feedback</th>" +
+      "    <th width=15%>Receiver<br>Feedback</th>" +
+      "  </tr>"
+    }
+  }
+  if(user.status_ch || document.getElementById("status2").innerHTML == ""){
+    update_element("status2", status_txt[user["status"]]);
+    switch (user.status) {
+      default:
+        document.getElementById("create_admin").innerHTML = "";
+        document.getElementById("remove_admin").innerHTML = "";
+        document.getElementById("register_num").innerHTML = "";
+        document.getElementById("register_addr").innerHTML = "";
+        document.getElementById("distribute").innerHTML = "";
+        document.getElementById("student_view").innerHTML = "";
+        break;
+      case "NA":
+        document.getElementById("create_admin").innerHTML = "";
+        document.getElementById("remove_admin").innerHTML = "";
+        document.getElementById("register_num").innerHTML = "";
+        document.getElementById("register_addr").innerHTML = "";
+        document.getElementById("distribute").innerHTML = "";
+        document.getElementById("student_view").innerHTML = "";
+        break;
+      case "ST":
+        document.getElementById("create_admin").innerHTML = "";
+        document.getElementById("remove_admin").innerHTML = "";
+        document.getElementById("register_num").innerHTML = "";
+        document.getElementById("register_addr").innerHTML = "";
+        document.getElementById("distribute").innerHTML = "";
+        document.getElementById("student_view").innerHTML = "<center><h3>Student Trading Status</h3>" +
+        "<table style='width:80%'>" +
+        "  <tr>" +
+        "    <th>Balance</th>" +
+        "    <th>Total Traded</th>" +
+        "    <th>Reputation</th>" +
+        "  </tr>" +
+        "  <tr>" +
+        "    <td id='balance' class='bignum'>--</td>" +
+        "    <td id='totaltr' class='bignum'>--</td>" +
+        "    <td id='rep' class='bignum''>--</td>" +
+        "  </tr>" +
+        "</table>" +
+        "<h3>Trading Centre</h3>" +
+        "<table><tr><th>Trade</th><th>Give Feedback</th><tr>" +
+        "<tr><td><label for='to_send'>Number of Cognocents:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
+        "<label for='recip_addr'>Recipient\'s Address:</label><input type='text' id='recip_addr' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input>" +
+        "<br><label for='reason'>Reason for transaction:</label>" +
+        "<br><textarea id='reason' rows='4' cols='70' placeholder='e.g. Payment for lecture notes'></textarea>" +
+        "<br><button  onclick='send_token()'>Send Cognocents</button>" +
+        "<p id='receipt'></p></div></td>" +
+        "<td>Send feedback: maximum is 5, minimum is -5" +
+        "<br><label for='score'>Score:</label><input type='text' id='score' placeholder='e.g. 5'><br>" +
+        "<label for='trans_id'>Transaction ID:</label><input type='text' id='trans_id' placeholder='e.g. 1'></input>" +
+        "<br><br><button  onclick='leave_feedback()'>Send Feedback</button>" +
+        "<p id='fed_back'></p></td></tr></table>" +
+        "<h3>Transaction History</h3>" +
+        "<table id='transactions' style='width:90%'>" +
+        "  <tr>" +
+        "    <th width=5%>#</th>" +
+        "    <th width=19%>Sender</th>" +
+        "    <th width=19%>Receiver</th>" +
+        "    <th width=19%>Amount</th>" +
+        "    <th width=19%>Sender<br>Feedback</th>" +
+        "    <th width=19%>Receiver<br>Feedback</th>" +
+        "  </tr>" +
+        "</table>" +
+        "</center>";
+        break;
+      case "OW":
+        document.getElementById("create_admin").innerHTML = "<br><label " +
+        "for='newAdmin'>Address:</label><input type='text' id='newAdmin' " +
+        "placeholder='e.g. 0x1d1edbeco50fb7cca917a11575aabad900fa5432'></input>"
+        + "<br><br><button  onclick='add_admin()'>Create Admin</button><div " +
+        "id='confirm_admin'></div><br><br>";
+        document.getElementById("remove_admin").innerHTML = "<br><label" +
+        " for='deadAdmin'>Address:</label><input type='text' id='deadAdmin' " +
+        "placeholder='e.g.0x1deadadd1ac1dbaff4009050c1a11574effa900d1'></input>"
+        + "<br><br><button  onclick='remove_admin()'>Remove Admin</button><div "
+        + "id='destroy_admin'></div><br><br>";
+        document.getElementById("register_num").innerHTML = reg_num_html;
+        document.getElementById("register_addr").innerHTML = reg_num_html;
+        document.getElementById("distribute").innerHTML = distrib_html;
+        document.getElementById("student_view").innerHTML = "";
+        break;
+      case "AD":
+        document.getElementById("create_admin").innerHTML = "";
+        document.getElementById("remove_admin").innerHTML = "";
+        document.getElementById("register_num").innerHTML = reg_num_html;
+        document.getElementById("register_addr").innerHTML = reg_num_html;
+        document.getElementById("distribute").innerHTML = distrib_html;
+        document.getElementById("student_view").innerHTML = "";
+    }
+    user.status_ch = false;
+  }
+  if(user.balance_ch && user.status == "ST"){
+    document.getElementById("balance").innerHTML = user.balance;
+    user.balance_ch = false;
+  }
+  if(user.totaltr_ch && user.status == "ST"){
+    document.getElementById("totaltr").innerHTML = user.totaltr;
+    user.totaltr_ch = false;
+  }
+  if(user.rep_ch && user.status == "ST"){
+    document.getElementById("rep").innerHTML = user.rep;
+    user.rep_ch = false;
+  }
+  if(user.status == "ST"){
+    for(var i = 0; i < user.trans_hist.length; i++){
+      if(user.trans_hist[i]){
+        var snd_fbk_id = "tr_" + i + "_snd_fbk"
+        if(!document.getElementById("transactions").innerHTML.includes(snd_fbk_id)){
+          document.getElementById("transactions").innerHTML += make_trans_rows(i)
+        }
+      }
+    }
+  }
+}, 3000);
+
+function split_address(addr) {
+  if(is_address(addr)){
+    return addr.slice(0,14)+"<br>"+addr.slice(14,28)+"<br>"+addr.slice(28)
+  }
+}
+
+function make_trans_rows(i){
+  if (!user.trans_hist[i]) {
+    console.log("Trying to make a row for a nonexistent transaction: " + i);
+    return;
+  }
+  var rows = "<tr class='hist'><td>" + user.trans_hist[i][5] + "</td>" +
+    "<td>" + split_address(user.trans_hist[i][0]) + "</td>" +
+    "<td>" + split_address(user.trans_hist[i][1]) + "</td>" +
+    "<td class='midnum'>" + user.trans_hist[i][6] + "<div class='s'></div></td>";
+  if(user.trans_hist[i][3]=='-10' || user.trans_hist[i][3]==-10){
+    rows += "<td id = 'tr_" + i + "_snd_fbk'>Not yet given</td>";
+  }
+  else {
+    rows += "<td class='midnum' id = 'tr_" + i + "_snd_fbk'>" + user.trans_hist[i][3] + "</td>";
+  }
+  if(user.trans_hist[i][4]=='-10' || user.trans_hist[i][4]==-10){
+    rows += "<td id = 'tr_" + i + "_rec_fbk'>Not yet given</td>";
+  }
+  else {
+    rows += "<td class='midnum' id = 'tr_" + i + "_rec_fbk'>" + user.trans_hist[i][4] + "</td>";
+  }
+  rows += "<tr class='hist'><th colspan=2>Reason:</th><td colspan=4>" + user.trans_hist[i][2] + "</td></tr>";
+  return rows;
+}
+
+//***** "result" needs to be displayed on the main page of the UI. At the momnet it's shown only on the console.
+function get_owner() {
+  var res= document.getElementById("owner");
+  var f= myContract.owner.call( function(err, result) {
+    if (!err) {
+      document.getElementById("owner").innerHTML = "Contract owned by " + result;
+    }
+  });
+}
+
+//Looks fine.
+function register_std_num(){
+  var stud_num = document.getElementById("stud_num").value;
+  console.log("register_std_num() was called")
+  //check if the admin has signed it.
+  myContract.valid_admins.call(user["account"] , function(error, result){
+    if(error) {
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error)
+    }
+    else {
+      if (!result) {
+        console.log(user["account"]  + " isn't an admin.");
+        document.getElementById("regnumres").innerHTML = "I'mma keep it real with ya chief. You're not an admin and you can't do that";
+      }
+      else {
+        myContract.register_std_num(stud_num,{from:user["account"] , gas:4200000},function(error,result){
+          if(error) {
+            alert("Error: Transaction has not been sent");
+            console.log(error);
+          }
+          else {
+            document.getElementById("regnumres").innerHTML = "Student s" + stud_num + " has been registered";
+            console.log(result)
+          }
+        })
+      }
+    }
+  })
+}
+
+function register_std_addr(){
+  console.log("register_std_addr() was called")
+  //check if the admin has signed it.
+  //document.getElementById("Fill_box_alert3").innerHTML = "";
+  //if (document.getElementById('addrx').value === ''){
+  //  document.getElementById("Fill_box_alert3").innerHTML = "All fields must be filled in!";
+  //  return; //do nothing if the user/admin has not signed in yet. // TODO This was at line after if was closed - ask why?
+  //}
+
+  var stud_num = document.getElementById("stud_num2");
+  var stud_addr = document.getElementById("stud_addr");
+  if(stud_num === '' || stud_addr === '') {
+    document.getElementById("regaddrres").innerHTML = "All fields must be filled in!";
+    return;
+  }
+
+  myContract.valid_student_num.call(stud_num, function(error,result){
+    if(error) {
+      alert("Error: Was not able to retrieve details of your account")
+      console.log(error)
+    }
+    else {
+      console.log(result)
+      if(!result[0]) {
+        document.getElementById("regaddrres").innerHTML = "That student number is not registered.";
+        return;
+      }
+      if(result[1]) {
+        document.getElementById("regaddrres").innerHTML = "That student number already has an address assigned.";
+        return;
+      }
+      myContract.register_std_addr(stud_addr, stud_num, {from:user["account"] , gas:4200000},function(error,result){
+        if(error) {
+          alert("Error:Transaction has not been sent")
+          console.log(error)
+        }
+        else {
+          console.log("Student address registered at " + result)
+          document.getElementById("regaddrres").innerHTML = "Your Cognocenti address, " + stud_addr + ", is now registered to your UUN, s" + stud_num;
+        }
+      })
+    }
+  })
+}
+
+// Helper function which checks for correctly formatted addresses
+function is_address(str){
+  var re = new RegExp('^0(x|X)[0-9a-fA-F]{40}$')
+  return re.test(str)
+}
+
+function get_transactions(){
+  //var minus_ten =- 10; // <---- why?
+  //var str_minus_ten = minus_ten.toString(); // <---- why?
+  var str_minus_ten = "-10"
+  // Doing the toUpperCase here is useful because I need to make a copy of
+  // user.account, in case it changes in the middle of the function call.
+  // asdjhjkfhkfghdkjf @ asynchronous methods
+  receiverD = user.account.toUpperCase()
+  // asynchronous call to smart contract, gets number of transactions, so loop
+  // can be defined (number is `result`)
+  myContract.totalNum_transactions.call(function(error,result){
+    // anonymous function to process output of async call
+    if(error) {
+      alert("Error: Was not able to communicate with contract")
+      console.log(error)
+    }
+    else {
+      //console.log(result)
+      total_transactions = result;
+      // loop iterates over all transactions in record. Not that a separate call
+      // to the contract is made for each transaction
+      for (var i = 1;i < total_transactions + 1 ;i++){
+        // asynchronous call to contract, retrieving the i-th transaction,
+        // checks for transactions involving the address given, dsplays those
+        // that contain the given address as sender OR recipient
+        myContract.transactions.call(i, function(error,result){
+          // anonymous function to process output of async call
+          if(error) {
+            alert("Error: Was not able to communicate with contract")
+            console.log(error)
+          }
+          else {
+            // If address provided is involved, compile details to an html table
+            // and display it:
+            if(receiverD == result[0].toUpperCase() ||receiverD == result[1].toUpperCase()){
+              if(!user.trans_hist[result[5]]){
+                user.trans_hist[result[5]] = result;
+              }
+              else{
+                if(user.trans_hist[result[5]][3] != result[3]){
+                  user.trans_hist[result[5]][3] = result[3];
+                  user.sender_fbk_ch[result[5]] = true;
+                }
+                if(user.trans_hist[result[5]][4] != result[4]){
+                  user.trans_hist[result[5]][4] = result[4];
+                  user.receiver_fbk_ch[result[5]] = true;
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+  });
+}
+
+function send_token(){
+  // Take inputs from the form
+  var cognocents = document.getElementById("to_send").value;
+  var recipient = document.getElementById("recip_addr").value;
+  var reason = document.getElementById("reason").value;
+  // Before sending values to the smart contract, let's see if they make sense.
+  // There are some checks (if the sender has enough funds, if the recipient
+  // exists) which can only be done by the contract, but these can be done locally
+  if(cognocents === '' || recipient === '' || reason === '' ) {
+    document.getElementById("receipt").innerHTML = "Error: All fields must be filled in!";
+    return;
+  }
+  if(!is_address(recipient)){
+    document.getElementById("receipt").innerHTML = "Error: That is not a valid address.<br>Addresses are 160-bit hexidecimal numbers; they begin with '0x' followed by 40 hexidecimal digits. A hexidecimal digit can be represented as a numeral 0-9, or a letter a-f (repressenting 10-15)";
+    return;
+  }
+  if(isNaN(parseInt(cognocents)) || parseInt(cognocents) != Number(cognocents)){
+    document.getElementById("receipt").innerHTML = "Error: You must pay a whole number of Cognocents";
+    return;
+  }
+  if(parseInt(cognocents) < 1) {
+    document.getElementById("receipt").innerHTML = "Error: You must send at least one Cognocent";
+    return;
+  }
+  // The contract doesn't actually return an error if you try to pay more than
+  // you have; the transaction just silently fails. Same if you send to an
+  // unregistered address
+  myContract.student_token_balance.call(user["account"] , function(error, result){
+    if(error) {
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error)
+    }
+    else {
+      var bal = result;
+      if(parseInt(bal) < parseInt(cognocents)) {
+        document.getElementById("receipt").innerHTML = "Error: You cannot send " + cognocents + " Cognocents; your account balance is " + bal + " Cognocents";
+        alert("Error: Insufficient funds :(")
+      }
+      else {
+        myContract.valid_student_addr.call(recipient, function(error, result){
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            if(!result){
+              document.getElementById("receipt").innerHTML = "Error: There is no account with the address " + recipient;
+              alert("Error: Recipient not found :(")
+            }
+            else {
+              // If the inputs check out, leave a note in the log, then send the transaction
+              console.log('sending ' + cognocents + ' to ' + recipient + ' because ' + reason);
+              myContract.send_token(cognocents, recipient, reason, {from:user["account"] , gas:4200000}, function(error,result){
+                if(error) {
+                  var message = error['message'];
+                  // Some of the error messages the contract gives are not super user-friendly,
+                  // so let's rewrite them:
+                  if(message.startsWith('Error: WalletMiddleware - Invalid "from"')) {
+                    message = "Error: You need to be logged in to this page, from the same address that you're logged in to MetaMask."
+                  }
+                  alert(message)
+                  document.getElementById("receipt").innerHTML = message;
+                  console.log(error);
+                }
+                else {
+                  document.getElementById("receipt").innerHTML = "Confirmed: You sent " + cognocents + ' Cognocents to ' + recipient + ' for the following reason:<br>' + reason
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+}
+
+function leave_feedback(){
+  var score = document.getElementById("score").value;
+  var transaction = document.getElementById("trans_id").value;
+  // Before sending values to the smart contract, let's see if they make sense.
+  if(score === '' || transaction === '') {
+    document.getElementById("fed_back").innerHTML = "Error: All fields must be filled in!";
+    return;
+  }
+  if(isNaN(parseInt(transaction)) || parseInt(transaction) != Number(transaction) || parseInt(transaction) < 0){
+    document.getElementById("fed_back").innerHTML = "Error: That is not a valid transaction ID.<br>Transaction IDs are non-negative whole numbers.";
+    return;
+  }
+  if(isNaN(parseInt(score)) || parseInt(score) != Number(score)){
+    document.getElementById("fed_back").innerHTML = "Error: Feedback score must be whole number";
+    return;
+  }
+  myContract.min_score(function(error, result){
+    if(error) {
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error)
+    }
+    else {
+      var min = get(result);
+      myContract.max_score(function(error, result){
+        if(error) {
+          alert("Error: Was not able to communicate with contract :(")
+          console.log(error)
+        }
+        else {
+          var max = get(result);
+          if ((score < min) || (score > max)) {
+            alert("Error: Score is out of range :(")
+            document.getElementById("fed_back").innerHTML = "Error: Feedback score cannot be greater than 5 or less than -5";
+          }
+          else {
+            myContract.transactions.call(transaction, function(error, result){
+              if(error) {
+                alert("Error: Was not able to communicate with contract :(")
+                console.log(error)
+              }
+              else {
+                var you = -1
+                for(var i = 0; i<2; i++) {
+                  if(result[i].toUpperCase() === user["account"] .toUpperCase()) {
+                    console.log(i);
+                    you = i
+                  }
+                }
+                if(you == -1){
+                  console.log(result[0]);
+                  console.log(result[1]);
+                  console.log(user["account"] )
+                  document.getElementById("fed_back").innerHTML = "You were not a party to transaction #" + transaction;
+                  alert("Error: None of your business! >:(")
+                }
+                else if (result[you+3]!='-10') {
+                document.getElementById("fed_back").innerHTML = "You already gave feedback on transaction #" + transaction;
+                  alert("Error: Already done! :(")
+                }
+                else {
+                  myContract.leave_feedback(transaction, score, {from:user["account"] , gas:4200000}, function(error, result){
+                    if(error) {
+                      alert(error)
+                      console.log(error)
+                      document.getElementById("fed_back").innerHTML = "An error occurred";
+                    }
+                    else {
+                      document.getElementById("fed_back").innerHTML = "You gave a score of " + score + " for transaction #" + transaction;
+                    }
+                  })
+                }
+              }
+            })
+          }
+        }
+      })
+    }
+  })
+}
+
+function get(n){
+  return n.c[0] * n.s
+}
+
+function add_admin() {
+  // Take inputs from the form
+  var new_admin = document.getElementById("newAdmin").value;
+  // Before sending values to the smart contract, let's see if they make sense.
+  // There are some checks (if the sender has enough funds, if the recipient
+  // exists) which can only be done by the contract, but these can be done locally
+  console.log(new_admin + " to be adminified!");
+  if(new_admin === '') {
+    document.getElementById("confirm_admin").innerHTML = "Error: All fields must be filled in!";
+    return;
+  }
+  if(!is_address(new_admin)){
+    document.getElementById("confirm_admin").innerHTML = "Error: That is not a valid address.<br>Addresses are 160-bit hexidecimal numbers; they begin with '0x' followed by 40 hexidecimal digits. A hexidecimal digit can be represented as a numeral 0-9, or a letter a-f (repressenting 10-15)";
+    return;
+  }
+  myContract.owner.call(function(error, result){
+    if(error){
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error);
+      alert(error)
+    }
+    else {
+      if (result.toUpperCase() != user["account"] .toUpperCase()) {
+        document.getElementById("confirm_admin").innerHTML = "Error: Only the Contract Owner can add and remove admins.";
+        alert("Error: not allowed")
+      }
+      else{
+        myContract.add_admin(new_admin,  {from:user["account"] , gas:4200000}, function(error, result){
+          console.log("myContract.add_admin has be called");
+          if(error) {
+            alert(error)
+            console.log(error)
+          }
+          else {
+            document.getElementById("confirm_admin").innerHTML = new_admin + " is now an Admin";
+          }
+        })
+      }
+    }
+  })
+}
+
+function remove_admin() {
+  // Take inputs from the form
+  var dead_admin = document.getElementById("deadAdmin").value;
+  // Before sending values to the smart contract, let's see if they make sense.
+  // There are some checks (if the sender has enough funds, if the recipient
+  // exists) which can only be done by the contract, but these can be done locally
+  console.log(dead_admin + " to be deadminified!");
+  if(dead_admin === '') {
+    document.getElementById("destroy_admin").innerHTML = "Error: All fields must be filled in!";
+    return;
+  }
+  if(!is_address(dead_admin)){
+    document.getElementById("destroy_admin").innerHTML = "Error: That is not a valid address.<br>Addresses are 160-bit hexidecimal numbers; they begin with '0x' followed by 40 hexidecimal digits. A hexidecimal digit can be represented as a numeral 0-9, or a letter a-f (repressenting 10-15)";
+    return;
+  }
+  myContract.owner.call(function(error, result){
+    if(error){
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error);
+      alert(error)
+    }
+    else {
+      if (result.toUpperCase() != user["account"] .toUpperCase()) {
+        document.getElementById("destroy_admin").innerHTML = "Error: Only the Contract Owner can add and remove admins.";
+        alert("Error: not allowed")
+      }
+      else{
+        myContract.valid_admins(dead_admin, function(error, result){
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            if(!result) {
+              document.getElementById("destroy_admin").innerHTML = "Error: " + dead_admin + " wasn't an admin anyway."
+              alert("Error: Not an admin :(")
+            }
+            else {
+              myContract.add_admin(dead_admin,  {from:user["account"] , gas:4200000}, function(error, result){
+                console.log("myContract.add_admin has be called");
+                if(error) {
+                  alert(error)
+                  console.log(error)
+                }
+                else {
+                  document.getElementById("destroy_admin").innerHTML = dead_admin + " is no longer an Admin";
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+}
+
+function distribute_token(){
+  // Take inputs from the form
+  var cognocents = document.getElementById("redistribute").value;
+  var recipient = document.getElementById("recip_addr2").value;
+  // Before sending values to the smart contract, let's see if they make sense.
+  // There are some checks (if the sender has enough funds, if the recipient
+  // exists) which can only be done by the contract, but these can be done locally
+  if(cognocents === '' || recipient === '') {
+    document.getElementById("redistributed").innerHTML = "Error: All fields must be filled in!";
+    return;
+  }
+  if(!is_address(recipient)){
+    document.getElementById("redistributed").innerHTML = "Error: That is not a valid address.<br>Addresses are 160-bit hexidecimal numbers; they begin with '0x' followed by 40 hexidecimal digits. A hexidecimal digit can be represented as a numeral 0-9, or a letter a-f (repressenting 10-15)";
+    return;
+  }
+  if(isNaN(parseInt(cognocents)) || parseInt(cognocents) != Number(cognocents)){
+    document.getElementById("redistributed").innerHTML = "Error: You must pay a whole number of Cognocents";
+    return;
+  }
+  if(parseInt(cognocents) < 1) {
+    document.getElementById("redistributed").innerHTML = "Error: You must send at least one Cognocent";
+    return;
+  }
+  // The contract doesn't actually return an error if you try to pay more than
+  // you have; the transaction just silently fails. Same if you send to an
+  // unregistered address
+  myContract.valid_admins(user["account"] , function(error, result){
+    if(error) {
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error)
+    }
+    else {
+      if (!result) {
+        document.getElementById("redistributed").innerHTML = "You are not an admin. Only admins can perform this action.";
+      }
+      else {
+        myContract.valid_student_addr.call(recipient, function(error, result){
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            if(!result){
+              document.getElementById("redistributed").innerHTML = "Error: There is no account with the address " + recipient;
+              alert("Error: Recipient not found :(")
+            }
+            else {
+              // If the inputs check out, leave a note in the log, then send the transaction
+              console.log('sending ' + cognocents + ' to ' + recipient);
+              myContract.distribute_token(recipient, cognocents, {from:user["account"] , gas:4200000}, function(error,result){
+                if(error) {
+                  var message = error['message'];
+                  // Some of the error messages the contract gives are not super user-friendly,
+                  // so let's rewrite them:
+                  if(message.startsWith('Error: WalletMiddleware - Invalid "from"')) {
+                    message = "Error: You need to be logged in to this page, from the same address that you're logged in to MetaMask."
+                  }
+                  alert(message)
+                  document.getElementById("redistributed").innerHTML = message;
+                  console.log(error);
+                }
+                else {
+                  document.getElementById("redistributed").innerHTML = "Confirmed: You assigned " + cognocents + ' Cognocents to ' + recipient
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+}
+
+function stud_token_bal(){
+  //given student's address it reads the content of "student_token_balance" in the contract and returns a value
+  myContract.valid_student_addr.call(user["account"] , function(error, result){
+    if(error) {
+      console.log(error)
+    }
+    else {
+      if(result) {
+        myContract.student_token_balance.call(user["account"] , function(error, result){
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            modify_user("balance", result);
+          }
+        })
+      }
+      else {
+        modify_user("balance", null);
+      }
+    }
+  })
+}
+
+function totalNumOf_tokens_traded(){
+  //given student's address it reads the content of "student_token_balance" in the contract and returns a value
+  myContract.valid_student_addr.call(user["account"] , function(error, result){
+    if(error) {
+      console.log(error)
+    }
+    else {
+      if(result) {
+        myContract.totalNumOf_tokens_traded.call(user["account"] , function(error, result){
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            modify_user("totaltr", result);
+          }
+        })
+      }
+      else {
+        modify_user("totaltr", null);
+      }
+    }
+  })
+}
+
+function reputations(){
+  //given student's address it reads the content of "reputations" in the contract and returns a value.
+  myContract.valid_student_addr.call(user["account"] , function(error, result){
+    if(error) {
+      console.log(error)
+    }
+    else {
+      if(result) {
+        myContract.reputations.call(user["account"] , function(error, result){
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            modify_user("rep", result);
+          }
+        })
+      }
+      else {
+        modify_user("rep", null);
+      }
+    }
+  })
+}
+/* Saving this here for later
+
+a += '<tr><td>Token Sender Address: </td><td>' + result[0].valueOf() + '</td></tr>';
+a += '<tr><td>Token  Recipient Address: </td><td>' + result[1].valueOf() + '</td></tr>';
+a += '<tr><td>Reason: </td><td>' + result[2].valueOf() + '</td></tr>';
+// a value of "-10" means no feedback has been provided
+if (result[3].valueOf()==str_minus_ten){
+  a += '<tr><td>Token Sender Feedback: </td><td>Not Provided Yet</td></tr>';
+}
+else {
+  a += '<tr><td>Token Sender Feedback: </td><td>' + result[3].valueOf() + '</td></tr>';
+}
+if (result[4].valueOf()==str_minus_ten){
+  a += '<tr><td>Token Recipient Feedback: </td><td>Not Provided Yet</td></tr>';
+}
+else {
+  a += '<tr><td>Token Recipient Feedback: </td><td>' + result[4].valueOf() + '</td></tr>';
+}
+a += '<tr><td>Transaction ID: </td><td>' + result[5].valueOf() + '</td></tr>';
+a += '<tr><td>Number of Tokens Sent: </td><td>' + result[6].valueOf() + '</td></tr>';
+// displays data as table
+document.getElementById('destination_1').innerHTML += '<hr><table style="width:90%">'+  a + '</table>';
+a='';
+
+*/
+
+</script>
