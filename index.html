@@ -2,10 +2,11 @@
 <!-- This version works with Metamask and can invoke the wallet. It does not have all the functions yet -->
 <html>
 <script language="javascript" type="text/javascript" src="web3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <!--  -->
 
 <head>
-<link href="https://fonts.googleapis.com/css?family=Zilla+Slab|Stalinist+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Zilla+Slab|Stalinist+One|Londrina+Solid|Exo+2+Black" rel="stylesheet">
 <!-- <link href="https://fonts.googleapis.com/css?family=BioRhyme|Josefin+Slab|Zilla+Slab" rel="stylesheet"> -->
 <style>
 
@@ -16,26 +17,26 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: "Stalinist One";
   background-color: red;
+  text-align: center;
+  transform: scale(1, 1.5);
 }
 
 h1, h2 {
   text-shadow: 2px 2px 0 white, -2px -2px 0 white;
+  font-size: 250%;
 }
 
 h3, h4, h5, h6 {
   text-shadow: 1px 1px 0 white, -1px -1px 0 white;
+  font-size: 120%;
 }
 
 table {
   background-color: white;
   padding-left: 4px;
   padding-right: 4px;
-
-}
-
-th {
-  font-family: "Stalinist One";
-  background-color: lightgray;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 tr.hist:nth-child(even) {
@@ -49,6 +50,12 @@ tr.hist:nth-child(odd) {
 tr.hist:hover {
   background-color: black;
   color: white;
+}
+
+th {
+  font-family: "Stalinist One";
+  transform: scale(1, 1.5);
+  background-color: lightgray;
 }
 
 td.bignum {
@@ -65,6 +72,11 @@ td.midnum {
   font-size: 200%;
 }
 
+td.r {
+  font-family: "Stalinist One";
+  transform: scale(1, 1.5);
+}
+
 div.a {
   font-family: "Zilla Slab"
 }
@@ -72,7 +84,7 @@ div.a {
 </style></head>
 
 <center>
-<h1>INF1-CG Value Creation and Trading<br>For Learning and Progress!</h1>
+<h1>INF1-CG Value Creation and Trading<br><i>For Friendship and Progress!</i></h1>
 </center>
 <body>
 <br>
@@ -84,7 +96,6 @@ div.a {
 
 <div class="a"id="remove_admin" ></div>
 
-
 <div class="a" id="register_num"></div>
 
 <div class="a" id="register_addr"></div>
@@ -93,7 +104,15 @@ div.a {
 
 <div class="a" id="student_view"></div>
 
+<h3>Data for the Masses</h3>
 
+<table>
+<tr><th>Trade Values</th><th>Feedback Values</th></tr>
+<tr><td><canvas id="tradeVals" width="400" height="400"></canvas></td>
+<td><canvas id="fbVals" width="400" height="400"></canvas></td></tr>
+</table>
+
+<br>
 <div class="a" style="font-size:80%">Ethereum Smart Contract powered by geth, remix, truffle, and MetaMask. Lovingly coded by the exceptionally smart and attractive people of the Blockchain Technologies Laboratory at the University of Edinburgh, and made available under a CC-BY-SA-3.0 license. </div><div id="owner" style="font-size:80%"></div>
 </body>
 </html>
@@ -101,6 +120,7 @@ div.a {
 
 <script>
 
+//var Chart = require('chart.js');
 // Define a service provider, i.e. connect to the blockchain via web3
 var web3;
 if (typeof web3 !== 'undefined') {
@@ -119,7 +139,6 @@ if (window.web3.currentProvider.isMetaMask) {
 else{
   console.log("MetaMask has not been injected");
 }
-
 
 //------------
 
@@ -499,6 +518,10 @@ var user = {
   "receiver_fbk_ch": []
 }
 
+if(user.account) {
+  user.account = user.account.toUpperCase();
+}
+
 /* A nice helper function that updates a variable in the user model, IFF the
 variable needs to be updated. If the variable is changed, a flag is set indicating
 that this has happened, so the data on the page can be updated. DO NOT use this
@@ -579,8 +602,8 @@ function update_status(acc_no){
 }
 
 function update(acc_no) {
-  if (is_address(acc_no) && acc_no.toUpperCase() == user["account"].toUpperCase()){
-    update_element("status1", "You are logged in as " + user["account"] );
+  if (is_address(acc_no) && acc_no.toUpperCase() == user.account){
+    update_element("status1", "You are logged in as " + user.account);
     update_element("status2", status_txt[user["status"]]);
     stud_token_bal();
     totalNumOf_tokens_traded();
@@ -596,8 +619,8 @@ var ins = web3.eth.contract(abi);
 var myContract = ins.at("0xbb301f712427e22f9ae4fae60d99d594b4dc6455");
 
 
-update_status(user["account"] );
-update(user["account"] );
+update_status(user.account);
+update(user.account);
 get_owner();
 
 
@@ -631,12 +654,16 @@ const distrib_html = "<br><label for='redistribute'>Number of Cognocents:</label
   "</input><br><br><button  onclick='distribute_token()'>Distribute Cognocents"  +
   "</button><p id='redistributed'></p><br><br>"
 
+var times = 0;
+
 window.setInterval(function(){
   /* This repeats every half-second, first updating the page's user model, then
   the page itself */
   // 1: update user model
-  modify_user("account", web3.eth.coinbase);
-  update_status(user["account"]);
+  if(web3.eth.coinbase){
+    modify_user("account", web3.eth.coinbase.toUpperCase());
+  }
+  update_status(user.account);
   stud_token_bal();
   totalNumOf_tokens_traded();
   reputations();
@@ -645,7 +672,7 @@ window.setInterval(function(){
   }
   // 2. update page
   if(user.account_ch){
-    update_element("status1", "You are logged in as " + user["account"] );
+    update_element("status1", "You are logged in as " + user.account );
     user.account_ch = false;
     user.balance = null;
     user.balance_ch = true;
@@ -715,19 +742,21 @@ window.setInterval(function(){
         "<p id='receipt'></p></div></td>" +
         "<td>Send feedback: maximum is 5, minimum is -5" +
         "<br><label for='score'>Score:</label><input type='text' id='score' placeholder='e.g. 5'><br>" +
-        "<label for='trans_id'>Transaction ID:</label><input type='text' id='trans_id' placeholder='e.g. 1'></input>" +
+        "<label for='trans_id'>Transaction ID #:</label><input type='text' id='trans_id' placeholder='e.g. 1'></input>" +
         "<br><br><button  onclick='leave_feedback()'>Send Feedback</button>" +
         "<p id='fed_back'></p></td></tr></table>" +
         "<h3>Transaction History</h3>" +
         "<table id='transactions' style='width:90%'>" +
         "  <tr>" +
-        "    <th width=5%>#</th>" +
+        "    <th width=5%>ID #</th>" +
         "    <th width=19%>Sender</th>" +
         "    <th width=19%>Receiver</th>" +
         "    <th width=19%>Amount</th>" +
         "    <th width=19%>Sender<br>Feedback</th>" +
         "    <th width=19%>Receiver<br>Feedback</th>" +
         "  </tr>" +
+        "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
+        "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
         "</table>" +
         "</center>";
         break;
@@ -772,14 +801,26 @@ window.setInterval(function(){
   if(user.status == "ST"){
     for(var i = 0; i < user.trans_hist.length; i++){
       if(user.trans_hist[i]){
-        var snd_fbk_id = "tr_" + i + "_snd_fbk"
-        if(!document.getElementById("transactions").innerHTML.includes(snd_fbk_id)){
-          document.getElementById("transactions").innerHTML += make_trans_rows(i)
+        if(user.account == user.trans_hist[i][0] ||user.account == user.trans_hist[i][1]){
+          var snd_fbk_id = "tr_" + i + "_snd_fbk"
+          if(!document.getElementById("transactions").innerHTML.includes(snd_fbk_id)){
+            document.getElementById("transactions").innerHTML += make_trans_rows(i)
+          }
         }
+      }
+      else{
+        console.log("Null DB entry at "+i);
       }
     }
   }
+  times+=1;
+  if(times % 40 == 10){
+    console.log("Plotting...");
+    draw_charts();
+  }
 }, 3000);
+
+draw_charts();
 
 function split_address(addr) {
   if(is_address(addr)){
@@ -808,7 +849,7 @@ function make_trans_rows(i){
   else {
     rows += "<td class='midnum' id = 'tr_" + i + "_rec_fbk'>" + user.trans_hist[i][4] + "</td>";
   }
-  rows += "<tr class='hist'><th colspan=2>Reason:</th><td colspan=4>" + user.trans_hist[i][2] + "</td></tr>";
+  rows += "<tr class='hist'><td class='r' colspan=2>Reason:</th><td colspan=4>" + user.trans_hist[i][2] + "</td></tr>";
   return rows;
 }
 
@@ -827,18 +868,18 @@ function register_std_num(){
   var stud_num = document.getElementById("stud_num").value;
   console.log("register_std_num() was called")
   //check if the admin has signed it.
-  myContract.valid_admins.call(user["account"] , function(error, result){
+  myContract.valid_admins.call(user.account , function(error, result){
     if(error) {
       alert("Error: Was not able to communicate with contract :(")
       console.log(error)
     }
     else {
       if (!result) {
-        console.log(user["account"]  + " isn't an admin.");
+        console.log(user.account  + " isn't an admin.");
         document.getElementById("regnumres").innerHTML = "I'mma keep it real with ya chief. You're not an admin and you can't do that";
       }
       else {
-        myContract.register_std_num(stud_num,{from:user["account"] , gas:4200000},function(error,result){
+        myContract.register_std_num(stud_num,{from:user.account , gas:4200000},function(error,result){
           if(error) {
             alert("Error: Transaction has not been sent");
             console.log(error);
@@ -884,7 +925,7 @@ function register_std_addr(){
         document.getElementById("regaddrres").innerHTML = "That student number already has an address assigned.";
         return;
       }
-      myContract.register_std_addr(stud_addr, stud_num, {from:user["account"] , gas:4200000},function(error,result){
+      myContract.register_std_addr(stud_addr, stud_num, {from:user.account , gas:4200000},function(error,result){
         if(error) {
           alert("Error:Transaction has not been sent")
           console.log(error)
@@ -905,9 +946,6 @@ function is_address(str){
 }
 
 function get_transactions(){
-  //var minus_ten =- 10; // <---- why?
-  //var str_minus_ten = minus_ten.toString(); // <---- why?
-  var str_minus_ten = "-10"
   // Doing the toUpperCase here is useful because I need to make a copy of
   // user.account, in case it changes in the middle of the function call.
   // asdjhjkfhkfghdkjf @ asynchronous methods
@@ -936,21 +974,19 @@ function get_transactions(){
             console.log(error)
           }
           else {
-            // If address provided is involved, compile details to an html table
-            // and display it:
-            if(receiverD == result[0].toUpperCase() ||receiverD == result[1].toUpperCase()){
-              if(!user.trans_hist[result[5]]){
-                user.trans_hist[result[5]] = result;
+            // Gather all transactions to local db
+            result[0] = result[0].toUpperCase();
+            result[1] = result[1].toUpperCase();
+            if(!user.trans_hist[result[5]]){
+              user.trans_hist[result[5]] = result;
+            }
+            else{
+              if(user.trans_hist[result[5]][3] != result[3]){                  user.trans_hist[result[5]][3] = result[3];
+                user.sender_fbk_ch[result[5]] = true;
               }
-              else{
-                if(user.trans_hist[result[5]][3] != result[3]){
-                  user.trans_hist[result[5]][3] = result[3];
-                  user.sender_fbk_ch[result[5]] = true;
-                }
-                if(user.trans_hist[result[5]][4] != result[4]){
-                  user.trans_hist[result[5]][4] = result[4];
-                  user.receiver_fbk_ch[result[5]] = true;
-                }
+              if(user.trans_hist[result[5]][4] != result[4]){
+                user.trans_hist[result[5]][4] = result[4];
+                user.receiver_fbk_ch[result[5]] = true;
               }
             }
           }
@@ -987,7 +1023,7 @@ function send_token(){
   // The contract doesn't actually return an error if you try to pay more than
   // you have; the transaction just silently fails. Same if you send to an
   // unregistered address
-  myContract.student_token_balance.call(user["account"] , function(error, result){
+  myContract.student_token_balance.call(user.account , function(error, result){
     if(error) {
       alert("Error: Was not able to communicate with contract :(")
       console.log(error)
@@ -1012,7 +1048,7 @@ function send_token(){
             else {
               // If the inputs check out, leave a note in the log, then send the transaction
               console.log('sending ' + cognocents + ' to ' + recipient + ' because ' + reason);
-              myContract.send_token(cognocents, recipient, reason, {from:user["account"] , gas:4200000}, function(error,result){
+              myContract.send_token(cognocents, recipient, reason, {from:user.account , gas:4200000}, function(error,result){
                 if(error) {
                   var message = error['message'];
                   // Some of the error messages the contract gives are not super user-friendly,
@@ -1079,7 +1115,7 @@ function leave_feedback(){
               else {
                 var you = -1
                 for(var i = 0; i<2; i++) {
-                  if(result[i].toUpperCase() === user["account"] .toUpperCase()) {
+                  if(result[i].toUpperCase() === user.account .toUpperCase()) {
                     console.log(i);
                     you = i
                   }
@@ -1087,7 +1123,7 @@ function leave_feedback(){
                 if(you == -1){
                   console.log(result[0]);
                   console.log(result[1]);
-                  console.log(user["account"] )
+                  console.log(user.account )
                   document.getElementById("fed_back").innerHTML = "You were not a party to transaction #" + transaction;
                   alert("Error: None of your business! >:(")
                 }
@@ -1096,7 +1132,7 @@ function leave_feedback(){
                   alert("Error: Already done! :(")
                 }
                 else {
-                  myContract.leave_feedback(transaction, score, {from:user["account"] , gas:4200000}, function(error, result){
+                  myContract.leave_feedback(transaction, score, {from:user.account , gas:4200000}, function(error, result){
                     if(error) {
                       alert(error)
                       console.log(error)
@@ -1142,12 +1178,12 @@ function add_admin() {
       alert(error)
     }
     else {
-      if (result.toUpperCase() != user["account"] .toUpperCase()) {
+      if (result.toUpperCase() != user.account .toUpperCase()) {
         document.getElementById("confirm_admin").innerHTML = "Error: Only the Contract Owner can add and remove admins.";
         alert("Error: not allowed")
       }
       else{
-        myContract.add_admin(new_admin,  {from:user["account"] , gas:4200000}, function(error, result){
+        myContract.add_admin(new_admin,  {from:user.account , gas:4200000}, function(error, result){
           console.log("myContract.add_admin has be called");
           if(error) {
             alert(error)
@@ -1184,7 +1220,7 @@ function remove_admin() {
       alert(error)
     }
     else {
-      if (result.toUpperCase() != user["account"] .toUpperCase()) {
+      if (result.toUpperCase() != user.account .toUpperCase()) {
         document.getElementById("destroy_admin").innerHTML = "Error: Only the Contract Owner can add and remove admins.";
         alert("Error: not allowed")
       }
@@ -1200,7 +1236,7 @@ function remove_admin() {
               alert("Error: Not an admin :(")
             }
             else {
-              myContract.add_admin(dead_admin,  {from:user["account"] , gas:4200000}, function(error, result){
+              myContract.add_admin(dead_admin,  {from:user.account , gas:4200000}, function(error, result){
                 console.log("myContract.add_admin has be called");
                 if(error) {
                   alert(error)
@@ -1244,7 +1280,7 @@ function distribute_token(){
   // The contract doesn't actually return an error if you try to pay more than
   // you have; the transaction just silently fails. Same if you send to an
   // unregistered address
-  myContract.valid_admins(user["account"] , function(error, result){
+  myContract.valid_admins(user.account , function(error, result){
     if(error) {
       alert("Error: Was not able to communicate with contract :(")
       console.log(error)
@@ -1267,7 +1303,7 @@ function distribute_token(){
             else {
               // If the inputs check out, leave a note in the log, then send the transaction
               console.log('sending ' + cognocents + ' to ' + recipient);
-              myContract.distribute_token(recipient, cognocents, {from:user["account"] , gas:4200000}, function(error,result){
+              myContract.distribute_token(recipient, cognocents, {from:user.account , gas:4200000}, function(error,result){
                 if(error) {
                   var message = error['message'];
                   // Some of the error messages the contract gives are not super user-friendly,
@@ -1293,13 +1329,13 @@ function distribute_token(){
 
 function stud_token_bal(){
   //given student's address it reads the content of "student_token_balance" in the contract and returns a value
-  myContract.valid_student_addr.call(user["account"] , function(error, result){
+  myContract.valid_student_addr.call(user.account , function(error, result){
     if(error) {
       console.log(error)
     }
     else {
       if(result) {
-        myContract.student_token_balance.call(user["account"] , function(error, result){
+        myContract.student_token_balance.call(user.account , function(error, result){
           if(error) {
             alert("Error: Was not able to communicate with contract :(")
             console.log(error)
@@ -1318,13 +1354,13 @@ function stud_token_bal(){
 
 function totalNumOf_tokens_traded(){
   //given student's address it reads the content of "student_token_balance" in the contract and returns a value
-  myContract.valid_student_addr.call(user["account"] , function(error, result){
+  myContract.valid_student_addr.call(user.account , function(error, result){
     if(error) {
       console.log(error)
     }
     else {
       if(result) {
-        myContract.totalNumOf_tokens_traded.call(user["account"] , function(error, result){
+        myContract.totalNumOf_tokens_traded.call(user.account , function(error, result){
           if(error) {
             alert("Error: Was not able to communicate with contract :(")
             console.log(error)
@@ -1343,13 +1379,13 @@ function totalNumOf_tokens_traded(){
 
 function reputations(){
   //given student's address it reads the content of "reputations" in the contract and returns a value.
-  myContract.valid_student_addr.call(user["account"] , function(error, result){
+  myContract.valid_student_addr.call(user.account , function(error, result){
     if(error) {
       console.log(error)
     }
     else {
       if(result) {
-        myContract.reputations.call(user["account"] , function(error, result){
+        myContract.reputations.call(user.account , function(error, result){
           if(error) {
             alert("Error: Was not able to communicate with contract :(")
             console.log(error)
@@ -1365,30 +1401,59 @@ function reputations(){
     }
   })
 }
-/* Saving this here for later
 
-a += '<tr><td>Token Sender Address: </td><td>' + result[0].valueOf() + '</td></tr>';
-a += '<tr><td>Token  Recipient Address: </td><td>' + result[1].valueOf() + '</td></tr>';
-a += '<tr><td>Reason: </td><td>' + result[2].valueOf() + '</td></tr>';
-// a value of "-10" means no feedback has been provided
-if (result[3].valueOf()==str_minus_ten){
-  a += '<tr><td>Token Sender Feedback: </td><td>Not Provided Yet</td></tr>';
+function draw_charts(){
+  /* Plots all charts*/
+  // First, a chart showing the frequencies of transaction values
+  var amounts = user.trans_hist.map(transac => transac[6]);
+  var amt_tots = {};
+  for(var i =0; i <amounts.length; i++){
+    if (amounts[i]>0){
+      amt_tots[amounts[i]] = amt_tots[amounts[i]] ? amt_tots[amounts[i]]+1 : 1;
+    }
+  }
+  trade_vals_x = Object.keys(amt_tots).sort();
+  trade_vals_y = trade_vals_x.map(x_val => amt_tots[x_val]);
+  barchart(trade_vals_x, trade_vals_y, "# of trades at value", "tradeVals");
+  // Second, frequencies of feedback values
+  var fbks = user.trans_hist.map(transac => transac[3]).concat(user.trans_hist.map(transac => transac[4]));
+  var fbk_tots = {};
+  for(var i =0; i <fbks.length; i++){
+    var f = (fbks[i] == -10) ? 'not given' : fbks[i];
+    fbk_tots[f] = fbk_tots[f] ? fbk_tots[f]+1 : 1;
+  }
+  fbk_vals_x = Object.keys(fbk_tots).sort();
+  fbk_vals_y = fbk_vals_x.map(x_val => fbk_tots[x_val]);
+  barchart(fbk_vals_x, fbk_vals_y, "# of feedbacks at value", "fbVals");
 }
-else {
-  a += '<tr><td>Token Sender Feedback: </td><td>' + result[3].valueOf() + '</td></tr>';
-}
-if (result[4].valueOf()==str_minus_ten){
-  a += '<tr><td>Token Recipient Feedback: </td><td>Not Provided Yet</td></tr>';
-}
-else {
-  a += '<tr><td>Token Recipient Feedback: </td><td>' + result[4].valueOf() + '</td></tr>';
-}
-a += '<tr><td>Transaction ID: </td><td>' + result[5].valueOf() + '</td></tr>';
-a += '<tr><td>Number of Tokens Sent: </td><td>' + result[6].valueOf() + '</td></tr>';
-// displays data as table
-document.getElementById('destination_1').innerHTML += '<hr><table style="width:90%">'+  a + '</table>';
-a='';
 
-*/
+function barchart(x, y, x_label, element){
+  var ctx = document.getElementById(element).getContext('2d');
+  var rpts = Math.ceil(x.length/3)
+  bg_colours = Array(rpts).fill(["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"]).flat();
+  bord_colours = Array(rpts).fill(["rgba(255, 0, 0, 1)", "rgba(255, 215, 0, 1)", "rgba(0, 0, 0, 1)"]).flat();
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: x,
+        datasets: [{
+            label: x_label,
+            data: y,
+            backgroundColor: bg_colours,
+            borderColor: bord_colours,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+}
 
 </script>
