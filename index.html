@@ -77,6 +77,30 @@ td.r {
   transform: scale(1, 1.5);
 }
 
+button {
+  border: black 1px;
+  background-color: red;
+  color: black;
+  padding: 6px 6px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Stalinist One";
+  transform: scale(1, 1.5);
+}
+
+button:hover {
+  background-color: black;
+  color: white
+}
+
+option:disabled {
+  color: gray;
+}
+
+option {
+  color: black;
+}
+
 div.a {
   font-family: "Zilla Slab"
 }
@@ -518,10 +542,6 @@ var user = {
   "receiver_fbk_ch": []
 }
 
-if(user.account) {
-  user.account = user.account.toUpperCase();
-}
-
 /* A nice helper function that updates a variable in the user model, IFF the
 variable needs to be updated. If the variable is changed, a flag is set indicating
 that this has happened, so the data on the page can be updated. DO NOT use this
@@ -561,7 +581,7 @@ function update_status(acc_no){
       console.log(error)
     }
     else {
-      if(acc_no.toUpperCase()==result.toUpperCase()){
+      if(same_addr(acc_no, result)){
         modify_user("status", "OW")
       }
       else{
@@ -602,7 +622,7 @@ function update_status(acc_no){
 }
 
 function update(acc_no) {
-  if (is_address(acc_no) && acc_no.toUpperCase() == user.account){
+  if (is_address(acc_no) && same_addr(acc_no, user.account)){
     update_element("status1", "You are logged in as " + user.account);
     update_element("status2", status_txt[user["status"]]);
     stud_token_bal();
@@ -661,15 +681,13 @@ window.setInterval(function(){
   the page itself */
   // 1: update user model
   if(web3.eth.coinbase){
-    modify_user("account", web3.eth.coinbase.toUpperCase());
+    modify_user("account", web3.eth.coinbase);
+    get_transactions()
   }
   update_status(user.account);
   stud_token_bal();
   totalNumOf_tokens_traded();
   reputations();
-  if(user.status == "ST") {
-    get_transactions()
-  }
   // 2. update page
   if(user.account_ch){
     update_element("status1", "You are logged in as " + user.account );
@@ -691,7 +709,9 @@ window.setInterval(function(){
       "    <th width=5%>Amount</th>" +
       "    <th width=15%>Sender<br>Feedback</th>" +
       "    <th width=15%>Receiver<br>Feedback</th>" +
-      "  </tr>"
+      "  </tr>" +
+      "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
+      "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
     }
   }
   if(user.status_ch || document.getElementById("status2").innerHTML == ""){
@@ -733,18 +753,20 @@ window.setInterval(function(){
         "  </tr>" +
         "</table>" +
         "<h3>Trading Centre</h3>" +
-        "<table><tr><th>Trade</th><th>Give Feedback</th><tr>" +
+        "<table><tr><th width=60%>Trade</th><th width=40%>Check Reputation</th><tr>" +
         "<tr><td><label for='to_send'>Number of Cognocents:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
         "<label for='recip_addr'>Recipient\'s Address:</label><input type='text' id='recip_addr' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input>" +
         "<br><label for='reason'>Reason for transaction:</label>" +
-        "<br><textarea id='reason' rows='4' cols='70' placeholder='e.g. Payment for lecture notes'></textarea>" +
+        "<select id='category' name='category'>" +
+        "  <option value='' selected disabled>chose category:</option>" +
+        "  <option value='inf1-cg'>INF1-CG Related</option>" +
+        "  <option value='other-course'>Other Academic</option>" +
+        "  <option value='non-academic'>Non-Academic</option>" +
+        "</select>" +
+        "<br><textarea id='reason' rows='4' cols='70' placeholder='Details: e.g., payment for lecture notes'></textarea>" +
         "<br><button  onclick='send_token()'>Send Cognocents</button>" +
         "<p id='receipt'></p></div></td>" +
-        "<td>Send feedback: maximum is 5, minimum is -5" +
-        "<br><label for='score'>Score:</label><input type='text' id='score' placeholder='e.g. 5'><br>" +
-        "<label for='trans_id'>Transaction ID #:</label><input type='text' id='trans_id' placeholder='e.g. 1'></input>" +
-        "<br><br><button  onclick='leave_feedback()'>Send Feedback</button>" +
-        "<p id='fed_back'></p></td></tr></table>" +
+        "<td>Coming soon!</td></tr></table>" +
         "<h3>Transaction History</h3>" +
         "<table id='transactions' style='width:90%'>" +
         "  <tr>" +
@@ -801,10 +823,26 @@ window.setInterval(function(){
   if(user.status == "ST"){
     for(var i = 0; i < user.trans_hist.length; i++){
       if(user.trans_hist[i]){
-        if(user.account == user.trans_hist[i][0] ||user.account == user.trans_hist[i][1]){
+        if(same_addr(user.account, user.trans_hist[i][0]) || same_addr(user.account, user.trans_hist[i][1])){
           var snd_fbk_id = "tr_" + i + "_snd_fbk"
           if(!document.getElementById("transactions").innerHTML.includes(snd_fbk_id)){
             document.getElementById("transactions").innerHTML += make_trans_rows(i)
+          }
+          else{
+            if(user.sender_fbk_ch[i]){
+              if(user.trans_hist[i][4] != -10){
+                document.getElementById(snd_fbk_id).innerHTML = user.trans_hist[i][3];
+                document.getElementById(snd_fbk_id).className = 'midnum';
+              }
+              user.sender_fbk_ch[i] = false;
+            }
+            if(user.receiver_fbk_ch[i]){
+              if(user.trans_hist[i][3] != -10){
+                document.getElementById(snd_fbk_id).innerHTML = user.trans_hist[i][4];
+                document.getElementById(snd_fbk_id).className = 'midnum';
+              }
+              user.receiver_fbk_ch[i] = false;
+            }
           }
         }
       }
@@ -814,13 +852,20 @@ window.setInterval(function(){
     }
   }
   times+=1;
-  if(times % 40 == 10){
+  if(times % 20 == 10){
     console.log("Plotting...");
     draw_charts();
   }
 }, 3000);
 
 draw_charts();
+
+function same_addr(addr1, addr2){
+  if (addr1 && addr2){
+    return addr1.toUpperCase() == addr2.toUpperCase();
+  }
+  return false;
+}
 
 function split_address(addr) {
   if(is_address(addr)){
@@ -833,18 +878,78 @@ function make_trans_rows(i){
     console.log("Trying to make a row for a nonexistent transaction: " + i);
     return;
   }
-  var rows = "<tr class='hist'><td>" + user.trans_hist[i][5] + "</td>" +
-    "<td>" + split_address(user.trans_hist[i][0]) + "</td>" +
-    "<td>" + split_address(user.trans_hist[i][1]) + "</td>" +
-    "<td class='midnum'>" + user.trans_hist[i][6] + "<div class='s'></div></td>";
-  if(user.trans_hist[i][3]=='-10' || user.trans_hist[i][3]==-10){
-    rows += "<td id = 'tr_" + i + "_snd_fbk'>Not yet given</td>";
+  var rows = "<tr class='hist'><td>" + user.trans_hist[i][5] + "</td>"
+  if(same_addr(user.trans_hist[i][0], user.account)){
+    rows += "<td class='midnum'>YOU</td>"
+  }
+  else{
+    rows += "<td>" + split_address(user.trans_hist[i][0]) + "</td>"
+  }
+  if(same_addr(user.trans_hist[i][1], user.account)){
+    rows += "<td class='midnum'>YOU</td>"
+  }
+  else{
+    rows += "<td>" + split_address(user.trans_hist[i][1]) + "</td>"
+  }
+  rows += "<td class='midnum'>" + user.trans_hist[i][6] + "<div class='s'></div></td>";
+  if(user.trans_hist[i][3]== -10){
+    if(same_addr(user.trans_hist[i][0], user.account)){
+      elem = "tr_" + i + "_snd_fbk";
+      rows += "<td id = '" + elem + "'><select id='tr_" + i + "_snd_fbk_sel' onchange='leave_feedback(this.value, " + i + ", \"" + elem + "\")'>" +
+        "<option value='' selected disabled>Give Feedback:</option>" +
+        "<option value='5'>5</option>" +
+        "<option value='4'>4</option>" +
+        "<option value='3'>3</option>" +
+        "<option value='2'>2</option>" +
+        "<option value='1'>1</option>" +
+        "<option value='0'>0</option>" +
+        "<option value='-1'>-1</option>" +
+        "<option value='-2'>-2</option>" +
+        "<option value='-3'>-3</option>" +
+        "<option value='-4'>-4</option>" +
+        "<option value='-5'>-5</option>" +
+        "</select><div class='" + elem + "_x'></div></td>"
+    }
+    else if (same_addr(user.trans_hist[i][1], user.account) && user.trans_hist[i][4]== -10) {
+      rows += "<td id = 'tr_" + i + "_snd_fbk'><b>Give feedback to reveal</b></td>";
+    }
+    else{
+      rows += "<td id = 'tr_" + i + "_snd_fbk'>Not yet given</td>";
+    }
+  }
+  else if (same_addr(user.trans_hist[i][1], user.account) && user.trans_hist[i][4]== -10) {
+    rows += "<td id = 'tr_" + i + "_snd_fbk'><b>Give feedback to reveal</b></td>";
   }
   else {
     rows += "<td class='midnum' id = 'tr_" + i + "_snd_fbk'>" + user.trans_hist[i][3] + "</td>";
   }
-  if(user.trans_hist[i][4]=='-10' || user.trans_hist[i][4]==-10){
-    rows += "<td id = 'tr_" + i + "_rec_fbk'>Not yet given</td>";
+  if(user.trans_hist[i][4]== -10){
+    if(same_addr(user.trans_hist[i][1], user.account)){
+      elem = "tr_" + i + "_rec_fbk";
+      rows += "<td id = '" + elem + "'><select id='tr_" + i + "_rec_fbk_sel' onchange='leave_feedback(this.value, " + i + ", \"" + elem + "\")'>" +
+        "<option value='' selected disabled>Give Feedback:</option>" +
+        "<option value='5'>5</option>" +
+        "<option value='4'>4</option>" +
+        "<option value='3'>3</option>" +
+        "<option value='2'>2</option>" +
+        "<option value='1'>1</option>" +
+        "<option value='0'>0</option>" +
+        "<option value='-1'>-1</option>" +
+        "<option value='-2'>-2</option>" +
+        "<option value='-3'>-3</option>" +
+        "<option value='-4'>-4</option>" +
+        "<option value='-5'>-5</option>" +
+        "</select><div class='" + elem + "_x'></div></td>"
+    }
+    else if (same_addr(user.trans_hist[i][0], user.account) && user.trans_hist[i][3]== -10) {
+      rows += "<td id = 'tr_" + i + "_rec_fbk'><b>Give feedback to reveal</b></td>";
+    }
+    else{
+      rows += "<td id = 'tr_" + i + "_rec_fbk'>Not yet given</td>";
+    }
+  }
+  else if (same_addr(user.trans_hist[i][0], user.account) && user.trans_hist[i][3]== -10) {
+    rows += "<td id = 'tr_" + i + "_rec_fbk'><b>Give feedback to reveal</b></td>";
   }
   else {
     rows += "<td class='midnum' id = 'tr_" + i + "_rec_fbk'>" + user.trans_hist[i][4] + "</td>";
@@ -946,10 +1051,6 @@ function is_address(str){
 }
 
 function get_transactions(){
-  // Doing the toUpperCase here is useful because I need to make a copy of
-  // user.account, in case it changes in the middle of the function call.
-  // asdjhjkfhkfghdkjf @ asynchronous methods
-  receiverD = user.account.toUpperCase()
   // asynchronous call to smart contract, gets number of transactions, so loop
   // can be defined (number is `result`)
   myContract.totalNum_transactions.call(function(error,result){
@@ -967,30 +1068,33 @@ function get_transactions(){
         // asynchronous call to contract, retrieving the i-th transaction,
         // checks for transactions involving the address given, dsplays those
         // that contain the given address as sender OR recipient
-        myContract.transactions.call(i, function(error,result){
-          // anonymous function to process output of async call
-          if(error) {
-            alert("Error: Was not able to communicate with contract")
-            console.log(error)
-          }
-          else {
-            // Gather all transactions to local db
-            result[0] = result[0].toUpperCase();
-            result[1] = result[1].toUpperCase();
-            if(!user.trans_hist[result[5]]){
-              user.trans_hist[result[5]] = result;
+        if(!user.trans_hist[i] || user.trans_hist[i][3]== -10 || user.trans_hist[i][4]){
+          myContract.transactions.call(i, function(error,result){
+            // anonymous function to process output of async call
+            if(error) {
+              alert("Error: Was not able to communicate with contract")
+              console.log(error)
             }
-            else{
-              if(user.trans_hist[result[5]][3] != result[3]){                  user.trans_hist[result[5]][3] = result[3];
-                user.sender_fbk_ch[result[5]] = true;
+            else {
+              // Gather all transactions to local db
+              if(!user.trans_hist[result[5]]){
+                user.trans_hist[result[5]] = result;
+                user.sender_fbk_ch[result[5]] = false;
+                user.receiver_fbk_ch[result[5]] = false;
               }
-              if(user.trans_hist[result[5]][4] != result[4]){
-                user.trans_hist[result[5]][4] = result[4];
-                user.receiver_fbk_ch[result[5]] = true;
+              else{
+                if(get(user.trans_hist[result[5]][3]) != get(result[3])){
+                  user.trans_hist[result[5]][3] = result[3];
+                  user.sender_fbk_ch[result[5]] = true;
+                }
+                if(get(user.trans_hist[result[5]][4]) != get(result[4])){
+                  user.trans_hist[result[5]][4] = result[4];
+                  user.receiver_fbk_ch[result[5]] = true;
+                }
               }
             }
-          }
-        });
+          });
+        }
       }
     }
   });
@@ -1000,11 +1104,12 @@ function send_token(){
   // Take inputs from the form
   var cognocents = document.getElementById("to_send").value;
   var recipient = document.getElementById("recip_addr").value;
+  var cat = document.getElementById("category").value;
   var reason = document.getElementById("reason").value;
   // Before sending values to the smart contract, let's see if they make sense.
   // There are some checks (if the sender has enough funds, if the recipient
   // exists) which can only be done by the contract, but these can be done locally
-  if(cognocents === '' || recipient === '' || reason === '' ) {
+  if(cognocents === '' || recipient === '' || reason === '' || cat === '') {
     document.getElementById("receipt").innerHTML = "Error: All fields must be filled in!";
     return;
   }
@@ -1020,6 +1125,15 @@ function send_token(){
     document.getElementById("receipt").innerHTML = "Error: You must send at least one Cognocent";
     return;
   }
+  if(same_addr(user.account, recipient)) {
+    document.getElementById("receipt").innerHTML = "Error: You cannot send yourself money";
+    return;
+  }
+  categories = {'inf1-cg': 'INF1-CG RELATED: ',
+    'other-course': 'OTHER ACADEMIC: ',
+    'non-academic': 'NON-ACEDMIC: '
+  };
+  reason = categories[cat] + ' ' + reason
   // The contract doesn't actually return an error if you try to pay more than
   // you have; the transaction just silently fails. Same if you send to an
   // unregistered address
@@ -1072,21 +1186,21 @@ function send_token(){
   })
 }
 
-function leave_feedback(){
-  var score = document.getElementById("score").value;
-  var transaction = document.getElementById("trans_id").value;
+function leave_feedback(score, transaction, elem){
   // Before sending values to the smart contract, let's see if they make sense.
-  if(score === '' || transaction === '') {
-    document.getElementById("fed_back").innerHTML = "Error: All fields must be filled in!";
-    return;
-  }
   if(isNaN(parseInt(transaction)) || parseInt(transaction) != Number(transaction) || parseInt(transaction) < 0){
-    document.getElementById("fed_back").innerHTML = "Error: That is not a valid transaction ID.<br>Transaction IDs are non-negative whole numbers.";
+    document.getElementById(elem + "_x").innerHTML = "not a valid transaction ID.";
     return;
   }
   if(isNaN(parseInt(score)) || parseInt(score) != Number(score)){
-    document.getElementById("fed_back").innerHTML = "Error: Feedback score must be whole number";
+    document.getElementById(elem + "_x").innerHTML = "must be whole number";
     return;
+  }
+  // We need to know if this is sender or receiver feedback, so we can correctly
+  // update the table
+  var role = 4;
+  if(elem.includes('snd')){
+    role = 3;
   }
   myContract.min_score(function(error, result){
     if(error) {
@@ -1104,7 +1218,7 @@ function leave_feedback(){
           var max = get(result);
           if ((score < min) || (score > max)) {
             alert("Error: Score is out of range :(")
-            document.getElementById("fed_back").innerHTML = "Error: Feedback score cannot be greater than 5 or less than -5";
+            document.getElementById(elem + "_x").innerHTML = "out of range";
           }
           else {
             myContract.transactions.call(transaction, function(error, result){
@@ -1115,20 +1229,17 @@ function leave_feedback(){
               else {
                 var you = -1
                 for(var i = 0; i<2; i++) {
-                  if(result[i].toUpperCase() === user.account .toUpperCase()) {
-                    console.log(i);
+                  if(same_addr(result[i], user.account)) {
                     you = i
                   }
                 }
                 if(you == -1){
-                  console.log(result[0]);
-                  console.log(result[1]);
-                  console.log(user.account )
-                  document.getElementById("fed_back").innerHTML = "You were not a party to transaction #" + transaction;
+                  console.log(user.account)
+                  document.getElementById(elem + "_x").innerHTML = "Not your transaction" + transaction;
                   alert("Error: None of your business! >:(")
                 }
                 else if (result[you+3]!='-10') {
-                document.getElementById("fed_back").innerHTML = "You already gave feedback on transaction #" + transaction;
+                document.getElementById(elem + "_x").innerHTML = "Already gave feedback" + transaction;
                   alert("Error: Already done! :(")
                 }
                 else {
@@ -1136,10 +1247,29 @@ function leave_feedback(){
                     if(error) {
                       alert(error)
                       console.log(error)
-                      document.getElementById("fed_back").innerHTML = "An error occurred";
+                      document.getElementById(elem + "_x").innerHTML = "An error occurred";
                     }
                     else {
-                      document.getElementById("fed_back").innerHTML = "You gave a score of " + score + " for transaction #" + transaction;
+                      user.trans_hist[transaction][role] = score
+                      document.getElementById(elem).innerHTML = score;
+                      document.getElementById(elem).className = "midnum";
+                      var opp_elem;
+                      var opp_role;
+                      if(role==3){
+                        opp_elem = elem.replace("snd", "rec");
+                        opp_role = 4;
+                      }
+                      else {
+                        opp_elem = elem.replace("rec", "snd");
+                        opp_role = 3;
+                      }
+                      if(user.trans_hist[transaction][opp_role]== -10){
+                        document.getElementById(opp_elem).innerHTML = "Not yet given";
+                      }
+                      else{
+                        document.getElementById(opp_elem).innerHTML = user.trans_hist[transaction][opp_role];
+                        document.getElementById(opp_elem).className = "midnum";
+                      }
                     }
                   })
                 }
@@ -1153,6 +1283,9 @@ function leave_feedback(){
 }
 
 function get(n){
+  if(!n.c){
+    console.log(n);
+  }
   return n.c[0] * n.s
 }
 
@@ -1178,7 +1311,7 @@ function add_admin() {
       alert(error)
     }
     else {
-      if (result.toUpperCase() != user.account .toUpperCase()) {
+      if (!same_addr(result, user.account)) {
         document.getElementById("confirm_admin").innerHTML = "Error: Only the Contract Owner can add and remove admins.";
         alert("Error: not allowed")
       }
@@ -1220,7 +1353,7 @@ function remove_admin() {
       alert(error)
     }
     else {
-      if (result.toUpperCase() != user.account .toUpperCase()) {
+      if (!same_addr(result, user.account)) {
         document.getElementById("destroy_admin").innerHTML = "Error: Only the Contract Owner can add and remove admins.";
         alert("Error: not allowed")
       }
