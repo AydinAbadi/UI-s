@@ -132,8 +132,16 @@ div.a {
 
 <table>
 <tr><th>Trade Values</th><th>Feedback Values</th></tr>
+<tr><td></td><td></td></tr>
+<tr><td></td><td></td></tr>
 <tr><td><canvas id="tradeVals" width="400" height="400"></canvas></td>
 <td><canvas id="fbVals" width="400" height="400"></canvas></td></tr>
+<tr><td></td><td></td></tr>
+<tr><td></td><td></td></tr>
+<tr><th>Trade Types</th><th>???</th></tr>
+<tr><td></td><td></td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><canvas id="tradeCats" width="400" height="400"></canvas></td><td></td></tr>
 </table>
 
 <br>
@@ -831,15 +839,29 @@ window.setInterval(function(){
           else{
             if(user.sender_fbk_ch[i]){
               if(user.trans_hist[i][4] != -10){
+                // Remember, changes to displayed feedback from this route are
+                // always changes left by the other party; so don't display it if
+                // the user hasn't given feedback also
                 document.getElementById(snd_fbk_id).innerHTML = user.trans_hist[i][3];
                 document.getElementById(snd_fbk_id).className = 'midnum';
+                if (user.trans_hist[i][3] == -10){
+                  console.log("Aha, a -10 has been detected");
+                } // there's a minor bug where a change to the displayed value of
+                // a feedback newly given by the user flips briefly from the new
+                // value to -10, then back. I am hunting its cause
               }
               user.sender_fbk_ch[i] = false;
             }
             if(user.receiver_fbk_ch[i]){
+              // Remember, changes to displayed feedback from this route are
+              // always changes left by the other party; so don't display it if
+              // the user hasn't given feedback also
               if(user.trans_hist[i][3] != -10){
-                document.getElementById(snd_fbk_id).innerHTML = user.trans_hist[i][4];
-                document.getElementById(snd_fbk_id).className = 'midnum';
+                document.getElementById("tr_" + i + "_rec_fbk").innerHTML = user.trans_hist[i][4];
+                document.getElementById("tr_" + i + "_rec_fbk").className = 'midnum';
+                if (user.trans_hist[i][4] == -10){
+                  console.log("Oho, a -10 has been detected");
+                }
               }
               user.receiver_fbk_ch[i] = false;
             }
@@ -1131,7 +1153,7 @@ function send_token(){
   }
   categories = {'inf1-cg': 'INF1-CG RELATED: ',
     'other-course': 'OTHER ACADEMIC: ',
-    'non-academic': 'NON-ACEDMIC: '
+    'non-academic': 'NON-ACADEMIC: '
   };
   reason = categories[cat] + ' ' + reason
   // The contract doesn't actually return an error if you try to pay more than
@@ -1269,6 +1291,9 @@ function leave_feedback(score, transaction, elem){
                       else{
                         document.getElementById(opp_elem).innerHTML = user.trans_hist[transaction][opp_role];
                         document.getElementById(opp_elem).className = "midnum";
+                        if (document.getElementById(opp_elem).innerHTML == -10) {
+                          console.log("Dude wtf a -10");
+                        }
                       }
                     }
                   })
@@ -1284,7 +1309,7 @@ function leave_feedback(score, transaction, elem){
 
 function get(n){
   if(!n.c){
-    console.log(n);
+    return n;
   }
   return n.c[0] * n.s
 }
@@ -1547,7 +1572,7 @@ function draw_charts(){
   }
   trade_vals_x = Object.keys(amt_tots).sort();
   trade_vals_y = trade_vals_x.map(x_val => amt_tots[x_val]);
-  barchart(trade_vals_x, trade_vals_y, "# of trades at value", "tradeVals");
+  barchart(trade_vals_x, trade_vals_y, "value of trade", "frequency", "tradeVals");
   // Second, frequencies of feedback values
   var fbks = user.trans_hist.map(transac => transac[3]).concat(user.trans_hist.map(transac => transac[4]));
   var fbk_tots = {'-5':0,'-4':0,'-3':0,'-2':0,'-1':0,'0':0,'1':0,'2':0,'3':0,'4':0,'5':0};
@@ -1558,10 +1583,17 @@ function draw_charts(){
   }
   fbk_vals_x = [-5,-4,-3,-2,-1,0,1,2,3,4,5];
   fbk_vals_y = fbk_vals_x.map(x_val => fbk_tots[x_val]);
-  barchart(fbk_vals_x, fbk_vals_y, "# of feedbacks at value", "fbVals");
+  barchart(fbk_vals_x, fbk_vals_y, "feedback level", "frequency", "fbVals");
+  // Third, how many trades of each category?
+  cat_counts = [0,0,0]
+  cat_starts = ['INF1-CG RELATED: ', 'OTHER ACADEMIC: ', 'NON-ACADEMIC: ']
+  for(var i=0; i < cat_starts.length; i++){
+    cat_counts[i] = user.trans_hist.map(transac => transac[2]).filter(function(x){return x.startsWith(cat_starts[i])}).length;
+  }
+  pie_chart(["Inf1-CG related", "Other courses", "Non-academic"], cat_counts, "Number of trades of each category", "tradeCats");
 }
 
-function barchart(x, y, x_label, element){
+function barchart(x, y, x_label, y_label, element){
   var ctx = document.getElementById(element).getContext('2d');
   var rpts = Math.ceil(x.length/3)
   bg_colours = Array(rpts).fill(["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"]).flat();
@@ -1569,25 +1601,62 @@ function barchart(x, y, x_label, element){
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: x,
-        datasets: [{
-            label: x_label,
-            data: y,
-            backgroundColor: bg_colours,
-            borderColor: bord_colours,
-            borderWidth: 1
-        }]
+      labels: x,
+      datasets: [{
+        data: y,
+        backgroundColor: bg_colours,
+        borderColor: bord_colours,
+        borderWidth: 1
+      }]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
+      legend: {
+        display:false
+      },
+      scales: {
+        xAxes: [{
+          scaleLabel: {
+            display:true,
+            labelString:x_label
+          }
+        }],
+        yAxes: [{
+          scaleLabel: {
+            display:true,
+            labelString:y_label
+          },
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      }
     }
-});
+  });
+}
+
+function pie_chart(x, y, lab, element){
+  var ctx = document.getElementById(element).getContext('2d');
+  var rpts = Math.ceil(x.length/3)
+  bg_colours = Array(rpts).fill(["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"]).flat();
+  bord_colours = Array(rpts).fill(["rgba(255, 0, 0, 1)", "rgba(255, 215, 0, 1)", "rgba(0, 0, 0, 1)"]).flat();
+  var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: x,
+      datasets: [{
+        data: y,
+        backgroundColor: bg_colours,
+        borderColor: bord_colours,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      title: {
+        display:true,
+        text:lab
+      }
+    }
+  });
 }
 
 </script>
