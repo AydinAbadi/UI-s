@@ -39,6 +39,18 @@ table {
   margin-right: auto;
 }
 
+table.s {
+  padding-left: 1px;
+  padding-right: 1px;
+  text-align: center;
+}
+
+th.s{
+  font-family: "Zilla Slab";
+  font-weight: bold;
+  transform: scale(1, 1);
+}
+
 tr.hist:nth-child(even) {
   background-color: lightgray;
 }
@@ -90,7 +102,7 @@ button {
 
 button:hover {
   background-color: black;
-  color: white
+  color: white;
 }
 
 option:disabled {
@@ -102,7 +114,7 @@ option {
 }
 
 div.a {
-  font-family: "Zilla Slab"
+  font-family: "Zilla Slab";
 }
 
 </style></head>
@@ -761,9 +773,9 @@ window.setInterval(function(){
         "  </tr>" +
         "</table>" +
         "<h3>Trading Centre</h3>" +
-        "<table><tr><th width=60%>Trade</th><th width=40%>Check Reputation</th><tr>" +
+        "<table><tr><th>Trade</th><th>Check Reputation</th><tr>" +
         "<tr><td><label for='to_send'>Number of Cognocents:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
-        "<label for='recip_addr'>Recipient\'s Address:</label><input type='text' id='recip_addr' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input>" +
+        "<label for='recip_addr'>Recipient\'s Address:</label><input type='text' size='42' id='recip_addr' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input>" +
         "<br><label for='reason'>Reason for transaction:</label>" +
         "<select id='category' name='category'>" +
         "  <option value='' selected disabled>chose category:</option>" +
@@ -771,10 +783,20 @@ window.setInterval(function(){
         "  <option value='other-course'>Other Academic</option>" +
         "  <option value='non-academic'>Non-Academic</option>" +
         "</select>" +
-        "<br><textarea id='reason' rows='4' cols='70' placeholder='Details: e.g., payment for lecture notes'></textarea>" +
-        "<br><button  onclick='send_token()'>Send Cognocents</button>" +
+        "<br><textarea id='reason' rows='7' cols='70' placeholder='Details: e.g., payment for lecture notes'></textarea>" +
+        "<br><br><button  onclick='send_token()'>Send Cognocents</button>" +
         "<p id='receipt'></p></div></td>" +
-        "<td>Coming soon!</td></tr></table>" +
+        "<td>Enter a student address to check their reputation:<br><br>" +
+        "<label for='check_addr'></label><input type='text' id='check_addr' size='42' placeholder='e.g. 0xaabcc4408deadbeef42150a8badb01890fa09666'> <button onclick='show_report()'>Check</button>" +
+        "<br><br><table class='s'>" +
+        "  <tr><td></td><th class='s'>As sender</th><th class='s'>As receiver</th><th class='s'>All trades</th></tr>" +
+        "  <tr><th class='s'># of trades</th><td id='snd_trs'>--</td><td id='rec_trs'>--</td><td id='all_trs'>--</td></tr>" +
+        "  <tr><th class='s'>value traded</th><td id='snd_trd'>--</td><td id='rec_trd'>--</td><td id='all_trd'>--</td></tr>" +
+        "  <tr><th class='s'>mean trade</th><td id='snd_trd_m'>--</td><td id='rec_trd_m'>--</td><td id='all_trd_m'>--</td></tr>" +
+        "  <tr><th class='s'>feedback</th><td id='snd_fbk'>--</td><td id='rec_fbk'>--</td><td id='all_fbk'>--</td></tr>" +
+        "  <tr><th class='s'>mean feedback</th><td id='snd_fbk_m'>--</td><td id='rec_fbk_m'>--</td><td id='all_fbk_m'>--</td></tr>" +
+        "</table><div id='rprt'></div>" +
+        "</td></tr></table>" +
         "<h3>Transaction History</h3>" +
         "<table id='transactions' style='width:90%'>" +
         "  <tr>" +
@@ -829,7 +851,7 @@ window.setInterval(function(){
     user.rep_ch = false;
   }
   if(user.status == "ST"){
-    for(var i = 0; i < user.trans_hist.length; i++){
+    for(var i = 1; i < user.trans_hist.length; i++){
       if(user.trans_hist[i]){
         if(same_addr(user.account, user.trans_hist[i][0]) || same_addr(user.account, user.trans_hist[i][1])){
           var snd_fbk_id = "tr_" + i + "_snd_fbk"
@@ -838,7 +860,7 @@ window.setInterval(function(){
           }
           else{
             if(user.sender_fbk_ch[i]){
-              if(user.trans_hist[i][4] != -10){
+              if(user.trans_hist[i][3] != -10 && user.trans_hist[i][4] != -10){
                 // Remember, changes to displayed feedback from this route are
                 // always changes left by the other party; so don't display it if
                 // the user hasn't given feedback also
@@ -856,7 +878,7 @@ window.setInterval(function(){
               // Remember, changes to displayed feedback from this route are
               // always changes left by the other party; so don't display it if
               // the user hasn't given feedback also
-              if(user.trans_hist[i][3] != -10){
+              if(user.trans_hist[i][3] != -10 && user.trans_hist[i][4] != -10){
                 document.getElementById("tr_" + i + "_rec_fbk").innerHTML = user.trans_hist[i][4];
                 document.getElementById("tr_" + i + "_rec_fbk").className = 'midnum';
                 if (user.trans_hist[i][4] == -10){
@@ -896,7 +918,7 @@ function split_address(addr) {
 }
 
 function make_trans_rows(i){
-  if (!user.trans_hist[i]) {
+  if (!user.trans_hist[i] || i==0) {
     console.log("Trying to make a row for a nonexistent transaction: " + i);
     return;
   }
@@ -1100,17 +1122,20 @@ function get_transactions(){
             else {
               // Gather all transactions to local db
               if(!user.trans_hist[result[5]]){
+                for(var j = 3; j < result.length; j++){
+                  result[j] = parseInt(result[j]);
+                }
                 user.trans_hist[result[5]] = result;
                 user.sender_fbk_ch[result[5]] = false;
                 user.receiver_fbk_ch[result[5]] = false;
               }
               else{
                 if(get(user.trans_hist[result[5]][3]) != get(result[3])){
-                  user.trans_hist[result[5]][3] = result[3];
+                  user.trans_hist[result[5]][3] = parseInt(result[3]);
                   user.sender_fbk_ch[result[5]] = true;
                 }
                 if(get(user.trans_hist[result[5]][4]) != get(result[4])){
-                  user.trans_hist[result[5]][4] = result[4];
+                  user.trans_hist[result[5]][4] = parseInt(result[4]);
                   user.receiver_fbk_ch[result[5]] = true;
                 }
               }
@@ -1563,7 +1588,7 @@ function reputations(){
 function draw_charts(){
   /* Plots all charts*/
   // First, a chart showing the frequencies of transaction values
-  var amounts = user.trans_hist.map(transac => transac[6]);
+  var amounts = user.trans_hist.slice(1).map(transac => transac[6]);
   var amt_tots = {};
   for(var i =0; i <amounts.length; i++){
     if (amounts[i]>0){
@@ -1574,7 +1599,7 @@ function draw_charts(){
   trade_vals_y = trade_vals_x.map(x_val => amt_tots[x_val]);
   barchart(trade_vals_x, trade_vals_y, "value of trade", "frequency", "tradeVals");
   // Second, frequencies of feedback values
-  var fbks = user.trans_hist.map(transac => transac[3]).concat(user.trans_hist.map(transac => transac[4]));
+  var fbks = user.trans_hist.slice(1).map(transac => transac[3]).concat(user.trans_hist.map(transac => transac[4]));
   var fbk_tots = {'-5':0,'-4':0,'-3':0,'-2':0,'-1':0,'0':0,'1':0,'2':0,'3':0,'4':0,'5':0};
   for(var i =0; i <fbks.length; i++){
     if((fbks[i]>= -5)&&(fbks[i]<=5)){
@@ -1588,7 +1613,7 @@ function draw_charts(){
   cat_counts = [0,0,0]
   cat_starts = ['INF1-CG RELATED: ', 'OTHER ACADEMIC: ', 'NON-ACADEMIC: ']
   for(var i=0; i < cat_starts.length; i++){
-    cat_counts[i] = user.trans_hist.map(transac => transac[2]).filter(function(x){return x.startsWith(cat_starts[i])}).length;
+    cat_counts[i] = user.trans_hist.slice(1).map(transac => transac[2]).filter(function(x){return x.startsWith(cat_starts[i])}).length;
   }
   pie_chart(["Inf1-CG related", "Other courses", "Non-academic"], cat_counts, "Number of trades of each category", "tradeCats");
 }
@@ -1657,6 +1682,143 @@ function pie_chart(x, y, lab, element){
       }
     }
   });
+}
+
+function get_report(addr){
+  /* Goes through the record of all transactions and generates a summary of
+  trades and feedback for one address. Returns an Object with the following
+  elements: Total traded, number of trades, mean trade, total feedback,
+  mean feedback; all of which will include sender-only, receive */
+  if (!is_address(addr)){
+    if(err_elem != ''){
+      document.getElementById(err_elem).innerHTML = "That's not an address";
+    }
+    return;
+  }
+  var report = {
+    trades:{
+      as_sender:0,
+      as_receiver:0,
+      all:0
+    },
+    trade_vals:{
+      as_sender:0,
+      as_receiver:0,
+      all:0
+    },
+    mean_trades:{
+      as_sender:0,
+      as_receiver:0,
+      all:0
+    },
+    total_fbks:{
+      as_sender:0,
+      as_receiver:0,
+      all:0
+    },
+    mean_fbks:{
+      as_sender:0,
+      as_receiver:0,
+      all:0
+    }
+  }
+  var num_snd_fbks=0;
+  var num_rec_fbks=0;
+  for(var i = 1; i < user.trans_hist.length; i++){
+    if(same_addr(addr, user.trans_hist[i][0])){
+      report.trades.as_sender++;
+      report.trade_vals.as_sender += user.trans_hist[i][6]
+      if(user.trans_hist[i][3]!= -10){
+        report.total_fbks.as_receiver += user.trans_hist[i][3]
+        num_snd_fbks++;
+      }
+    }
+    if(same_addr(addr, user.trans_hist[i][1])){
+      report.trades.as_receiver++;
+      report.trade_vals.as_receiver += user.trans_hist[i][6]
+      if(user.trans_hist[i][4]!= -10){
+        report.total_fbks.as_receiver += user.trans_hist[i][4]
+        num_rec_fbks++;
+      }
+    }
+  }
+  report.trades.all = report.trades.as_sender+report.trades.as_receiver;
+  report.trade_vals.all = report.trade_vals.as_sender+report.trade_vals.as_receiver;
+  report.total_fbks.all = report.total_fbks.as_sender+report.total_fbks.as_receiver;
+  report.mean_trades.as_sender = divide_or_zero(report.trade_vals.as_sender, report.trades.as_sender);
+  report.mean_fbks.as_sender = divide_or_zero(report.total_fbks.as_sender, num_snd_fbks);
+  report.mean_trades.as_receiver = divide_or_zero(report.trade_vals.as_receiver, report.trades.as_receiver);
+  report.mean_fbks.as_receiver = divide_or_zero(report.total_fbks.as_receiver, num_rec_fbks);
+  report.mean_trades.all = divide_or_zero(report.trade_vals.all, report.trades.all);
+  report.mean_fbks.all = divide_or_zero(report.total_fbks.all, num_snd_fbks+num_rec_fbks);
+  return report;
+}
+
+function divide_or_zero(x, y){
+  if(y==0) {
+    return 0;
+  }
+  else{
+    return x/y;
+  }
+}
+
+
+function show_report(){
+  var addr = document.getElementById('check_addr').value;
+  if (!is_address(addr)){
+    console.log(addr);
+    document.getElementById("rprt").innerHTML = "That's not an address";
+    document.getElementById("snd_trs").innerHTML = "--";
+    document.getElementById("rec_trs").innerHTML = "--";
+    document.getElementById("all_trs").innerHTML = "--";
+    document.getElementById("snd_trd").innerHTML = "--";
+    document.getElementById("rec_trd").innerHTML = "--";
+    document.getElementById("all_trd").innerHTML = "--";
+    document.getElementById("snd_trd_m").innerHTML = "--";
+    document.getElementById("rec_trd_m").innerHTML = "--";
+    document.getElementById("all_trd_m").innerHTML = "--";
+    document.getElementById("snd_fbk").innerHTML = "--";
+    document.getElementById("rec_fbk").innerHTML = "--";
+    document.getElementById("all_fbk").innerHTML = "--";
+    document.getElementById("snd_fbk_m").innerHTML = "--";
+    document.getElementById("rec_fbk_m").innerHTML = "--";
+    document.getElementById("all_fbk_m").innerHTML = "--";
+    return;
+  }
+  report = get_report(addr);
+  document.getElementById("snd_trs").innerHTML = report.trades.as_sender;
+  document.getElementById("rec_trs").innerHTML = report.trades.as_receiver;
+  document.getElementById("all_trs").innerHTML = report.trades.all;
+  document.getElementById("snd_trd").innerHTML = report.trade_vals.as_sender;
+  document.getElementById("rec_trd").innerHTML = report.trade_vals.as_receiver;
+  document.getElementById("all_trd").innerHTML = report.trade_vals.all;
+  document.getElementById("snd_trd_m").innerHTML = report.mean_trades.as_sender.toFixed(2);
+  document.getElementById("rec_trd_m").innerHTML = report.mean_trades.as_receiver.toFixed(2);
+  document.getElementById("all_trd_m").innerHTML = report.mean_trades.all.toFixed(2);
+  document.getElementById("snd_fbk").innerHTML = report.total_fbks.as_sender;
+  document.getElementById("rec_fbk").innerHTML = report.total_fbks.as_receiver;
+  document.getElementById("all_fbk").innerHTML = report.total_fbks.all;
+  document.getElementById("snd_fbk_m").innerHTML = report.mean_fbks.as_sender.toFixed(2);
+  document.getElementById("rec_fbk_m").innerHTML = report.mean_fbks.as_receiver.toFixed(2);
+  document.getElementById("all_fbk_m").innerHTML = report.mean_fbks.all.toFixed(2);
+  document.getElementById("rprt").innerHTML = "Trade and feedback report for the account at:<br>" + addr;
+  if(report.trades.all==0) {
+    myContract.valid_student_addr.call(addr, function(error, result){
+      if(error) {
+        alert("Error: Was not able to communicate with contract :(");
+        console.log(error);
+      }
+      else {
+        if(result) {
+          document.getElementById("rprt").innerHTML += "<br>This is a valid student account, but has not traded.";
+        }
+        else{
+          document.getElementById("rprt").innerHTML += "<br>Note that this is not a valid student account.";
+        }
+      }
+    })
+  }
 }
 
 </script>
