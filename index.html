@@ -697,7 +697,7 @@ const distrib_html = "<br><label for='redistribute'>Number of Cognocents:</label
 var times = 0;
 
 window.setInterval(function(){
-  /* This repeats every half-second, first updating the page's user model, then
+  /* This repeats every 3 secs, first updating the page's user model, then
   the page itself */
   // 1: update user model
   if(web3.eth.coinbase){
@@ -710,6 +710,7 @@ window.setInterval(function(){
   reputations();
   // 2. update page
   if(user.account_ch){
+    // If the user logged in changes, wipe the old user model and rebuild
     update_element("status1", "You are logged in as " + user.account );
     user.account_ch = false;
     user.balance = null;
@@ -737,7 +738,7 @@ window.setInterval(function(){
   if(user.status_ch || document.getElementById("status2").innerHTML == ""){
     update_element("status2", status_txt[user["status"]]);
     switch (user.status) {
-      default:
+      default: // users with no account get nothing
         document.getElementById("create_admin").innerHTML = "";
         document.getElementById("remove_admin").innerHTML = "";
         document.getElementById("register_num").innerHTML = "";
@@ -745,7 +746,7 @@ window.setInterval(function(){
         document.getElementById("distribute").innerHTML = "";
         document.getElementById("student_view").innerHTML = "";
         break;
-      case "NA":
+      case "NA": // same with users with unregistred accounts
         document.getElementById("create_admin").innerHTML = "";
         document.getElementById("remove_admin").innerHTML = "";
         document.getElementById("register_num").innerHTML = "";
@@ -753,7 +754,7 @@ window.setInterval(function(){
         document.getElementById("distribute").innerHTML = "";
         document.getElementById("student_view").innerHTML = "";
         break;
-      case "ST":
+      case "ST": // students don't get the admin tools, but get student view
         document.getElementById("create_admin").innerHTML = "";
         document.getElementById("remove_admin").innerHTML = "";
         document.getElementById("register_num").innerHTML = "";
@@ -772,8 +773,8 @@ window.setInterval(function(){
         "    <td id='rep' class='bignum''>--</td>" +
         "  </tr>" +
         "</table>" +
-        "<h3>Trading Centre</h3>" +
-        "<table><tr><th>Trade</th><th>Check Reputation</th><tr>" +
+        "<h3 id='tc'>Trading Centre</h3>" +
+        "<table><tr><th width=400>Trade</th><th width=400>Check Reputation</th><tr>" +
         "<tr><td><label for='to_send'>Number of Cognocents:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
         "<label for='recip_addr'>Recipient\'s Address:</label><input type='text' size='42' id='recip_addr' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input>" +
         "<br><label for='reason'>Reason for transaction:</label>" +
@@ -812,7 +813,7 @@ window.setInterval(function(){
         "</table>" +
         "</center>";
         break;
-      case "OW":
+      case "OW": // the owner gets admin tools, plus the ability to make and unmake admins
         document.getElementById("create_admin").innerHTML = "<br><label " +
         "for='newAdmin'>Address:</label><input type='text' id='newAdmin' " +
         "placeholder='e.g. 0x1d1edbeco50fb7cca917a11575aabad900fa5432'></input>"
@@ -828,7 +829,7 @@ window.setInterval(function(){
         document.getElementById("distribute").innerHTML = distrib_html;
         document.getElementById("student_view").innerHTML = "";
         break;
-      case "AD":
+      case "AD": //admins can register student numbers and addresses, and send studnts free tokens
         document.getElementById("create_admin").innerHTML = "";
         document.getElementById("remove_admin").innerHTML = "";
         document.getElementById("register_num").innerHTML = reg_num_html;
@@ -836,8 +837,8 @@ window.setInterval(function(){
         document.getElementById("distribute").innerHTML = distrib_html;
         document.getElementById("student_view").innerHTML = "";
     }
-    user.status_ch = false;
-  }
+    user.status_ch = false; //reset the "user changed" flag
+  } // if the user is a student and bal, traded, or feedback change, update the display
   if(user.balance_ch && user.status == "ST"){
     document.getElementById("balance").innerHTML = user.balance;
     user.balance_ch = false;
@@ -850,15 +851,17 @@ window.setInterval(function(){
     document.getElementById("rep").innerHTML = user.rep;
     user.rep_ch = false;
   }
-  if(user.status == "ST"){
-    for(var i = 1; i < user.trans_hist.length; i++){
+  if(user.status == "ST"){ // also, in student view the transaction list must be kept up to date
+    for(var i = 1; i < user.trans_hist.length; i++){ // going through the history in the user model...
       if(user.trans_hist[i]){
         if(same_addr(user.account, user.trans_hist[i][0]) || same_addr(user.account, user.trans_hist[i][1])){
+          // if a transaction involving the user isn't on display yet, make
+          // lines for it and display them
           var snd_fbk_id = "tr_" + i + "_snd_fbk"
           if(!document.getElementById("transactions").innerHTML.includes(snd_fbk_id)){
             document.getElementById("transactions").innerHTML += make_trans_rows(i)
           }
-          else{
+          else{ //also, if the feedback is added for an xisting transaction, update it
             if(user.sender_fbk_ch[i]){
               if(user.trans_hist[i][3] != -10 && user.trans_hist[i][4] != -10){
                 // Remember, changes to displayed feedback from this route are
@@ -896,7 +899,7 @@ window.setInterval(function(){
     }
   }
   times+=1;
-  if(times % 20 == 10){
+  if(times % 20 == 10){ // update the plots once a minute
     console.log("Plotting...");
     draw_charts();
   }
@@ -917,6 +920,12 @@ function split_address(addr) {
   }
 }
 
+function check_for_trade(addr){
+  document.getElementById("recip_addr").value = addr;
+  document.getElementById("check_addr").value = addr;
+  show_report();
+}
+
 function make_trans_rows(i){
   if (!user.trans_hist[i] || i==0) {
     console.log("Trying to make a row for a nonexistent transaction: " + i);
@@ -927,13 +936,13 @@ function make_trans_rows(i){
     rows += "<td class='midnum'>YOU</td>"
   }
   else{
-    rows += "<td>" + split_address(user.trans_hist[i][0]) + "</td>"
+    rows += "<td><a href='#tc' onclick='check_for_trade(\"" + user.trans_hist[i][0] + "\")'>" + split_address(user.trans_hist[i][0]) + "</a></td>"
   }
   if(same_addr(user.trans_hist[i][1], user.account)){
     rows += "<td class='midnum'>YOU</td>"
   }
   else{
-    rows += "<td>" + split_address(user.trans_hist[i][1]) + "</td>"
+    rows += "<td><a href='#tc' onclick='check_for_trade(\"" + user.trans_hist[i][1] + "\")'>" + split_address(user.trans_hist[i][1]) + "</a></td>"
   }
   rows += "<td class='midnum'>" + user.trans_hist[i][6] + "<div class='s'></div></td>";
   if(user.trans_hist[i][3]== -10){
@@ -1620,6 +1629,8 @@ function draw_charts(){
 
 function barchart(x, y, x_label, y_label, element){
   var ctx = document.getElementById(element).getContext('2d');
+  ctx.canvas.height = 400;
+  ctx.canvas.width = 400;
   var rpts = Math.ceil(x.length/3)
   bg_colours = Array(rpts).fill(["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"]).flat();
   bord_colours = Array(rpts).fill(["rgba(255, 0, 0, 1)", "rgba(255, 215, 0, 1)", "rgba(0, 0, 0, 1)"]).flat();
@@ -1661,6 +1672,8 @@ function barchart(x, y, x_label, y_label, element){
 
 function pie_chart(x, y, lab, element){
   var ctx = document.getElementById(element).getContext('2d');
+  ctx.canvas.height = 400;
+  ctx.canvas.width = 400;
   var rpts = Math.ceil(x.length/3)
   bg_colours = Array(rpts).fill(["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"]).flat();
   bord_colours = Array(rpts).fill(["rgba(255, 0, 0, 1)", "rgba(255, 215, 0, 1)", "rgba(0, 0, 0, 1)"]).flat();
@@ -1728,16 +1741,16 @@ function get_report(addr){
     if(same_addr(addr, user.trans_hist[i][0])){
       report.trades.as_sender++;
       report.trade_vals.as_sender += user.trans_hist[i][6]
-      if(user.trans_hist[i][3]!= -10){
-        report.total_fbks.as_receiver += user.trans_hist[i][3]
+      if(user.trans_hist[i][4]!= -10){
+        report.total_fbks.as_sender += user.trans_hist[i][4]
         num_snd_fbks++;
       }
     }
     if(same_addr(addr, user.trans_hist[i][1])){
       report.trades.as_receiver++;
       report.trade_vals.as_receiver += user.trans_hist[i][6]
-      if(user.trans_hist[i][4]!= -10){
-        report.total_fbks.as_receiver += user.trans_hist[i][4]
+      if(user.trans_hist[i][3]!= -10){
+        report.total_fbks.as_receiver += user.trans_hist[i][3]
         num_rec_fbks++;
       }
     }
@@ -1755,12 +1768,8 @@ function get_report(addr){
 }
 
 function divide_or_zero(x, y){
-  if(y==0) {
-    return 0;
-  }
-  else{
-    return x/y;
-  }
+  // returns x/y, unless y is zero; then returns 0
+  return y==0 ? 0 : x/y;
 }
 
 
