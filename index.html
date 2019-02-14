@@ -6,29 +6,38 @@
 <!--  -->
 
 <head>
-<link href="https://fonts.googleapis.com/css?family=Zilla+Slab|Stalinist+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Zilla+Slab" rel="stylesheet">
 <!-- <link href="https://fonts.googleapis.com/css?family=BioRhyme|Josefin+Slab|Zilla+Slab" rel="stylesheet"> -->
 <style>
 
+
+
 body {
-  background-color: gold;
+  background-color: red;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Stalinist One";
-  background-color: red;
+h1, h2, h3, h4, h5, h6, h1 table {
+  font-family: "Gill Sans";
+  background-color: #222222;
+  color: white;
   text-align: center;
-  transform: scale(1, 1.5);
+}
+
+.star {
+  font-size: 300%;
+  color: red;
 }
 
 h1, h2 {
-  text-shadow: 2px 2px 0 white, -2px -2px 0 white;
-  font-size: 250%;
+  font-size: 400%;
 }
 
 h3, h4, h5, h6 {
-  text-shadow: 1px 1px 0 white, -1px -1px 0 white;
-  font-size: 120%;
+  font-size: 200%;
+}
+
+.red {
+  background-color: red;
 }
 
 table {
@@ -46,8 +55,9 @@ table.s {
 }
 
 th.s{
-  font-family: "Zilla Slab";
+  font-family: "Gill Sans";
   font-weight: bold;
+  font-size: 100%;
   transform: scale(1, 1);
 }
 
@@ -64,40 +74,89 @@ tr.hist:hover {
   color: white;
 }
 
+tr.hist a:link {
+  color:black;
+}
+
+tr.hist a:visited {
+  color:black;
+}
+
+tr.hist:hover a:hover {
+  color:red;
+}
+
+tr.hist:hover a:active {
+  color:red;
+}
+
+tr.hist a:hover {
+  color:red;
+}
+
+tr.hist a:active {
+  color:red;
+}
+
+tr.hist:hover a:link {
+  color:white;
+}
+
+tr.hist:hover a:visited {
+  color:white;
+}
+
 th {
-  font-family: "Stalinist One";
-  transform: scale(1, 1.5);
+  font-family: "Gill Sans";
   background-color: lightgray;
+  font-size: 150%;
 }
 
 td.bignum {
-  font-family: "Stalinist One";
+  font-family: "Gill Sans";
   text-shadow: 2px 2px 0 red, -2px -2px 0 red;
+  text-align: center;
+  font-size: 500%;
+}
+
+td.midnum {
+  font-family: "Gill Sans";
+  text-shadow: 1px 1px 0 red, -1px -1px 0 red;
   text-align: center;
   font-size: 300%;
 }
 
-td.midnum {
-  font-family: "Stalinist One";
-  text-shadow: 1px 1px 0 red, -1px -1px 0 red;
-  text-align: center;
-  font-size: 200%;
+td.r {
+  font-family: "Gill Sans";
+  font-size: 150%;
+  font-weight: bold;
 }
 
-td.r {
-  font-family: "Stalinist One";
-  transform: scale(1, 1.5);
+input[type=text], textarea, select {
+  border: 2px solid lightgray;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 120%;
+  font-family: "Zilla Slab";
+}
+
+select {
+  width: 100%;
+}
+
+input[type=text], textarea {
+  width: 98%;
 }
 
 button {
   border: black 1px;
   background-color: red;
   color: black;
-  padding: 6px 6px;
   cursor: pointer;
   display: inline-block;
-  font-family: "Stalinist One";
-  transform: scale(1, 1.5);
+  font-size: 150%;
+  width: 100%;
+  font-family: "Gill Sans";
 }
 
 button:hover {
@@ -114,16 +173,18 @@ option {
 }
 
 div.a {
-  font-family: "Zilla Slab";
+  font-family: "Gill Sans";
+  font-size: 120%;
 }
+
 
 </style></head>
 
 <center>
-<h1>INF1-CG Value Creation and Trading<br><i>For Friendship and Progress!</i></h1>
+<h1><table><tr><td class="star">&#x2605;</td><td><table><tr><td>INF1-CG Value Creation and Trading</td></tr><tr><td><i>For Friendship and Progress!</i></td></tr></table></td><td class="star">&#x2605;</td></tr></table></h1>
 </center>
 <body>
-<br>
+
 <div class="a" align="center"><table><tr><td id="status1">You don't seem to be logged in to MetaMask</td></tr>
 <tr><td id="status2"></td></tr></table></div>
 <div class="a" id="regaddrres"></div>
@@ -687,11 +748,11 @@ const reg_addr_html = "<br><label for='stud_num2'>Student Number:</label><input"
   "onclick='register_std_addr()'>Register Student's Address</button><p "  +
   "id='regaddrres'></p><br><br>"
 
-const distrib_html = "<br><label for='redistribute'>Number of Cognocents:</label>"  +
+const distrib_html = "<br><label for='redistribute'>Number of CognoCenti:</label>"  +
   "<input type='text' id='redistribute' placeholder='e.g. 3'><label "  +
   "for='recip_addr2'>Recipient\'s Address:</label><input type='text' "  +
   "id='recip_addr2' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'>"  +
-  "</input><br><br><button  onclick='distribute_token()'>Distribute Cognocents"  +
+  "</input><br><br><button  onclick='distribute_token()'>Distribute CognoCenti"  +
   "</button><p id='redistributed'></p><br><br>"
 
 var times = 0;
@@ -775,22 +836,21 @@ window.setInterval(function(){
         "</table>" +
         "<h3 id='tc'>Trading Centre</h3>" +
         "<table><tr><th width=400>Trade</th><th width=400>Check Reputation</th><tr>" +
-        "<tr><td><label for='to_send'>Number of Cognocents:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
-        "<label for='recip_addr'>Recipient\'s Address:</label><input type='text' size='42' id='recip_addr' placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input>" +
-        "<br><label for='reason'>Reason for transaction:</label>" +
+        "<tr><td colspan=2><label for='an_address'>Enter a valid student address to check their reputation and history, and send CognoCenti:</label></td></tr>" +
+        "<tr><td colspan=2><input type='text' id='an_address'  placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input></td></tr>" +
+        "<tr><td><label for='to_send'>Number of CognoCenti:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
+        "<label for='reason'>Reason for transaction:</label>" +
         "<select id='category' name='category'>" +
         "  <option value='' selected disabled>chose category:</option>" +
         "  <option value='inf1-cg'>INF1-CG Related</option>" +
         "  <option value='other-course'>Other Academic</option>" +
         "  <option value='non-academic'>Non-Academic</option>" +
         "</select>" +
-        "<br><textarea id='reason' rows='7' cols='70' placeholder='Details: e.g., payment for lecture notes'></textarea>" +
-        "<br><br><button  onclick='send_token()'>Send Cognocents</button>" +
+        "<br><textarea id='reason' rows='4' placeholder='Details: e.g., payment for lecture notes'></textarea>" +
+        "<br><button  onclick='send_token()'>Send CognoCenti</button>" +
         "<p id='receipt'></p></div></td>" +
-        "<td>Enter a student address to check their reputation:<br><br>" +
-        "<label for='check_addr'></label><input type='text' id='check_addr' size='42' placeholder='e.g. 0xaabcc4408deadbeef42150a8badb01890fa09666'> <button onclick='show_report()'>Check</button>" +
-        "<br><br><table class='s'>" +
-        "  <tr><td></td><th class='s'>As sender</th><th class='s'>As receiver</th><th class='s'>All trades</th></tr>" +
+        "<td><table class='s'>" +
+        "  <tr><td class='red'><button onclick='show_report()'>Check</button></td><th class='s'>As sender</th><th class='s'>As receiver</th><th class='s'>All trades</th></tr>" +
         "  <tr><th class='s'># of trades</th><td id='snd_trs'>--</td><td id='rec_trs'>--</td><td id='all_trs'>--</td></tr>" +
         "  <tr><th class='s'>value traded</th><td id='snd_trd'>--</td><td id='rec_trd'>--</td><td id='all_trd'>--</td></tr>" +
         "  <tr><th class='s'>mean trade</th><td id='snd_trd_m'>--</td><td id='rec_trd_m'>--</td><td id='all_trd_m'>--</td></tr>" +
@@ -805,8 +865,8 @@ window.setInterval(function(){
         "    <th width=19%>Sender</th>" +
         "    <th width=19%>Receiver</th>" +
         "    <th width=19%>Amount</th>" +
-        "    <th width=19%>Sender<br>Feedback</th>" +
-        "    <th width=19%>Receiver<br>Feedback</th>" +
+        "    <th width=19%>Sender Feedback</th>" +
+        "    <th width=19%>Receiver Feedback</th>" +
         "  </tr>" +
         "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
         "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
@@ -921,8 +981,7 @@ function split_address(addr) {
 }
 
 function check_for_trade(addr){
-  document.getElementById("recip_addr").value = addr;
-  document.getElementById("check_addr").value = addr;
+  document.getElementById("an_address").value = addr;
   show_report();
 }
 
@@ -1159,7 +1218,7 @@ function get_transactions(){
 function send_token(){
   // Take inputs from the form
   var cognocents = document.getElementById("to_send").value;
-  var recipient = document.getElementById("recip_addr").value;
+  var recipient = document.getElementById("an_address").value;
   var cat = document.getElementById("category").value;
   var reason = document.getElementById("reason").value;
   // Before sending values to the smart contract, let's see if they make sense.
@@ -1174,11 +1233,11 @@ function send_token(){
     return;
   }
   if(isNaN(parseInt(cognocents)) || parseInt(cognocents) != Number(cognocents)){
-    document.getElementById("receipt").innerHTML = "Error: You must pay a whole number of Cognocents";
+    document.getElementById("receipt").innerHTML = "Error: You must pay a whole number of CognoCenti";
     return;
   }
   if(parseInt(cognocents) < 1) {
-    document.getElementById("receipt").innerHTML = "Error: You must send at least one Cognocent";
+    document.getElementById("receipt").innerHTML = "Error: You must send at least one CognoCent";
     return;
   }
   if(same_addr(user.account, recipient)) {
@@ -1201,7 +1260,7 @@ function send_token(){
     else {
       var bal = result;
       if(parseInt(bal) < parseInt(cognocents)) {
-        document.getElementById("receipt").innerHTML = "Error: You cannot send " + cognocents + " Cognocents; your account balance is " + bal + " Cognocents";
+        document.getElementById("receipt").innerHTML = "Error: You cannot send " + cognocents + " CognoCenti; your account balance is " + bal + " CognoCenti";
         alert("Error: Insufficient funds :(")
       }
       else {
@@ -1231,7 +1290,7 @@ function send_token(){
                   console.log(error);
                 }
                 else {
-                  document.getElementById("receipt").innerHTML = "Confirmed: You sent " + cognocents + ' Cognocents to ' + recipient + ' for the following reason:<br>' + reason
+                  document.getElementById("receipt").innerHTML = "Confirmed: You sent " + cognocents + ' CognoCenti to:<br>' + recipient + '<br>For the following reason:<br>' + reason
                 }
               })
             }
@@ -1462,11 +1521,11 @@ function distribute_token(){
     return;
   }
   if(isNaN(parseInt(cognocents)) || parseInt(cognocents) != Number(cognocents)){
-    document.getElementById("redistributed").innerHTML = "Error: You must pay a whole number of Cognocents";
+    document.getElementById("redistributed").innerHTML = "Error: You must pay a whole number of CognoCenti";
     return;
   }
   if(parseInt(cognocents) < 1) {
-    document.getElementById("redistributed").innerHTML = "Error: You must send at least one Cognocent";
+    document.getElementById("redistributed").innerHTML = "Error: You must send at least one CognoCent";
     return;
   }
   // The contract doesn't actually return an error if you try to pay more than
@@ -1508,7 +1567,7 @@ function distribute_token(){
                   console.log(error);
                 }
                 else {
-                  document.getElementById("redistributed").innerHTML = "Confirmed: You assigned " + cognocents + ' Cognocents to ' + recipient
+                  document.getElementById("redistributed").innerHTML = "Confirmed: You assigned " + cognocents + ' CognoCenti to ' + recipient
                 }
               })
             }
@@ -1606,7 +1665,7 @@ function draw_charts(){
   }
   trade_vals_x = Object.keys(amt_tots).sort();
   trade_vals_y = trade_vals_x.map(x_val => amt_tots[x_val]);
-  barchart(trade_vals_x, trade_vals_y, "value of trade", "frequency", "tradeVals");
+  barchart(trade_vals_x, trade_vals_y, "value of trade", "frequency", "rgba(0, 0, 0, 0.6)", "rgba(0, 0, 0, 1)", "tradeVals");
   // Second, frequencies of feedback values
   var fbks = user.trans_hist.slice(1).map(transac => transac[3]).concat(user.trans_hist.map(transac => transac[4]));
   var fbk_tots = {'-5':0,'-4':0,'-3':0,'-2':0,'-1':0,'0':0,'1':0,'2':0,'3':0,'4':0,'5':0};
@@ -1617,7 +1676,7 @@ function draw_charts(){
   }
   fbk_vals_x = [-5,-4,-3,-2,-1,0,1,2,3,4,5];
   fbk_vals_y = fbk_vals_x.map(x_val => fbk_tots[x_val]);
-  barchart(fbk_vals_x, fbk_vals_y, "feedback level", "frequency", "fbVals");
+  barchart(fbk_vals_x, fbk_vals_y, "feedback level", "frequency", "rgba(255, 0, 0, 0.6)", "rgba(255, 0, 0, 1)", "fbVals");
   // Third, how many trades of each category?
   cat_counts = [0,0,0]
   cat_starts = ['INF1-CG RELATED: ', 'OTHER ACADEMIC: ', 'NON-ACADEMIC: ']
@@ -1627,13 +1686,13 @@ function draw_charts(){
   pie_chart(["Inf1-CG related", "Other courses", "Non-academic"], cat_counts, "Number of trades of each category", "tradeCats");
 }
 
-function barchart(x, y, x_label, y_label, element){
+function barchart(x, y, x_label, y_label, bg_col, bord_col, element){
   var ctx = document.getElementById(element).getContext('2d');
   ctx.canvas.height = 400;
   ctx.canvas.width = 400;
   var rpts = Math.ceil(x.length/3)
-  bg_colours = Array(rpts).fill(["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"]).flat();
-  bord_colours = Array(rpts).fill(["rgba(255, 0, 0, 1)", "rgba(255, 215, 0, 1)", "rgba(0, 0, 0, 1)"]).flat();
+  bg_colours = Array(x.length).fill(bg_col);
+  bord_colours = Array(x.length).fill(bord_col);
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -1774,7 +1833,7 @@ function divide_or_zero(x, y){
 
 
 function show_report(){
-  var addr = document.getElementById('check_addr').value;
+  var addr = document.getElementById('an_address').value;
   if (!is_address(addr)){
     console.log(addr);
     document.getElementById("rprt").innerHTML = "That's not an address";
