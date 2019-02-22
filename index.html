@@ -6,14 +6,14 @@
 <!--  -->
 
 <head>
+<meta charset="utf-8"/>
 <link href="https://fonts.googleapis.com/css?family=Zilla+Slab" rel="stylesheet">
 <!-- <link href="https://fonts.googleapis.com/css?family=BioRhyme|Josefin+Slab|Zilla+Slab" rel="stylesheet"> -->
+
 <style>
 
-
-
 body {
-  background-color: red;
+  background-color: #eeeeee;
 }
 
 h1, h2, h3, h4, h5, h6, h1 table {
@@ -29,11 +29,11 @@ h1, h2, h3, h4, h5, h6, h1 table {
 }
 
 h1, h2 {
-  font-size: 400%;
+  font-size: 48pt;
 }
 
 h3, h4, h5, h6 {
-  font-size: 200%;
+  font-size: 24pt;
 }
 
 .red {
@@ -57,7 +57,7 @@ table.s {
 th.s{
   font-family: "Gill Sans";
   font-weight: bold;
-  font-size: 100%;
+  font-size: 15pt;
   transform: scale(1, 1);
 }
 
@@ -109,7 +109,7 @@ tr.hist:hover a:visited {
 th {
   font-family: "Gill Sans";
   background-color: lightgray;
-  font-size: 150%;
+  font-size: 24pt;
 }
 
 td.bignum {
@@ -128,7 +128,7 @@ td.midnum {
 
 td.r {
   font-family: "Gill Sans";
-  font-size: 150%;
+  font-size: 18pt;
   font-weight: bold;
 }
 
@@ -154,7 +154,7 @@ button {
   color: black;
   cursor: pointer;
   display: inline-block;
-  font-size: 150%;
+  font-size: 18pt;
   width: 100%;
   font-family: "Gill Sans";
 }
@@ -174,48 +174,206 @@ option {
 
 div.a {
   font-family: "Gill Sans";
-  font-size: 120%;
+  font-size: 18pt;
+}
+
+.tabcontent {
+  display: none;
 }
 
 
-</style></head>
+</style>
+
+<style>
+
+
+
+body {
+  background-color: white;
+}
+
+h1, h2, h3, h4, h5, h6, h1 table {
+  font-family: "Gill Sans";
+  background-color: #b660ff;
+  color: black;
+  text-align: center;
+}
+
+.star {
+  font-size: 300%;
+  color: #b660ff;
+}
+
+h1, h2 {
+  font-size: 48pt;
+}
+
+h3, h4, h5, h6 {
+  font-size: 24pt;
+}
+
+.red {
+  background-color: #eddcf3;
+}
+
+table {
+  background-color: white;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.s {
+  padding-left: 1px;
+  padding-right: 1px;
+  text-align: center;
+}
+
+th.s{
+  font-family: "Gill Sans";
+  font-weight: bold;
+  font-size: 15pt;
+  transform: scale(1, 1);
+}
+
+tr.hist:nth-child(even) {
+  background-color: #eddcf3;
+}
+
+tr.hist:nth-child(odd) {
+  border: 2px #eddcf3;
+}
+
+tr.hist:hover {
+  background-color: black;
+  color: white;
+}
+
+tr.hist a:link {
+  color:black;
+}
+
+tr.hist a:visited {
+  color:black;
+}
+
+tr.hist:hover a:hover {
+  color:red;
+}
+
+tr.hist:hover a:active {
+  color:red;
+}
+
+tr.hist a:hover {
+  color:red;
+}
+
+tr.hist a:active {
+  color:red;
+}
+
+tr.hist:hover a:link {
+  color:white;
+}
+
+tr.hist:hover a:visited {
+  color:white;
+}
+
+th {
+  font-family: "Gill Sans";
+  background-color: #eddcf3;
+  font-size: 24pt;
+}
+
+td.bignum {
+  font-family: "Gill Sans";
+  text-shadow: 2px 2px 0 #b660ff, -2px -2px 0 #b660ff;
+  text-align: center;
+  font-size: 500%;
+}
+
+td.midnum {
+  font-family: "Gill Sans";
+  text-shadow: 1px 1px 0 #b660ff, -1px -1px 0 #b660ff;
+  text-align: center;
+  font-size: 300%;
+}
+
+td.r {
+  font-family: "Gill Sans";
+  font-size: 18pt;
+  font-weight: bold;
+}
+
+input[type=text], textarea, select {
+  border: 2px solid #eddcf3;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 120%;
+  font-family: "Zilla Slab";
+}
+
+select {
+  width: 100%;
+}
+
+input[type=text], textarea {
+  width: 98%;
+}
+
+button {
+  border: black 1px;
+  background-color: #b660ff;
+  color: black;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 18pt;
+  width: 100%;
+  font-family: "Gill Sans";
+}
+
+button:hover {
+  background-color: black;
+  color: white;
+}
+
+option:disabled {
+  color: gray;
+}
+
+option {
+  color: black;
+}
+
+div.a {
+  font-family: "Gill Sans";
+  font-size: 18pt;
+}
+
+.tabcontent {
+  display: none;
+}
+
+
+</style>
+
+</head>
 
 <center>
-<h1><table><tr><td class="star">&#x2605;</td><td><table><tr><td>INF1-CG Value Creation and Trading</td></tr><tr><td><i>For Friendship and Progress!</i></td></tr></table></td><td class="star">&#x2605;</td></tr></table></h1>
+<h1>VCaT: INF1-CG Value Creation and Trading</h1>
 </center>
 <body>
 
 <div class="a" align="center"><table><tr><td id="status1">You don't seem to be logged in to MetaMask</td></tr>
 <tr><td id="status2"></td></tr></table></div>
-<div class="a" id="regaddrres"></div>
 
-<div class="a" id="create_admin"></div>
 
-<div class="a"id="remove_admin" ></div>
+<div class="a" id="main_view"></div>
 
-<div class="a" id="register_num"></div>
 
-<div class="a" id="register_addr"></div>
-
-<div class="a" id="distribute"></div>
-
-<div class="a" id="student_view"></div>
-
-<h3>Data for the Masses</h3>
-
-<table>
-<tr><th>Trade Values</th><th>Feedback Values</th></tr>
-<tr><td></td><td></td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><canvas id="tradeVals" width="400" height="400"></canvas></td>
-<td><canvas id="fbVals" width="400" height="400"></canvas></td></tr>
-<tr><td></td><td></td></tr>
-<tr><td></td><td></td></tr>
-<tr><th>Trade Types</th><th>???</th></tr>
-<tr><td></td><td></td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><canvas id="tradeCats" width="400" height="400"></canvas></td><td></td></tr>
-</table>
 
 <br>
 <div class="a" style="font-size:80%">Ethereum Smart Contract powered by geth, remix, truffle, and MetaMask. Lovingly coded by the exceptionally smart and attractive people of the Blockchain Technologies Laboratory at the University of Edinburgh, and made available under a CC-BY-SA-3.0 license. </div><div id="owner" style="font-size:80%"></div>
@@ -233,8 +391,8 @@ if (typeof web3 !== 'undefined') {
 }
 else {
   // set the provider you want
-  console.log("http://localhost:8545");
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  console.log("http://129.215.199.18:8545"); // was http://localhost:8545
+  web3 = new Web3(new Web3.providers.HttpProvider("http://129.215.199.18:8545"));
 }
 
 // Check if Metamask has been Enjected
@@ -250,6 +408,126 @@ else{
 // The contract's ABI
 var abi = [
 	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "proposals",
+		"outputs": [
+			{
+				"name": "numOf_tokens",
+				"type": "uint256"
+			},
+			{
+				"name": "creator_address",
+				"type": "address"
+			},
+			{
+				"name": "creator_emailAdress",
+				"type": "string"
+			},
+			{
+				"name": "reason",
+				"type": "string"
+			},
+			{
+				"name": "proposal_ID",
+				"type": "uint256"
+			},
+			{
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "reputations",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "min_score",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "lecture_number",
+				"type": "uint256"
+			},
+			{
+				"name": "lec_ID",
+				"type": "string"
+			}
+		],
+		"name": "register_lectureID",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"name": "recipient_address",
+				"type": "address"
+			},
+			{
+				"name": "_reason",
+				"type": "string"
+			},
+			{
+				"name": "time_",
+				"type": "string"
+			},
+			{
+				"name": "offer_ID_",
+				"type": "uint256"
+			}
+		],
+		"name": "send_token",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -264,21 +542,162 @@ var abi = [
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "totalNum_proposals",
+		"outputs": [
 			{
-				"name": "std_addr",
-				"type": "address"
-			},
-			{
-				"name": "numOf_tokens",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "distribute_token",
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "totalNumOf_tokens_traded",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "numOf_tokens_",
+				"type": "uint256"
+			},
+			{
+				"name": "reason_",
+				"type": "string"
+			},
+			{
+				"name": "email_address_",
+				"type": "string"
+			}
+		],
+		"name": "makeProposal",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "input_",
+				"type": "string"
+			}
+		],
+		"name": "claim_token",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "admin",
+				"type": "address"
+			}
+		],
+		"name": "remove_admin",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "valid_student_addr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "attended",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "total_participants",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "hash_lectureID",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes2"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -321,85 +740,29 @@ var abi = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "std_num",
+				"name": "num",
 				"type": "uint256"
 			}
 		],
-		"name": "register_std_num",
+		"name": "set_currentlecture_number",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "admin",
-				"type": "address"
-			}
-		],
-		"name": "remove_admin",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"name": "recipient_address",
-				"type": "address"
-			},
-			{
-				"name": "_reason",
-				"type": "string"
-			}
-		],
-		"name": "send_token",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"name": "admin",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "max_score",
-		"outputs": [
-			{
-				"name": "",
-				"type": "int256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"constant": true,
-		"inputs": [],
-		"name": "min_score",
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "valid_admins",
 		"outputs": [
 			{
 				"name": "",
-				"type": "int256"
+				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -414,77 +777,6 @@ var abi = [
 			{
 				"name": "",
 				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "reputations",
-		"outputs": [
-			{
-				"name": "",
-				"type": "int256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "student_token_balance",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "totalNum_transactions",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "totalNumOf_tokens_traded",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -528,6 +820,10 @@ var abi = [
 			{
 				"name": "numOf_tokens",
 				"type": "uint256"
+			},
+			{
+				"name": "creation_time",
+				"type": "string"
 			}
 		],
 		"payable": false,
@@ -542,11 +838,39 @@ var abi = [
 				"type": "address"
 			}
 		],
-		"name": "valid_admins",
+		"name": "student_token_balance",
 		"outputs": [
 			{
 				"name": "",
-				"type": "bool"
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "std_num",
+				"type": "uint256"
+			}
+		],
+		"name": "register_std_num",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "current_lecture_number",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -555,21 +879,34 @@ var abi = [
 	},
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "valid_student_addr",
+		"inputs": [],
+		"name": "max_score",
 		"outputs": [
 			{
 				"name": "",
-				"type": "bool"
+				"type": "int256"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "std_addr",
+				"type": "address"
+			},
+			{
+				"name": "numOf_tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "distribute_token",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -594,6 +931,45 @@ var abi = [
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalNum_transactions",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "lecture_tokens",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "admin",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	}
 ]
 
@@ -619,6 +995,8 @@ var user = {
   "rep": null,
   "rep_ch": false,
   "trans_hist": [],
+  "offer_list": [],
+  "offer_count": 0,
   "sender_fbk_ch": [],
   "receiver_fbk_ch": []
 }
@@ -716,8 +1094,8 @@ function update(acc_no) {
 }
 
 var ins = web3.eth.contract(abi);
-// note that "0xbb301f712427e22f9ae4fae60d99d594b4dc6455" is the address of the contract on the blockchain
-var myContract = ins.at("0xbb301f712427e22f9ae4fae60d99d594b4dc6455");
+// note that "0xe588b3bc0a64857c1e8e7a41f47d8eb9481a9b7e" is the address of the contract on the blockchain
+var myContract = ins.at("0xe588b3bc0a64857c1e8e7a41f47d8eb9481a9b7e");
 
 
 update_status(user.account);
@@ -741,8 +1119,8 @@ const reg_num_html = "<br><label for='stud_num'>Student Number:</label><input " 
   "onclick='register_std_num()'>Register Student's Number</button><p " +
   "id='regnumres'></p><br><br>"
 
-const reg_addr_html = "<br><label for='stud_num2'>Student Number:</label><input"  +
-  "type='text' id='stud_num2' placeholder='e.g. 5467'><label for='stud_addr'>"  +
+const reg_addr_html = "<br><label for='stud_num2'>Student Number:</label><input "  +
+  "type='text' id='stud_num2' placeholder='e.g. 5467'></input><br><label for='stud_addr'>"  +
   "Student\'s Address:</label><input type='text' id='stud_addr' placeholder='e.g. "  +
   "0x6bac436758904dc3675880ac400aac6badd16758'></input><br><br><button  "  +
   "onclick='register_std_addr()'>Register Student's Address</button><p "  +
@@ -755,6 +1133,73 @@ const distrib_html = "<br><label for='redistribute'>Number of CognoCenti:</label
   "</input><br><br><button  onclick='distribute_token()'>Distribute CognoCenti"  +
   "</button><p id='redistributed'></p><br><br>"
 
+const data_for_the_people = "<h3>Data for the People</h3>" +
+"<table><tr><th>Trade Values</th><th>Feedback Values</th></tr>" +
+"<tr><td><canvas id='tradeVals' width='400' height='400'></canvas></td>" +
+"<td><canvas id='fbVals' width='400' height='400'></canvas></td></tr>" +
+"<tr><th>Trade Types</th><th>???</th></tr>" +
+"<tr><td><canvas id='tradeCats' width='400' height='400'></canvas></td><td></td></tr></table>";
+
+const about_vcat = "<h3>About VCaT</h3>" +
+"<p>Insert Richard's explanation of the scheme here.</p>";
+
+const proposal_form = "<h3>Propose a Trade</h3>" +
+  "<table><tr><td><label for='cc_offered'>CognoCenti offered:</label><input type='text' id='cc_offered' placeholder='e.g. 3'></td>" +
+    "<td><label for='email'>Email address:</label><input type='text' id='email' placeholder='e.g. s1900000@ed.ac.uk, you@gmail.com...'></td></tr>"+
+  "<tr><td colspan=2><label for='offer_reason'>Reason for transaction:</label><select id='offer_cat' name='offer_cat'>" +
+    "<option value='' selected disabled>choose category:</option>" +
+    "<option value='inf1-cg'>INF1-CG Related</option>" +
+    "<option value='other-course'>Other Academic</option>" +
+    "<option value='non-academic'>Non-Academic</option></select></td></tr>" +
+  "<tr><td colspan=2><textarea id='offer_reason' rows='4' placeholder='Details: e.g., Looking for a wake-up call the morning of the exam'></textarea></div></td></tr>" +
+  "<tr><td colspan=2><button  onclick='submit_proposal()'>Submit Proposal</button><br>" +
+  "<div id='acknowledged'></div></td></tr></table>"
+
+const proposal_list = "<br><br><h3>Trades Proposed</h3>" +
+  "<p id='filter_props'></p>" +
+  "<table width=90%><thead><tr><th rowspan=2 width=8%>ID #</th><th rowspan=2 width=8%>Price</th><th rowspan=2 width=42%>Proposer</th><th rowspan=2 width=16%></th><th width=26% colspan=2>Proposer's Feedback</th></tr>" +
+  "<tr><th>Total</th><th>Mean</th></thead>" +
+  "<tbody id='off_list'>" +
+  "</tbody></table>"
+
+const outside_view = "<center><div class='tab'>" +
+            "<table><tr><td><button class='tablinks' id='abt_but' onclick='openView(event, \"About\")'>About VCaT</button></td>" +
+            "<td><button class='tablinks' id='prop_but' onclick='openView(event, \"Proposals\")'>Proposals</button></td>" +
+            "<td><button class='tablinks' id='dat_but' onclick='openView(event, \"Data\")'>Data</button></td></tr></table>" +
+          "</tr></table></div>" +
+          "<div id='About' class='tabcontent'>" +
+            about_vcat +
+          "</div>" +
+          "<div id='Proposals' class='tabcontent'>" +
+            proposal_list +
+          "</div>" +
+          "<div id='Data' class='tabcontent'>" +
+            data_for_the_people +
+          "</div>";
+
+const admin_view = "<center><div class='tab'>" +
+            "<table><tr><td><button class='tablinks' id='ady_but' onclick='openView(event, \"Admin\")'>Admin</button></td>" +
+            "<td><button class='tablinks' id='prop_but' onclick='openView(event, \"Proposals\")'>Proposals</button></td>" +
+            "<td><button class='tablinks' id='abt_but' onclick='openView(event, \"About\")'>About VCaT</button></td>" +
+            "<td><button class='tablinks' id='dat_but' onclick='openView(event, \"Data\")'>Data</button></td></tr></table>" +
+          "</tr></table></div>" +
+		  "<div id='Admin' class='tabcontent'>" +
+		  	"<div class='a' id='create_admin'></div>" +
+		  	"<div class='a' id='remove_admin' ></div>" +
+		  	"<div class='a' id='register_num'></div>" +
+		  	"<div class='a' id='register_addr'></div>" +
+		  	"<div class='a' id='distribute'></div>" +
+          "</div>" +
+          "<div id='Proposals' class='tabcontent'>" +
+            proposal_list +
+          "</div>" +
+          "<div id='About' class='tabcontent'>" +
+            about_vcat +
+          "</div>" +
+          "<div id='Data' class='tabcontent'>" +
+            data_for_the_people +
+          "</div>";
+
 var times = 0;
 
 window.setInterval(function(){
@@ -763,8 +1208,9 @@ window.setInterval(function(){
   // 1: update user model
   if(web3.eth.coinbase){
     modify_user("account", web3.eth.coinbase);
-    get_transactions()
+    get_transactions();
   }
+  get_offers();
   update_status(user.account);
   stud_token_bal();
   totalNumOf_tokens_traded();
@@ -791,89 +1237,112 @@ window.setInterval(function(){
       "    <th width=5%>Amount</th>" +
       "    <th width=15%>Sender<br>Feedback</th>" +
       "    <th width=15%>Receiver<br>Feedback</th>" +
-      "  </tr>" +
-      "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
-      "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+      "  </tr>";
     }
   }
   if(user.status_ch || document.getElementById("status2").innerHTML == ""){
     update_element("status2", status_txt[user["status"]]);
+    refresh_prop_emails();
     switch (user.status) {
       default: // users with no account get nothing
-        document.getElementById("create_admin").innerHTML = "";
-        document.getElementById("remove_admin").innerHTML = "";
-        document.getElementById("register_num").innerHTML = "";
-        document.getElementById("register_addr").innerHTML = "";
-        document.getElementById("distribute").innerHTML = "";
-        document.getElementById("student_view").innerHTML = "";
+        if(document.getElementById("off_list")){
+          var o_l = document.getElementById("off_list").innerHTML;
+        }
+        document.getElementById("main_view").innerHTML = outside_view;
+        document.getElementById("off_list").innerHTML=o_l?o_l:"";
+        document.getElementById("filter_props").innerHTML = "";
+        document.getElementById("About").style.display = "block";
         break;
       case "NA": // same with users with unregistred accounts
-        document.getElementById("create_admin").innerHTML = "";
-        document.getElementById("remove_admin").innerHTML = "";
-        document.getElementById("register_num").innerHTML = "";
-        document.getElementById("register_addr").innerHTML = "";
-        document.getElementById("distribute").innerHTML = "";
-        document.getElementById("student_view").innerHTML = "";
+        if(document.getElementById("off_list")){
+          var o_l = document.getElementById("off_list").innerHTML;
+        }
+        document.getElementById("main_view").innerHTML = outside_view;
+        document.getElementById("off_list").innerHTML=o_l?o_l:"";
+        document.getElementById("filter_props").innerHTML = "";
+        document.getElementById("About").style.display = "block";
         break;
       case "ST": // students don't get the admin tools, but get student view
-        document.getElementById("create_admin").innerHTML = "";
-        document.getElementById("remove_admin").innerHTML = "";
-        document.getElementById("register_num").innerHTML = "";
-        document.getElementById("register_addr").innerHTML = "";
-        document.getElementById("distribute").innerHTML = "";
-        document.getElementById("student_view").innerHTML = "<center><h3>Student Trading Status</h3>" +
-        "<table style='width:80%'>" +
-        "  <tr>" +
-        "    <th>Balance</th>" +
-        "    <th>Total Traded</th>" +
-        "    <th>Reputation</th>" +
-        "  </tr>" +
-        "  <tr>" +
-        "    <td id='balance' class='bignum'>--</td>" +
-        "    <td id='totaltr' class='bignum'>--</td>" +
-        "    <td id='rep' class='bignum''>--</td>" +
-        "  </tr>" +
-        "</table>" +
-        "<h3 id='tc'>Trading Centre</h3>" +
-        "<table><tr><th width=400>Trade</th><th width=400>Check Reputation</th><tr>" +
-        "<tr><td colspan=2><label for='an_address'>Enter a valid student address to check their reputation and history, and send CognoCenti:</label></td></tr>" +
-        "<tr><td colspan=2><input type='text' id='an_address'  placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input></td></tr>" +
-        "<tr><td><label for='to_send'>Number of CognoCenti:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
-        "<label for='reason'>Reason for transaction:</label>" +
-        "<select id='category' name='category'>" +
-        "  <option value='' selected disabled>chose category:</option>" +
-        "  <option value='inf1-cg'>INF1-CG Related</option>" +
-        "  <option value='other-course'>Other Academic</option>" +
-        "  <option value='non-academic'>Non-Academic</option>" +
-        "</select>" +
-        "<br><textarea id='reason' rows='4' placeholder='Details: e.g., payment for lecture notes'></textarea>" +
-        "<br><button  onclick='send_token()'>Send CognoCenti</button>" +
-        "<p id='receipt'></p></div></td>" +
-        "<td><table class='s'>" +
-        "  <tr><td class='red'><button onclick='show_report()'>Check</button></td><th class='s'>As sender</th><th class='s'>As receiver</th><th class='s'>All trades</th></tr>" +
-        "  <tr><th class='s'># of trades</th><td id='snd_trs'>--</td><td id='rec_trs'>--</td><td id='all_trs'>--</td></tr>" +
-        "  <tr><th class='s'>value traded</th><td id='snd_trd'>--</td><td id='rec_trd'>--</td><td id='all_trd'>--</td></tr>" +
-        "  <tr><th class='s'>mean trade</th><td id='snd_trd_m'>--</td><td id='rec_trd_m'>--</td><td id='all_trd_m'>--</td></tr>" +
-        "  <tr><th class='s'>feedback</th><td id='snd_fbk'>--</td><td id='rec_fbk'>--</td><td id='all_fbk'>--</td></tr>" +
-        "  <tr><th class='s'>mean feedback</th><td id='snd_fbk_m'>--</td><td id='rec_fbk_m'>--</td><td id='all_fbk_m'>--</td></tr>" +
-        "</table><div id='rprt'></div>" +
-        "</td></tr></table>" +
-        "<h3>Transaction History</h3>" +
-        "<table id='transactions' style='width:90%'>" +
-        "  <tr>" +
-        "    <th width=5%>ID #</th>" +
-        "    <th width=19%>Sender</th>" +
-        "    <th width=19%>Receiver</th>" +
-        "    <th width=19%>Amount</th>" +
-        "    <th width=19%>Sender Feedback</th>" +
-        "    <th width=19%>Receiver Feedback</th>" +
-        "  </tr>" +
-        "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
-        "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
-        "</table>" +
+        if(document.getElementById("off_list")){
+          var o_l = document.getElementById("off_list").innerHTML;
+        }
+        document.getElementById("main_view").innerHTML = "<center><div class='tab'>" +
+          "<table><tr><td><button class='tablinks' id='trad_but' onclick='openView(event, \"Trading\")'>Trading</button></td>" +
+            "<td><button class='tablinks' id='prop_but' onclick='openView(event, \"Proposals\")'>Proposals</button></td>" +
+            "<td><button class='tablinks' id='abt_but' onclick='openView(event, \"About\")'>About VCaT</button></td>" +
+            "<td><button class='tablinks' id='dat_but' onclick='openView(event, \"Data\")'>Data</button></td></tr></table>" +
+          "</div>" +
+          "<div id='Trading' class='tabcontent'><h3>Student Trading Status</h3>" +
+            "<table style='width:80%'>" +
+              "<tr>" +
+                "<th>Balance</th>" +
+                "<th>Total Traded</th>" +
+                "<th>Reputation</th>" +
+              "</tr>" +
+              "<tr>" +
+                "<td id='balance' class='bignum'>--</td>" +
+                "<td id='totaltr' class='bignum'>--</td>" +
+                "<td id='rep' class='bignum''>--</td>" +
+              "</tr>" +
+            "</table>" +
+          "<h3 id='tc'>Trading Centre</h3>" +
+            "<table><tr><th width=400>Trade</th><th width=400>Check Reputation</th><tr>" +
+              "<tr><td colspan=2><label for='an_address'>Enter a valid student address to check their reputation and history, and send CognoCenti:</label></td></tr>" +
+              "<tr><td colspan=2><input type='text' id='an_address'  placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input></td></tr>" +
+              "<tr><td><label for='to_send'>Number of CognoCenti:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
+                "<label for='prop_id'>Proposal ID#:</label><input type='text' id='prop_id' placeholder='e.g. 12'><br>" +
+                "<label for='reason'>Reason for transaction:</label>" +
+                "<select id='category' name='category'>" +
+                  "<option value='' selected disabled>choose category:</option>" +
+                  "<option value='inf1-cg'>INF1-CG Related</option>" +
+                  "<option value='other-course'>Other Academic</option>" +
+                  "<option value='non-academic'>Non-Academic</option>" +
+                "</select><br>" +
+              "<textarea id='reason' rows='4' placeholder='Details: e.g., payment for lecture notes'></textarea></div></td>" +
+              "<td><table class='s'>" +
+                "<tr><td class='red'></td><th class='s'>As sender</th><th class='s'>As receiver</th><th class='s'>All trades</th></tr>" +
+                "<tr><th class='s'># of trades</th><td id='snd_trs'>--</td><td id='rec_trs'>--</td><td id='all_trs'>--</td></tr>" +
+                "<tr><th class='s'>value traded</th><td id='snd_trd'>--</td><td id='rec_trd'>--</td><td id='all_trd'>--</td></tr>" +
+                "<tr><th class='s'>mean trade</th><td id='snd_trd_m'>--</td><td id='rec_trd_m'>--</td><td id='all_trd_m'>--</td></tr>" +
+                "<tr><th class='s'>feedback</th><td id='snd_fbk'>--</td><td id='rec_fbk'>--</td><td id='all_fbk'>--</td></tr>" +
+                "<tr><th class='s'>mean feedback</th><td id='snd_fbk_m'>--</td><td id='rec_fbk_m'>--</td><td id='all_fbk_m'>--</td></tr>" +
+              "</table></td></tr>"+
+              "<tr><td><button onclick='send_token()'>Send CognoCenti</button></td><td><button onclick='show_report()'>Check</button></td></tr>" +
+              "<tr><td><div id='receipt'></div></td><td><div id='rprt'></div></td></tr></table>" +
+            "<h3>Transaction History</h3>" +
+            "<table id='transactions' style='width:90%'>" +
+              "<tr>" +
+                "<th width=5%>ID #</th>" +
+                "<th width=19%>Sender</th>" +
+                "<th width=19%>Receiver</th>" +
+                "<th width=19%>Amount</th>" +
+                "<th width=19%>Sender Feedback</th>" +
+                "<th width=19%>Receiver Feedback</th>" +
+              "</tr>" +
+            "</table>" +
+          "</div>" +
+          "<div id='Proposals' class='tabcontent'>" +
+            proposal_form +
+            proposal_list +
+          "</div>" +
+          "<div id='About' class='tabcontent'>" +
+            about_vcat +
+          "</div>" +
+          "<div id='Data' class='tabcontent'>" +
+            data_for_the_people +
+          "</div>" +
         "</center>";
+        document.getElementById("off_list").innerHTML=o_l?o_l:"";
+        document.getElementById("filter_props").innerHTML = "<form>Filter proposals:&nbsp;&nbsp;&nbsp;" +
+        "<input type='radio' name='filter' id='f_none' onclick='filter_proposals()' checked> All Proposals&nbsp;&nbsp;&nbsp;" +
+        "<input type='radio' name='filter' id='f_self' onclick='filter_proposals()'> Only Mine</form>";
+        document.getElementById("Trading").style.display = "block";
         break;
       case "OW": // the owner gets admin tools, plus the ability to make and unmake admins
+        if(document.getElementById("off_list")){
+          var o_l = document.getElementById("off_list").innerHTML;
+        }
+        document.getElementById("main_view").innerHTML = admin_view;
         document.getElementById("create_admin").innerHTML = "<br><label " +
         "for='newAdmin'>Address:</label><input type='text' id='newAdmin' " +
         "placeholder='e.g. 0x1d1edbeco50fb7cca917a11575aabad900fa5432'></input>"
@@ -885,17 +1354,25 @@ window.setInterval(function(){
         + "<br><br><button  onclick='remove_admin()'>Remove Admin</button><div "
         + "id='destroy_admin'></div><br><br>";
         document.getElementById("register_num").innerHTML = reg_num_html;
-        document.getElementById("register_addr").innerHTML = reg_num_html;
+        document.getElementById("register_addr").innerHTML = reg_addr_html;
         document.getElementById("distribute").innerHTML = distrib_html;
-        document.getElementById("student_view").innerHTML = "";
+        document.getElementById("off_list").innerHTML=o_l?o_l:"";
+        document.getElementById("filter_props").innerHTML = "";
+        document.getElementById("Admin").style.display = "block";
         break;
       case "AD": //admins can register student numbers and addresses, and send studnts free tokens
+        if(document.getElementById("off_list")){
+          var o_l = document.getElementById("off_list").innerHTML;
+        }
+        document.getElementById("main_view").innerHTML = admin_view;
         document.getElementById("create_admin").innerHTML = "";
         document.getElementById("remove_admin").innerHTML = "";
         document.getElementById("register_num").innerHTML = reg_num_html;
-        document.getElementById("register_addr").innerHTML = reg_num_html;
+        document.getElementById("register_addr").innerHTML = reg_addr_html;
         document.getElementById("distribute").innerHTML = distrib_html;
-        document.getElementById("student_view").innerHTML = "";
+        document.getElementById("off_list").innerHTML=o_l?o_l:"";
+        document.getElementById("filter_props").innerHTML = "";
+        document.getElementById("Admin").style.display = "block";
     }
     user.status_ch = false; //reset the "user changed" flag
   } // if the user is a student and bal, traded, or feedback change, update the display
@@ -957,6 +1434,44 @@ window.setInterval(function(){
         console.log("Null DB entry at "+i);
       }
     }
+  }
+  // Proposals are updated for all users
+  if(user.offer_list.length-1 > user.offer_count){
+    var reps = {};
+    for(var j = user.offer_count+1; j<user.offer_list.length; j++){
+      if(user.offer_list[j][5]){
+        var mail_link = get_email_link(j);
+        reps[user.offer_list[j][1]] = reps[user.offer_list[j][1]] ? reps[user.offer_list[j][1]] : get_report(user.offer_list[j][1]);
+        proposal_row = "<tr class='prop_row_" + j + "'>" +
+              "<td align='center' rowspan=2>" + j + "</td>" +
+              "<td align='center' rowspan=2>" + user.offer_list[j][0] + "</td>" +
+              "<td id='mail_link_" + j + "'>" + mail_link + "</td>" +
+              "<th>As sender:</th>" +
+              "<td id='tfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].total_fbks.as_sender + "</td>" +
+              "<td id='mfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].mean_fbks.as_sender.toFixed(2) + "</td>" +
+            "</tr>" +
+            "<tr class='prop_row_" + j + "'>" +
+              "<td>" + user.offer_list[j][1] + "</td>" +
+              "<th>All trades</th>" +
+              "<td id='tfat_" + j + "' align='center'>" + reps[user.offer_list[j][1]].total_fbks.all + "</td>" +
+              "<td id='mfat_" + j + "' align='center'>" + reps[user.offer_list[j][1]].mean_fbks.all.toFixed(2) + "</td>" +
+            "</tr>" +
+            "<tr class='prop_row_" + j + "'>" +
+              "<th colspan=2>Reason</th>" +
+              "<td colspan=4>" + user.offer_list[j][3] + "<div id='init_trade_" + j + "'></div></td>" +
+            "</tr></div>"
+      }
+      else{
+        proposal_row = "<div id='prop_row_"+j+"'></dv>"
+      }
+      if(document.getElementById("off_list").innerHTML){
+        document.getElementById("off_list").innerHTML = proposal_row + document.getElementById("off_list").innerHTML;
+      }
+      else {
+        document.getElementById("off_list").innerHTML = proposal_row;
+      }
+    }
+    user.offer_count = user.offer_list.length-1;
   }
   times+=1;
   if(times % 20 == 10){ // update the plots once a minute
@@ -1113,20 +1628,12 @@ function register_std_num(){
 
 function register_std_addr(){
   console.log("register_std_addr() was called")
-  //check if the admin has signed it.
-  //document.getElementById("Fill_box_alert3").innerHTML = "";
-  //if (document.getElementById('addrx').value === ''){
-  //  document.getElementById("Fill_box_alert3").innerHTML = "All fields must be filled in!";
-  //  return; //do nothing if the user/admin has not signed in yet. // TODO This was at line after if was closed - ask why?
-  //}
-
-  var stud_num = document.getElementById("stud_num2");
-  var stud_addr = document.getElementById("stud_addr");
-  if(stud_num === '' || stud_addr === '') {
+  var stud_num = document.getElementById("stud_num2").value;
+  var stud_addr = document.getElementById("stud_addr").value;
+  if(stud_num == '' || stud_addr == '') {
     document.getElementById("regaddrres").innerHTML = "All fields must be filled in!";
     return;
   }
-
   myContract.valid_student_num.call(stud_num, function(error,result){
     if(error) {
       alert("Error: Was not able to retrieve details of your account")
@@ -1142,14 +1649,27 @@ function register_std_addr(){
         document.getElementById("regaddrres").innerHTML = "That student number already has an address assigned.";
         return;
       }
-      myContract.register_std_addr(stud_addr, stud_num, {from:user.account , gas:4200000},function(error,result){
+      myContract.valid_student_addr.call(stud_addr, function(error,result){
         if(error) {
-          alert("Error:Transaction has not been sent")
+          alert("Error: Was not able to retrieve details of your account")
           console.log(error)
         }
         else {
-          console.log("Student address registered at " + result)
-          document.getElementById("regaddrres").innerHTML = "Your Cognocenti address, " + stud_addr + ", is now registered to your UUN, s" + stud_num;
+          if(result){
+            document.getElementById("regaddrres").innerHTML = "That address has already been assigned.";
+          }
+          else{
+            myContract.register_std_addr(stud_addr, stud_num, {from:user.account , gas:4200000},function(error,result){
+              if(error) {
+                alert("Error:Transaction has not been sent")
+                console.log(error)
+              }
+              else {
+                console.log("Student address registered at " + result)
+                document.getElementById("regaddrres").innerHTML = "Student " + stud_num + "'s address, " + stud_addr + ", is now registered with VCaT";
+              }
+            })
+          }
         }
       })
     }
@@ -1158,8 +1678,8 @@ function register_std_addr(){
 
 // Helper function which checks for correctly formatted addresses
 function is_address(str){
-  var re = new RegExp('^0(x|X)[0-9a-fA-F]{40}$')
-  return re.test(str)
+  var re = new RegExp('^0(x|X)[0-9a-fA-F]{40}$');
+  return re.test(str);
 }
 
 function get_transactions(){
@@ -1172,8 +1692,7 @@ function get_transactions(){
       console.log(error)
     }
     else {
-      //console.log(result)
-      total_transactions = result;
+      var total_transactions = result;
       // loop iterates over all transactions in record. Not that a separate call
       // to the contract is made for each transaction
       for (var i = 1;i < total_transactions + 1 ;i++){
@@ -1217,15 +1736,22 @@ function get_transactions(){
 
 function send_token(){
   // Take inputs from the form
+  console.log("send_token() called");
   var cognocents = document.getElementById("to_send").value;
+  var prop_no = document.getElementById("prop_id").value;
   var recipient = document.getElementById("an_address").value;
   var cat = document.getElementById("category").value;
   var reason = document.getElementById("reason").value;
+  var time = (new Date(Date.now())).toString();
   // Before sending values to the smart contract, let's see if they make sense.
   // There are some checks (if the sender has enough funds, if the recipient
   // exists) which can only be done by the contract, but these can be done locally
-  if(cognocents === '' || recipient === '' || reason === '' || cat === '') {
+  if(cognocents === '' || recipient === '' || reason === '' || cat === ''|| prop_no === '') {
     document.getElementById("receipt").innerHTML = "Error: All fields must be filled in!";
+    return;
+  }
+  if(time === ''){
+    document.getElementById("receipt").innerHTML = "Error: VCaT is unable to determine the time.";
     return;
   }
   if(!is_address(recipient)){
@@ -1248,7 +1774,7 @@ function send_token(){
     'other-course': 'OTHER ACADEMIC: ',
     'non-academic': 'NON-ACADEMIC: '
   };
-  reason = categories[cat] + ' ' + reason
+  reason = categories[cat] + reason
   // The contract doesn't actually return an error if you try to pay more than
   // you have; the transaction just silently fails. Same if you send to an
   // unregistered address
@@ -1275,22 +1801,39 @@ function send_token(){
               alert("Error: Recipient not found :(")
             }
             else {
-              // If the inputs check out, leave a note in the log, then send the transaction
-              console.log('sending ' + cognocents + ' to ' + recipient + ' because ' + reason);
-              myContract.send_token(cognocents, recipient, reason, {from:user.account , gas:4200000}, function(error,result){
+              myContract.proposals.call(prop_no, function(error, result){
                 if(error) {
-                  var message = error['message'];
-                  // Some of the error messages the contract gives are not super user-friendly,
-                  // so let's rewrite them:
-                  if(message.startsWith('Error: WalletMiddleware - Invalid "from"')) {
-                    message = "Error: You need to be logged in to this page, from the same address that you're logged in to MetaMask."
-                  }
-                  alert(message)
-                  document.getElementById("receipt").innerHTML = message;
-                  console.log(error);
+                  alert("Error: Was not able to communicate with contract :(")
+                  console.log(error)
                 }
                 else {
-                  document.getElementById("receipt").innerHTML = "Confirmed: You sent " + cognocents + ' CognoCenti to:<br>' + recipient + '<br>For the following reason:<br>' + reason
+                  if(!result[5]){
+                    document.getElementById("receipt").innerHTML = "Error: There is active proposal #" + prop_no;
+                    alert("Error: Proposal not found :(")
+                  }
+                  else if (!same_addr(user.account, result[1]) && !same_addr(recipient, result[1])) {
+                    document.getElementById("receipt").innerHTML = "Error: Neither you nor the recipient are the proposer of proposal #" + prop_no;
+                  }
+                  else{
+                    // If the inputs check out, leave a note in the log, then send the transaction
+                    console.log('sending ' + cognocents + ' to ' + recipient + ' because ' + reason);
+                    myContract.send_token(cognocents, recipient, reason, time, prop_no, {from:user.account , gas:4200000}, function(error,result){
+                      if(error) {
+                        var message = error['message'];
+                        // Some of the error messages the contract gives are not super user-friendly,
+                        // so let's rewrite them:
+                        if(message.startsWith('Error: WalletMiddleware - Invalid "from"')) {
+                          message = "Error: You need to be logged in to this page, from the same address that you're logged in to MetaMask."
+                        }
+                        alert(message)
+                        document.getElementById("receipt").innerHTML = message;
+                        console.log(error);
+                      }
+                      else {
+                        document.getElementById("receipt").innerHTML = "Confirmed: You sent " + cognocents + ' CognoCenti to:<br>' + recipient + '<br>For the following reason:<br>' + reason
+                      }
+                    })
+                  }
                 }
               })
             }
@@ -1365,7 +1908,7 @@ function leave_feedback(score, transaction, elem){
                       document.getElementById(elem + "_x").innerHTML = "An error occurred";
                     }
                     else {
-                      user.trans_hist[transaction][role] = score
+                      user.trans_hist[transaction][role] = parseInt(score);
                       document.getElementById(elem).innerHTML = score;
                       document.getElementById(elem).className = "midnum";
                       var opp_elem;
@@ -1435,7 +1978,7 @@ function add_admin() {
       }
       else{
         myContract.add_admin(new_admin,  {from:user.account , gas:4200000}, function(error, result){
-          console.log("myContract.add_admin has be called");
+          console.log("myContract.add_admin has been called");
           if(error) {
             alert(error)
             console.log(error)
@@ -1687,73 +2230,77 @@ function draw_charts(){
 }
 
 function barchart(x, y, x_label, y_label, bg_col, bord_col, element){
-  var ctx = document.getElementById(element).getContext('2d');
-  ctx.canvas.height = 400;
-  ctx.canvas.width = 400;
-  var rpts = Math.ceil(x.length/3)
-  bg_colours = Array(x.length).fill(bg_col);
-  bord_colours = Array(x.length).fill(bord_col);
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: x,
-      datasets: [{
-        data: y,
-        backgroundColor: bg_colours,
-        borderColor: bord_colours,
-        borderWidth: 1
-      }]
-    },
-    options: {
-      legend: {
-        display:false
-      },
-      scales: {
-        xAxes: [{
-          scaleLabel: {
-            display:true,
-            labelString:x_label
-          }
-        }],
-        yAxes: [{
-          scaleLabel: {
-            display:true,
-            labelString:y_label
-          },
-          ticks: {
-            beginAtZero:true
-          }
+  if(document.getElementById(element)){
+    var ctx = document.getElementById(element).getContext('2d');
+    ctx.canvas.height = 400;
+    ctx.canvas.width = 400;
+    var rpts = Math.ceil(x.length/3)
+    bg_colours = Array(x.length).fill(bg_col);
+    bord_colours = Array(x.length).fill(bord_col);
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: x,
+        datasets: [{
+          data: y,
+          backgroundColor: bg_colours,
+          borderColor: bord_colours,
+          borderWidth: 1
         }]
+      },
+      options: {
+        legend: {
+          display:false
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display:true,
+              labelString:x_label
+            }
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display:true,
+              labelString:y_label
+            },
+            ticks: {
+              beginAtZero:true
+            }
+          }]
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 function pie_chart(x, y, lab, element){
-  var ctx = document.getElementById(element).getContext('2d');
-  ctx.canvas.height = 400;
-  ctx.canvas.width = 400;
-  var rpts = Math.ceil(x.length/3)
-  bg_colours = Array(rpts).fill(["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"]).flat();
-  bord_colours = Array(rpts).fill(["rgba(255, 0, 0, 1)", "rgba(255, 215, 0, 1)", "rgba(0, 0, 0, 1)"]).flat();
-  var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: x,
-      datasets: [{
-        data: y,
-        backgroundColor: bg_colours,
-        borderColor: bord_colours,
-        borderWidth: 1
-      }]
-    },
-    options: {
-      title: {
-        display:true,
-        text:lab
+  if(document.getElementById(element)){
+    var ctx = document.getElementById(element).getContext('2d');
+    ctx.canvas.height = 400;
+    ctx.canvas.width = 400;
+    var rpts = Math.ceil(x.length/3)
+    bg_colours = ["rgba(255, 0, 0, 0.6)", "rgba(255, 215, 0, 0.6)", "rgba(0, 0, 0, 0.6)"];
+    bord_colours = ["rgba(255, 0, 0, 1)", "rgba(255, 215, 0, 1)", "rgba(0, 0, 0, 1)"];
+    var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: x,
+        datasets: [{
+          data: y,
+          backgroundColor: bg_colours,
+          borderColor: bord_colours,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        title: {
+          display:true,
+          text:lab
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 function get_report(addr){
@@ -1831,7 +2378,6 @@ function divide_or_zero(x, y){
   return y==0 ? 0 : x/y;
 }
 
-
 function show_report(){
   var addr = document.getElementById('an_address').value;
   if (!is_address(addr)){
@@ -1886,6 +2432,267 @@ function show_report(){
         }
       }
     })
+  }
+}
+
+function openView(evt, tabName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(tabName).style.display = "block";
+  if(typeof evt == 'string'){
+    document.getElementById(evt).className += " active"
+  }
+  else{
+    evt.currentTarget.className += " active";
+  }
+}
+
+function submit_proposal() {
+  var amt_offered = document.getElementById("cc_offered").value;
+  var email = document.getElementById("email").value;
+  var cat = document.getElementById("offer_cat").value;
+  var reason = document.getElementById("offer_reason").value;
+  // Check stuff that you don't need to his the contract for
+  if(amt_offered === '' || email === '' || reason === '' || cat === '') {
+    document.getElementById("acknowledged").innerHTML = "Error: All fields must be filled in!";
+    return;
+  }
+  if(!is_valid_email(email)){
+    document.getElementById("acknowledged").innerHTML = "Error: That is not a valid email address.";
+    return;
+  }
+  if(isNaN(parseInt(amt_offered)) || parseInt(amt_offered) != Number(amt_offered)){
+    document.getElementById("acknowledged").innerHTML = "Error: You must offer a whole number of CognoCenti";
+    return;
+  }
+  else{
+    amt_offered = parseInt(amt_offered);
+  }
+  if(parseInt(amt_offered) < 1) {
+    document.getElementById("acknowledged").innerHTML = "Error: You must offer at least one CognoCent";
+    return;
+  }
+  // prefixes for reasons, needed for statistical breakdown
+  categories = {'inf1-cg': 'INF1-CG RELATED: ',
+    'other-course': 'OTHER ACADEMIC: ',
+    'non-academic': 'NON-ACADEMIC: '
+  };
+  reason = categories[cat] + reason;
+  // does the student have enough tokens to do this?
+  myContract.student_token_balance.call(user.account , function(error, result){
+    if(error) {
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error)
+    }
+    else {
+      var bal = result;
+      if(parseInt(bal) < parseInt(amt_offered)) {
+        document.getElementById("acknowledged").innerHTML = "Error: You cannot send " + amt_offered + " CognoCenti; your account balance is " + bal + " CognoCenti";
+        alert("Error: Insufficient funds :(")
+      }
+      else {
+        myContract.valid_student_addr.call(user.account, function(error, result){
+          // Just in case someone is able to access the form with a non-student account
+          if(error) {
+            alert("Error: Was not able to communicate with contract :(")
+            console.log(error)
+          }
+          else {
+            if(!result){
+              document.getElementById("acknowledged").innerHTML = "Error: Your account is not a valid student account. Address is: " + user.account;
+            }
+            else {
+              myContract.makeProposal(amt_offered, reason, email, {from:user.account , gas:4200000}, function(error,result){
+                // Post the proposal
+                if(error){
+                  console.log(error)
+                  document.getElementById("acknowledged").innerHTML = "Error: Proposal submission failed";
+                }
+                else{
+                  document.getElementById("acknowledged").innerHTML = "Confirmed: You are offering " + amt_offered + ' CognoCenti for:<br>' + reason + '<br>...and gave the contact email:<br>' + email
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+}
+
+function is_valid_email(eml){
+  var re = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+  return re.test(eml);
+}
+
+function get_offers() {
+  if(!myContract){
+    console.log("Trying to get at the offer list before connencting to a contract");
+    return;
+  }
+  // Get the number of proposals from the contract, so we know how often to loop
+  myContract.totalNum_proposals.call(function(error, result){
+    if(error) {
+      alert("Error: Was not able to communicate with contract :(")
+      console.log(error)
+    }
+    else {
+      var num_props = parseInt(result);
+      // remember, proposals in the contract are numbered starting at 1
+      for(var i = 1; i < num_props + 1; i++) {
+        // there are two cases where an proposal on the contract will change
+        // the state of the user-model here; if the proposal is new, and not
+        // yet recorded, or (else if) the proposal has become inactive
+        if(!user.offer_list[i]) {
+          myContract.proposals.call(i, function(error, result){
+            if(error) {
+              alert("Error: Was not able to communicate with contract :(")
+              console.log(error)
+            }
+            else {
+              user.offer_list[result[4]] = result;
+            }
+          })
+        }
+        else if(user.offer_list[i][5]){
+          myContract.proposals.call(i, function(error, result){
+            var ii = result[4];
+            if(error) {
+              alert("Error: Was not able to communicate with contract :(")
+              console.log(error)
+            }
+            else if(!result[5]){
+              // change the entry if applicable
+              user.offer_list[ii][5] = result[5];
+              var rows = document.getElementsByClassName("prop_row_"+ii)
+              // and if rows exist in the proposal table, blank them
+              for(var j = 0; j < rows.length; j++){
+                rows[j].innerHTML = "";
+              }
+            }
+            else{
+              rpt = get_report(result[1])
+              update_element("tfas_"+ii, rpt.total_fbks.as_sender);
+              update_element("mfas_"+ii, rpt.mean_fbks.as_sender.toFixed(2));
+              update_element("tfat_"+ii, rpt.total_fbks.all);
+              update_element("mfat_"+ii, rpt.mean_fbks.all.toFixed(2));
+            }
+          })
+        }
+      }
+    }
+  })
+}
+
+function get_email_link(n){
+  if(user.status=='NA'||user.status=='XX'){
+    return "Email address hidden";
+  }
+  else{
+    var proposalURI = encodeURIComponent(user.offer_list[n][3]);
+    var subject = "[VCaT]%20Your%20offer%3A%20" + proposalURI;
+    var body = "I%20am%20interested%20in%20the%20trade%20you%20proposed%20on%20" +
+      "VCaT%2C%20proposal%20%23" + user.offer_list[n][4] + "%2C%20%22" + proposalURI + "%22.";
+    return '<a href="mailto:'+user.offer_list[n][2]+'?subject=' + subject + "&amp;body=" + body + '">'+user.offer_list[n][2]+'</a>'
+  }
+}
+
+function refresh_prop_emails(){
+  for(var i = 1; i < user.offer_list.length; i++){
+    if(document.getElementById('mail_link_'+i)){
+      document.getElementById('mail_link_'+i).innerHTML = get_email_link(i);
+    }
+  }
+}
+
+function filter_proposals(){
+  var filter_on = document.getElementById("f_self").checked;
+  for(var i = 1; i < user.offer_list.length; i++){
+    if(user.offer_list[i][5]){
+      if(filter_on){
+        if(same_addr(user.offer_list[i][1], user.account)){
+          var rows = document.getElementsByClassName("prop_row_"+i);
+          for(var j = 0; j < rows.length; j++){
+            rows[j].style.display = 'table-row';
+          }
+          if(document.getElementById("init_trade_"+i)){
+            document.getElementById("init_trade_"+i).innerHTML = '<button onclick="init_trade(' + i + ')">Initiate Trade</button>';
+          }
+        }
+        else{
+          var rows = document.getElementsByClassName("prop_row_"+i);
+          for(var j = 0; j < rows.length; j++){
+            rows[j].style.display = 'none';
+          }
+          if(document.getElementById("init_trade_"+i)){
+            document.getElementById("init_trade_"+i).innerHTML = '';
+          }
+        }
+      }
+      else{
+        var rows = document.getElementsByClassName("prop_row_"+i);
+        for(var j = 0; j < rows.length; j++){
+          rows[j].style.display = 'table-row';
+        }
+        if(document.getElementById("init_trade_"+i)){
+          document.getElementById("init_trade_"+i).innerHTML = '';
+        }
+      }
+    }
+  }
+}
+
+function parse_reason(reason){
+  prefixes = ["INF1-CG RELATED", "OTHER ACADEMIC", "NON-ACADEMIC"];
+  pref_vals = {
+    "INF1-CG RELATED":'inf1-cg',
+    "OTHER ACADEMIC":'other-course',
+    "NON-ACADEMIC":'non-academic'
+  }
+  split_reason = ['', ''];
+  split_index = 0;
+  for(var i = 0; i < prefixes.length; i++){
+    if(reason.startsWith(prefixes[i])){
+      split_reason[0] = pref_vals[prefixes[i]];
+      split_index = prefixes[i].length;
+      break;
+    }
+  }
+  if(reason.slice(split_index).startsWith(':')){
+    split_index++;
+  }
+  split_reason[1] = reason.slice(split_index);
+  return split_reason;
+}
+
+function init_trade(prop_no){
+  var to_send = document.getElementById("to_send");
+  var prop_id = document.getElementById("prop_id");
+  var category = document.getElementById("category");
+  var reason = document.getElementById("reason");
+  var address = document.getElementById("an_address");
+  if(to_send && prop_id && category && reason){
+    to_send.value = user.offer_list[prop_no][0];
+    prop_id.value = prop_no;
+    split_reason = parse_reason(user.offer_list[prop_no][3])
+    category.value = split_reason[0];
+    reason.innerHTML = split_reason[1];
+    openView("trad_but","Trading");
+    address.focus()
   }
 }
 
