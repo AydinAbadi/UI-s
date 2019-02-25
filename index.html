@@ -99,6 +99,7 @@ tr.hist:hover {
 a {
   font-style: italic;
   text-decoration: none;
+  color:#503399
 }
 
 a:link {
@@ -1268,8 +1269,9 @@ window.setInterval(function(){
               "</tr>" +
             "</table>" +
           "<h3 id='tc'>Trading Centre</h3>" +
-            "<table><tr><th width=400>Trade</th><th width=400>Check Reputation</th><tr>" +
-              "<tr><td colspan=2><label for='an_address'>Enter a valid student address to check their reputation and history, and send CognoCenti:</label></td></tr>" +
+            "<table><tr><th width=450>Trade</th><th width=450>Check Reputation</th><tr>" +
+              "<tr><td colspan=2><label for='an_address'>Enter a valid student address to check their reputation and history, and to send CognoCenti. " +
+              "Note that to trade, you must first propose a trade on the <a onClick='openView(\"prop_but\", \"Proposals\"); return false'>Proposals</a> screen</label></td></tr>" +
               "<tr><td class='pb' colspan=2><input type='text' id='an_address'  placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input></td></tr>" +
               "<tr><td class='pr'><label for='to_send'>Number of CognoCenti:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
                 "<label for='prop_id'>Proposal ID#:</label><input type='text' id='prop_id' placeholder='e.g. 12'><br>" +
