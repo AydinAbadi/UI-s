@@ -1016,8 +1016,8 @@ const data_for_the_people = "<h3>Data for the People</h3>" +
 "<table><tr><th>Trade Values</th><th>Feedback Values</th></tr>" +
 "<tr><td><canvas id='tradeVals' width='400' height='400'></canvas></td>" +
 "<td><canvas id='fbVals' width='400' height='400'></canvas></td></tr>" +
-"<tr><th>Trade Types</th><th>???</th></tr>" +
-"<tr><td><canvas id='tradeCats' width='400' height='400'></canvas></td><td></td></tr></table>";
+"<tr><th>Trade Types</th></tr>" +
+"<tr><td><canvas id='tradeCats' width='400' height='400'></canvas></td></tr></table>";
 
 const about_top = "<table width=90%>"+
     "<tr>" +
@@ -1219,7 +1219,7 @@ window.setInterval(function(){
       "  </tr>";
     }
   }
-  if(user.status_ch || document.getElementById("status2").innerHTML == ""){
+  if(user.status_ch || document.getElementById("status2").innerHTML == "" || !document.getElementById("vcat_info")){
     update_element("status2", status_txt[user["status"]]);
     refresh_prop_emails();
     switch (user.status) {
