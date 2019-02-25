@@ -176,19 +176,22 @@ input[type=text], textarea {
 }
 
 button {
-  border: black 1px;
   background-color: #b699ff;
   color: black;
+  border: 2px solid black;
   cursor: pointer;
   display: inline-block;
   font-size: 15pt;
   width: 100%;
   font-family: "Helvetica";
+  border-radius: 8px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 button:hover {
   background-color: black;
   color: white;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.40);
 }
 
 option:disabled {
@@ -1080,15 +1083,15 @@ const get_started = "<h6>How to get set up for VCaT</h6>" +
   " and Firefox which connects you to the Ethereum blockchain and allows you " +
   "interact with your blockchain wallet via compatible websites. Go to " +
   "<a href='https://metamask.io' target='_blank'>metamask.io</a> " +
-  "and follow the installation instructions there.</p><img src='Screenshot_1.jpg' alt='MetaMask website'></li>" +
+  "and follow the installation instructions there.</p><img width=800px src='Screenshot_1.jpg' alt='MetaMask website'></li>" +
   "<li><h6>Connect to the INF1-CG private blockchain</h6><p>MetaMask should" +
   " now be in the plugins bar of your browser. <ul><li>Click the icon to open MetaMask.</li>" +
   "<img src='Screenshot_2.jpg' alt='Open MetaMask'>" +
   "<li>The Networks menu at the top should say 'Main Ethereum Network'. Click" +
   " it and select <i>Custom RPC</i>.</li><img src='Screenshot_3.jpg' alt='Custom RPC'>" +
   "<li>Scroll down to where it says 'New RPC URL'. Paste in the VCaT blockchain" +
-  " URL, 'http://129.215.199.18:8545', and click Save</li></ul>" +
-  "<img src='Screenshot_4.jpg' alt='VCaT blockchain URL'></li>" +
+  " URL, 'http://129.215.199.18:8545', and click Save.<br>" +
+  "<img src='Screenshot_4.jpg' alt='VCaT blockchain URL'></li></ul></li>" +
   "<li><h6>Copy your blockchain address and email it to us</h6><p>Below the " +
   "Networks menu, you will find the name and address of your Ethereum account. " +
   "If you click on it, MetaMask will copy the address to the clipboard. " +
@@ -1109,9 +1112,9 @@ const get_started = "<h6>How to get set up for VCaT</h6>" +
   "<li><h6>Start using VCaT!</h6><p>As soon as your account is activated, this " +
   "page will detect the change, and start showing the main Trading and Proposals " +
   "screens. First, propose trades, or respond to proposals. From there, you can " +
-  "make trades, leave feedback, and check the feedback of other VCaT users.</p></li></ol>" +
+  "make trades, leave feedback, and check the feedback of other VCaT users.</p>" +
   "<img src='Screenshot_7.jpg' alt='Propose trades'>" +
-  "<img src='Screenshot_8.jpg' alt='Send CognoCenti and give feedback.'>"
+  "<img src='Screenshot_8.jpg' alt='Send CognoCenti and give feedback.'></li></ol>"
 
 const proposal_form = "<h3>Propose a Trade</h3>" +
   "<table><tr><td><label for='cc_offered'>Value in CognoCenti:</label><input type='text' id='cc_offered' placeholder='e.g. 3'></td>" +
