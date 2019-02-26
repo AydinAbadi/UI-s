@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- This version works with Metamask and can invoke the wallet. It does not have all the functions yet -->
+<!-- This is the final version ready for launch, modulo a bug or two -->
 <html>
 <script language="javascript" type="text/javascript" src="web3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -237,7 +237,7 @@ currency backed by a smart contract on INF1-CG's private Ethereum blockchain.</t
 
 
 <br>
-<div class="a" style="font-size:80%">Ethereum Smart Contract powered by geth, remix, and MetaMask. Lovingly coded by the exceptionally smart and attractive people of the Blockchain Technologies Laboratory at the University of Edinburgh, and made available under a CC-BY-SA-3.0 license. </div><div id="owner" style="font-size:80%"></div>
+<div class="a" style="font-size:80%">&copy; Aydin Abadi, Dave Cochran and Richard Shillcock 2019. Ethereum Smart Contract powered by geth, remix, and MetaMask. Lovingly coded by the exceptionally smart and attractive people of the Blockchain Technologies Laboratory at the University of Edinburgh.</div><div id="owner" style="font-size:80%"></div>
 </body>
 </html>
 <!--  -->
@@ -252,6 +252,8 @@ if (typeof web3 !== 'undefined') {
 }
 else {
   // set the provider you want
+  //console.log("http://0.215.199.18:8545"); // was http://localhost:8545
+  //web3 = new Web3(new Web3.providers.HttpProvider("http://0.215.199.18:8545"));
   console.log("http://129.215.199.18:8545"); // was http://localhost:8545
   web3 = new Web3(new Web3.providers.HttpProvider("http://129.215.199.18:8545"));
 }
@@ -895,7 +897,7 @@ function update_element(id, content) {
   }
 }
 
-
+console.log(user);
 
 /* Function which checks the status of the current account number on the contract,
 setting `status` variable as either "NA", "ST" (student), "AD" (admin), or "OW"
@@ -970,7 +972,7 @@ function update(acc_no) {
 var ins = web3.eth.contract(abi);
 // note that "0xbc2db8ed4f03ec3812e266d52a37ce1f999e72c3" is the address of the contract on the blockchain
 var myContract = ins.at("0xe588b3bc0a64857c1e8e7a41f47d8eb9481a9b7e");
-
+//var myContract = ins.at("0xe000000000000000000000000000000000000000");
 
 update_status(user.account);
 update(user.account);
@@ -1045,7 +1047,7 @@ const about_vcat = "<h6>An experiment</h6>" +
   "<p>Anything at all that is of use to you, you can trade with your fellow" +
   " students for <i>CognoCenti</i>, our local currency.</p>" +
   "<h6>What will happen?</h6>" +
-  "<p>You will each get 100 CognoCenti.</p>" +
+  "<p>You will each get 10 CognoCenti.</p>" +
   "<p>You will see a <i>trading screen</i>. It will tell you what coins you " +
   "currently have and give you options for how to spend them. You and your peers" +
   " can post and reply to offers—buy and sell and give feedback on how it went.</p>" +
@@ -1275,8 +1277,13 @@ window.setInterval(function(){
             "</table>" +
           "<h3 id='tc'>Trading Centre</h3>" +
             "<table><tr><th width=450>Trade</th><th width=450>Check Reputation</th><tr>" +
-              "<tr><td colspan=2><label for='an_address'>Enter a valid student address to check their reputation and history, and to send CognoCenti. " +
-              "Note that to trade, you must first propose a trade on the <a onClick='openView(\"prop_but\", \"Proposals\"); return false'>Proposals</a> screen</label></td></tr>" +
+              "<tr><td colspan=2><label for='an_address'><ul><li>To check a user's " +
+              "reputation and history, enter their address and click 'Check'.</li>" +
+              "<li>To send CognoCenti, enter the address and fill out the form " +
+              "to the left, then click 'Send CognoCenti'. Note that to trade, " +
+              "you must first propose a trade on the " +
+              "<a onClick='openView(\"prop_but\", \"Proposals\"); return false'>" +
+              "Proposals</a> screen, or respond to a proposal</li></ul></label></td></tr>" +
               "<tr><td class='pb' colspan=2><input type='text' id='an_address'  placeholder='e.g. 0x50a8badb01890fa09666aabcc4408deadbeef421'></input></td></tr>" +
               "<tr><td class='pr'><label for='to_send'>Number of CognoCenti:</label><input type='text' id='to_send' placeholder='e.g. 3'><br>" +
                 "<label for='prop_id'>Proposal ID#:</label><input type='text' id='prop_id' placeholder='e.g. 12'><br>" +
