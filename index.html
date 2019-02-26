@@ -1466,12 +1466,20 @@ window.setInterval(function(){
         proposal_row = "<tr class='prop_row_" + j + "'>" +
               "<td align='center' rowspan=2>" + j + "</td>" +
               "<td align='center' rowspan=2>" + user.offer_list[j][0] + "</td>" +
-              "<td id='mail_link_" + j + "'>" + mail_link + "</td>" +
-              "<th>As sender:</th>" +
-              "<td id='tfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].total_fbks.as_sender + "</td>" +
-              "<td id='mfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].mean_fbks.as_sender.toFixed(2) + "</td>" +
-            "</tr>" +
-            "<tr class='prop_row_" + j + "'>" +
+              "<td id='mail_link_" + j + "'>" + mail_link + "</td>"
+        if(parse_reason(user.offer_list[j][3]).type == '(Wanted)'){
+          proposal_row += "<th>As sender:</th>" +
+            "<td id='tfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].total_fbks.as_sender + "</td>" +
+            "<td id='mfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].mean_fbks.as_sender.toFixed(2) + "</td>" +
+            "</tr>"
+        }
+        else{
+          proposal_row += "<th>As receiver:</th>" +
+            "<td id='tfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].total_fbks.as_receiver + "</td>" +
+            "<td id='mfas_" + j + "' align='center'>" + reps[user.offer_list[j][1]].mean_fbks.as_receiver.toFixed(2) + "</td>" +
+            "</tr>"
+        }
+        proposal_row += "<tr class='prop_row_" + j + "'>" +
               "<td>" + user.offer_list[j][1] + "</td>" +
               "<th>All trades</th>" +
               "<td id='tfat_" + j + "' align='center'>" + reps[user.offer_list[j][1]].total_fbks.all + "</td>" +
@@ -2627,8 +2635,15 @@ function get_offers() {
             }
             else{
               rpt = get_report(result[1])
-              update_element("tfas_"+ii, rpt.total_fbks.as_sender);
-              update_element("mfas_"+ii, rpt.mean_fbks.as_sender.toFixed(2));
+              type = parse_reason(result[3]).type
+              if(type=='(Wanted)'){
+                update_element("tfas_"+ii, rpt.total_fbks.as_sender);
+                update_element("mfas_"+ii, rpt.mean_fbks.as_sender.toFixed(2));
+              }
+              else{
+                update_element("tfas_"+ii, rpt.total_fbks.as_receiver);
+                update_element("mfas_"+ii, rpt.mean_fbks.as_receiver.toFixed(2));
+              }
               update_element("tfat_"+ii, rpt.total_fbks.all);
               update_element("mfat_"+ii, rpt.mean_fbks.all.toFixed(2));
             }
