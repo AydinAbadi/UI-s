@@ -999,5 +999,3 @@ function hashExpDate() {
         alert("You need to insert or generate a seed first!")
     }
 }
-
-
