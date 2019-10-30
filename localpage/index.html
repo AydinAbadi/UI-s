@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Local page</title>
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/spop.min.css"/>
+    <link rel="stylesheet" href="css/style.css">
+    <!--<link rel="stylesheet" href="css/insertseeding.styl">-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/snow.js"></script>
+    <script src="js/jquery.pure.tooltips.js"></script>
+    <script src="js/spop.min.js"></script>
+    <script src="js/user.js"></script>
+    <!--<style scoped lang="stylus">-->
+    <style type="text/css">
+        html {
+            width: 100%;
+            height: 1700px;
+        }
+
+        body {
+
+            width: 100%;
+            height: 1500px;
+
+            background-repeat: no-repeat;
+
+            /*background-position: center center #2D0F0F;*/
+
+            background-color: white;
+            /*background-color: black;*/
+
+            background-image: url(images/snow.jpg);
+            background-position: bottom center;
+            /*background-size: cover;*/
+
+            background-size: 100% 100%;
+
+        }
+
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100001;
+        }
+
+    </style>
+</head>
+<body>
+<!-- 雪花背景 -->
+<div class="snow-container"></div>
+<div class="outer">
+    <h1>Do you have a seed?</h1>
+    <!--<input type="radio" id="seedquery" name="seedquery" value="Yes">-->
+    <!--<label for="seedquery">Yes</label>-->
+    <!--<input type="radio" id="seedquery2" name="seedquery" value="No">-->
+    <!--<label for="seedquery2">No</label>-->
+    <!--<button type="submit">Submit</button>-->
+    <button class="yesbtn" id="yesbtn" onclick="showdiv('insertseed','generateseed')">Yes</button>
+    <button class="nobtn" id="nobtn" onclick="showdiv('generateseed','insertseed')">No</button>
+    <div id="insertseed">
+        <p>
+            <span data-text="I">I</span>
+            <span data-text="N">N</span>
+            <span data-text="S">S</span>
+            <span data-text="E">E</span>
+            <span data-text="R">R</span>
+            <span data-text="T">T</span>
+            <span data-text=" "> </span>
+            <span data-text="T">T</span>
+            <span data-text="H">H</span>
+            <span data-text="E">E</span>
+            <span data-text=" "> </span>
+            <span data-text="S">S</span>
+            <span data-text="E">E</span>
+            <span data-text="E">E</span>
+            <span data-text="D">D</span>
+        </p>
+
+        <label class="field a-field a-field_a3">
+            <input size=60 id="insertseedcont" name="insertseedcont" class="insertseedcont field__input a-field__input"
+                   placeholder="e.g. 0x1238" required>
+            <span class="a-field__label-wrap">
+      <span class="a-field__label">Seed</span>
+    </span>
+        </label>
+
+        <button class="bttn" onclick="inserSd()">insert</button>
+    </div>
+    <div id="generateseed">
+        <div class="bt">
+            <div class="container">
+                <div class="tick">
+                </div>
+            </div>
+        </div>
+        <div class="center-outer">
+            <div class="center-inner">
+
+                <!--<div class="bubbles">-->
+                <h1><span id="seedcontent"></span></h1>
+                <!--</div>-->
+
+            </div>
+        </div>
+        <button class="square_btnn" onclick="copyToClipboard('#seedcontent')">Copy Seed</button>
+    </div>
+    <br>
+    <div class="wrap1">
+        <!--<div class="sticker"></div>-->
+        <!--<div class="msg">new!</div>-->
+        <button class="box ageb" onclick="showdiv2('itage','itdegree','itlicense')">Age</button>
+
+    </div>
+    <div class="wrap2">
+        <!--<div class="sticker"></div>-->
+        <!--<div class="msg">new!</div>-->
+        <button class="box degreeb" onclick="showdiv2('itdegree','itage','itlicense')">Degree</button>
+
+    </div>
+    <div class="wrap3">
+        <!--<div class="sticker"></div>-->
+        <!--<div class="msg">new!</div>-->
+        <button class="box licenseb" onclick="showdiv2('itlicense','itage','itdegree')">License</button>
+
+    </div>
+
+
+    <div id="itage">
+        <!--<hr style="border-color: #a5f5ff; boder:2px;">-->
+
+        <h3><a href="#"> Age: </a></h3>
+        <input type="text" id="age" class="age" name="age">
+        <button class="square_btn" onclick="hashAge()">Encrypt</button>
+        <span id="encryptedage"></span><br>
+        <button class="square_btnnage" onclick="copyToClipboard('#encryptedage')">Copy Encrypted Age</button>
+        <button class="square_btn1"
+                onclick="window.location.href='http://localhost:63342/UI-s-master/login/main/clientpage/index.html?_ijt=7i0snfmblh3v84f2krhm2p3ao9'">
+            Submit
+        </button>
+    </div>
+    <div id="itdegree">
+        <div class="dtpy">
+            <h4 class="h1"><a href="#">Degree Type:</a></h4>
+
+            <input type="text" id="degree" class="degree" name="degree">
+            <button class="square_btn" onclick="hashDegree()">Encrypt</button>
+            <span id="encrypteddegreety"></span>
+            <button class="square_btnndegree" onclick="copyToClipboard('#encrypteddegreety')">Copy Encrypted Type
+            </button>
+            <br><br>
+        </div>
+        <div class="dtpydes">
+            <h4 class="h2"><a href="#">Degree Description:</a></h4>
+            <textarea name="degreedes" id="degreedes" class="degreedes" cols="30" rows="10"></textarea>
+            <button class="bn1 square_btn9" onclick="hashDegreeDes()">Encrypt</button>
+            <span id="encrypteddegreedes"></span>
+            <button class="square_btnndedes" onclick="copyToClipboard('#encrypteddegreedes')">Copy Encrypted
+                Description
+            </button>
+            <br><br>
+        </div>
+
+        <!--<label class="fileContainer">-->
+        <!--Click here to trigger the file uploader!-->
+        <!--<input type="file"/>-->
+        <!--</label>-->
+        <div class="upload-btn-wrapper">
+            <button class="btn">Upload a file</button>
+            <input type="file" name="myfile"/>
+        </div>
+        <button class="square_btn2"
+                onclick="window.location.href='http://localhost:63342/UI-s-master/login/main/clientpage/index.html?_ijt=7i0snfmblh3v84f2krhm2p3ao9'">
+            Submit
+        </button>
+
+    </div>
+    <div id="itlicense">
+        <div class="lipy">
+            <h4 class="h3"><a href="#">License Type:</a></h4>
+            <input type="text" id="license" class="license" name="license">
+            <button class="square_btn" onclick="hashLicense()">Encrypt</button>
+            <span id="encryptedlicensety"></span>
+            <button class="square_btnlis" onclick="copyToClipboard('#encryptedlicensety')">Copy Encrypted Type</button>
+            <br><br>
+        </div>
+        <div class="lides">
+            <h4 class="h4"><a href="#">License Description:</a></h4>
+            <textarea name="licensedes" id="licensedes" class="licensedes" cols="30" rows="18"></textarea>
+            <button class="bn1 square_btn" onclick="hashLicenseDes()">Encrypt</button>
+            <span id="encryptedLicensedes"></span>
+            <button class="square_btnnlisdes" onclick="copyToClipboard('#encryptedLicensedes')">Copy Encrypted Des
+            </button>
+            <br><br>
+
+        </div>
+
+        <label class="dt" for="date">Expired Date</label>
+
+        <input type="date" id="date" name="date" class="date">
+        <button class="square_btn" onclick="hashExpDate()">Encrypt</button>
+        <span id="encryptedExpDate"></span>
+        <button class="square_btnndate" onclick="copyToClipboard('#encryptedExpDate')">Copy Encrypted Date</button>
+        <br><br>
+        <button class="square_btn3"
+                onclick="window.location.href='http://localhost:63342/UI-s-master/login/main/clientpage/index.html?_ijt=7i0snfmblh3v84f2krhm2p3ao9'">
+            Submit
+        </button>
+
+    </div>
+</div>
+<script>
+    function showdiv(targetid, hideid) {
+
+        var target = document.getElementById(targetid);
+        // var clicktext=document.getElementById(objN)
+        var hide = document.getElementById(hideid);
+        if (target.style.display == "block") {
+            target.style.display = "none";
+            // clicktext.innerText="Open DIV";
+
+
+        } else {
+            target.style.display = "block";
+            // clicktext.innerText='Close DIV';
+            hide.style.display = "none";
+
+        }
+    }
+
+    function showdiv2(targetid, hideid1, hideid2) {
+
+        var target = document.getElementById(targetid);
+        var hide1 = document.getElementById(hideid1);
+        var hide2 = document.getElementById(hideid2);
+
+        if (target.style.display == "block") {
+            target.style.display = "none";
+            // clicktext.innerText="Open DIV";
+
+
+        } else {
+            target.style.display = "block";
+            // clicktext.innerText='Close DIV';
+            hide1.style.display = "none";
+            hide2.style.display = "none";
+
+
+        }
+    }
+</script>
+<script>
+
+
+    let button = document.querySelector('.bt');
+    let buttonText = document.querySelector('.tick');
+
+    const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
+
+    buttonText.innerHTML = "Generate the seed";
+
+    button.addEventListener('click', function () {
+
+        if (buttonText.innerHTML !== "Generate the seed") {
+            buttonText.innerHTML = "Generate the seed";
+        } else if (buttonText.innerHTML === "Generate the seed") {
+            buttonText.innerHTML = tickMark;
+        }
+        this.classList.toggle('button__circle');
+        var array = new Uint32Array(2);
+        window.crypto.getRandomValues(array);
+        var arr1 = array[0].toString(16);
+        var arr2 = array[1].toString(16);
+        // alert("arr1:"+arr1);
+        // alert("arr2:"+arr2);
+        var seed = arr1.concat(arr2);
+        document.getElementById("seedcontent").innerHTML = seed;
+        globalseed = seed;
+    });
+
+    jQuery(document).ready(function ($) {
+
+        // Define a blank array for the effect positions. This will be populated based on width of the title.
+        var bArray = [];
+        // Define a size array, this will be used to vary bubble sizes
+        var sArray = [4, 6, 8, 10];
+
+        // Push the header width values to bArray
+        for (var i = 0; i < $('.bubbles').width(); i++) {
+            bArray.push(i);
+        }
+
+        // Function to select random array element
+        // Used within the setInterval a few times
+        function randomValue(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // setInterval function used to create new bubble every 350 milliseconds
+        setInterval(function () {
+
+            // Get a random size, defined as variable so it can be used for both width and height
+            var size = randomValue(sArray);
+            // New bubble appeneded to div with it's size and left position being set inline
+            // Left value is set through getting a random value from bArray
+            $('.bubbles').append('<div class="individual-bubble" style="left: ' + randomValue(bArray) + 'px; width: ' + size + 'px; height:' + size + 'px;"></div>');
+
+            // Animate each bubble to the top (bottom 100%) and reduce opacity as it moves
+            // Callback function used to remove finsihed animations from the page
+            $('.individual-bubble').animate({
+                    'bottom': '100%',
+                    'opacity': '-=0.7'
+                }, 3000, function () {
+                    $(this).remove()
+                }
+            );
+
+
+        }, 350);
+
+    });
+
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+
+</script>
+</body>
+</html>
