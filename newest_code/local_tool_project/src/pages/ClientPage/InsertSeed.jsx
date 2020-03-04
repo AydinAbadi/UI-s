@@ -56,6 +56,14 @@ class InsertSeedPage extends Component {
     });
   };
 
+  handleGenerateSeed = () => {
+    let emptyArray = new Uint32Array(2);
+    window.crypto.getRandomValues(emptyArray);
+    let fisrtPart = emptyArray[0].toString(16);
+    let secondPart = emptyArray[1].toString(16);
+    return fisrtPart.concat(secondPart);
+  }
+
   handleFocus = () => {
       this.setState({
           seedDirty: true
@@ -70,7 +78,7 @@ class InsertSeedPage extends Component {
 
   handleSeedGenerate = () => {
       this.setState({
-          seed: 'ox128gdhydlkaucosnehsj',
+          seed: this.handleGenerateSeed(),
           generateDialogStatus: true
       })
   }
