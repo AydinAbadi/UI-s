@@ -37,11 +37,11 @@ const styles = {
         height: '100vh',
         overflow: 'hidden'
     },
-    '@global': {
-        body: {
-            background: '#000'
-        }
-    },
+    // '@global': {
+    //     body: {
+    //         background: '#000'
+    //     }
+    // },
     buttonContainer: {
         width: "100%",
         display: 'flex',
@@ -78,6 +78,7 @@ class HomePage extends Component{
                                 className={classes.clientButton}
                                 color="primary"
                                 variant="contained"
+                                href="/client"
                                 >I AM CLIENT</Button>
                             <Button 
                                 className={classes.validatorButton}

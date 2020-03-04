@@ -8,6 +8,7 @@ import {ThemeProvider} from '@material-ui/core/styles';
 import theme from '../../theme';
 import * as ROUTES from '../../routes';
 import HomePage from '../../pages/HomePage';
+import ClientPage from '../../pages/ClientPage';
 
 export default class RouterList extends Component {
     render() {
@@ -15,6 +16,7 @@ export default class RouterList extends Component {
             <ThemeProvider theme={theme}>
                 <Router>
                     <Route exact path={ROUTES.HOMEPAGE} component={HomePage} />
+                    <Route exact path={ROUTES.CLIENTPAGE} component={ClientPage} />
                 </Router>
             </ThemeProvider>
         )
