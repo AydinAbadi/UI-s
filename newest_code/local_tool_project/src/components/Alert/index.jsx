@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function AlertDialog(props) {
-  const { open, handleClose } = props;
+  const { open, handleClose, title, description } = props;
   return (
     <div>
       <Dialog
@@ -16,19 +16,18 @@ export default function AlertDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            {description}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          {/* <Button onClick={handleClose} color="primary">
             Disagree
-          </Button>
+          </Button> */}
           <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

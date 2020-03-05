@@ -3,7 +3,7 @@
  * Email: xiaojin971212@gmail.com
  */
 import React, { Component } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { styled, makeStyles } from "@material-ui/core/styles";
 import CssBaseLine from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -11,6 +11,9 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from '@material-ui/core/TextField';
 import Alert from '../../components/Alert';
+import Divider from '@material-ui/core/Divider';
+import * as Utilities from '../../utilities';
+
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -29,6 +32,21 @@ const useStyles = makeStyles(theme => ({
     title: {
         marginBottom: theme.spacing(8)
     },
+    backButton: {
+      marginRight: theme.spacing(4)
+    },
+    stepButtons: {
+      display: "flex",
+      justifyContent: 'center',
+      marginTop: theme.spacing(4)
+    },
+    form: {
+      marginBottom: theme.spacing(8)
+    }
+}));
+
+const StepButton = styled(Button)(({ theme }) => ({
+  minWidth: "120px"
 }));
 
 function InsertSeedPageWrapper(props) {
@@ -80,7 +98,22 @@ class InsertSeedPage extends Component {
       this.setState({
           seed: this.handleGenerateSeed(),
           generateDialogStatus: true
+      }, () => {
+        Utilities.copyStringToClipboard(this.state.seed);
       })
+  }
+
+  handleSubmit =() => {
+    const { seed } = this.state;
+    const { handleNext, updateValueEntry } = this.props;
+    if (!seed) {
+      this.setState({
+        seedDirty: true
+      })
+    } else {
+      handleNext();
+      updateValueEntry('seed', seed);
+    }
   }
 
   render() {
@@ -92,25 +125,8 @@ class InsertSeedPage extends Component {
         <Container fixed className={classes.root}>
           <Box className={classes.container}>
               <Typography variant="h5" className={classes.title}>INSERT or GENERATE SEED FOR ENCRYPTION</Typography>
-            <form action="">
+            <form noValidate className={classes.form}>
               <Box className={classes.fieldRow}>
-                {/* <FormControl error={seedDirty ? !seed : false} className={classes.seedInput} >
-                  <InputLabel htmlFor="client-seed">Seed</InputLabel>
-                  <Input
-                    id="client-seed"
-                    name="seed"
-                    value={seed}
-                    onChange={this.handleChange}
-                    onBlur={this.handleFocus}
-                    placeholder="Please input or generate the seed for encryption."
-                    autoComplete="off"
-                  />
-                  <FormHelperText>
-                    {
-                        seedDirty ? (!seed ? "Please input or generate the seed." : "") : ""
-                    }
-                  </FormHelperText>
-                </FormControl> */}
                 <TextField
                     error={seedDirty ? !seed : false}
                     className={classes.seedInput}
@@ -136,8 +152,32 @@ class InsertSeedPage extends Component {
                 </Button>
               </Box>
             </form>
+
+            <Divider variant="middle" style={{ width: "100%" }}/>
+
+            <div className={classes.stepButtons}>
+                <StepButton
+                      href="/"
+                      className={classes.backButton}
+                    >
+                      Back To Home
+                    </StepButton>
+                    <StepButton
+                      variant="contained"
+                      color="primary"
+                      onClick={this.handleSubmit}
+                    >
+                      Next
+                    </StepButton>
+            </div>
+
           </Box>
-          <Alert open={generateDialogStatus} handleClose={this.handleGenerateDialogClose}/>
+          <Alert 
+            open={generateDialogStatus} 
+            handleClose={this.handleGenerateDialogClose}
+            title="Seed Generation"
+            description="Success! The seed copied to your clipboard aotumaticlly."
+          />
         </Container>
       </React.Fragment>
     );

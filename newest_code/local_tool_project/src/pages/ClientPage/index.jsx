@@ -3,15 +3,14 @@
  * Email: xiaojin971212@gmail.com
  */
 import React, { Component } from "react";
-import { styled, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import CssBaseLine from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Divider from '@material-ui/core/Divider';
 
 import Stepper from "../../components/Stepper";
 import InsertSeed from "./InsertSeed";
+import SelectType from './SelectType';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,23 +23,13 @@ const useStyles = makeStyles(theme => ({
   stepper: {
     paddingTop: theme.spacing(2)
   },
-  backButton: {
-    marginRight: theme.spacing(2)
-  },
-  stepButtons: {
-    display: "flex",
-    justifyContent: 'center',
-    marginTop: theme.spacing(4)
-  },
   stepContent: {
-      marginTop: theme.spacing(8),
-      marginBottom: theme.spacing(8)
+      marginTop: theme.spacing(4),
+      marginBottom: theme.spacing(4)
   }
 }));
 
-const StepButton = styled(Button)(({ theme }) => ({
-    width: "120px"
-}));
+
 
 function ClientPageWrapper(props) {
   const classes = useStyles();
@@ -55,7 +44,8 @@ class ClientPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 0
+      activeStep: 1,
+      valueEntry: {}
     };
   }
   componentDidMount() {
@@ -74,6 +64,38 @@ class ClientPage extends Component {
     });
   };
 
+  updateValueEntry = (key, value) => {
+    const { valueEntry } = this.state;
+    this.setState({
+      valueEntry: Object.assign(valueEntry, {[key]: value})
+    }, () => {
+      console.log(this.state.valueEntry)
+    });
+  }
+
+  handleStepContentRender = () => {
+    const { activeStep } = this.state;
+    switch (activeStep) {
+      case 0:
+        return (
+          <InsertSeed 
+                handleNext={this.handleNext}
+                updateValueEntry={this.updateValueEntry}
+              />
+        )
+      case 1:
+        return (
+          <SelectType
+            handleNext={this.handleNext}
+            handleBack={this.handleBack}
+          />
+        )
+    
+      default:
+        return ""
+    }
+  }
+
   render() {
     const { classes } = this.props;
     const { activeStep } = this.state;
@@ -81,52 +103,22 @@ class ClientPage extends Component {
     return (
       <React.Fragment>
         <CssBaseLine />
-        <Container fixed className={classes.root}>
+        <Container fixed className={classes.root} maxWidth="md">
           <Box className={classes.container}>
             <div className={classes.stepper}>
               <Stepper
                 activeStep={activeStep}
-                handleBack={this.handleBack}
-                handleNext={this.handleNext}
                 steps={steps}
               />
             </div>
 
 
             <div className={classes.stepContent}>
-              <InsertSeed />
+              {
+                this.handleStepContentRender()
+              }
             </div>
 
-            <Divider variant="middle" />
-
-            <div className={classes.stepButtons}>
-              {activeStep === steps.length ? (
-                <div>
-                  <StepButton href="http://www.google.com" target="_blank">
-                    Complete
-                  </StepButton>
-                </div>
-              ) : (
-                <div>
-                  <div>
-                    <StepButton
-                      disabled={activeStep === 0}
-                      onClick={this.handleBack}
-                      className={classes.backButton}
-                    >
-                      Back
-                    </StepButton>
-                    <StepButton
-                      variant="contained"
-                      color="primary"
-                      onClick={this.handleNext}
-                    >
-                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                    </StepButton>
-                  </div>
-                </div>
-              )}
-            </div>
           </Box>
         </Container>
       </React.Fragment>
