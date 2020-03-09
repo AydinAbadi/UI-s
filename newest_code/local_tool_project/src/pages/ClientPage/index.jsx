@@ -10,7 +10,8 @@ import Box from "@material-ui/core/Box";
 
 import Stepper from "../../components/Stepper";
 import InsertSeed from "./InsertSeed";
-import SelectType from './SelectType';
+import EncryptAttribute from './EncryptAttribute';
+import ResultPage from './ResultPage';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,7 +45,7 @@ class ClientPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 1,
+      activeStep: 2,
       valueEntry: {}
     };
   }
@@ -72,9 +73,10 @@ class ClientPage extends Component {
       console.log(this.state.valueEntry)
     });
   }
+  
 
   handleStepContentRender = () => {
-    const { activeStep } = this.state;
+    const { activeStep, valueEntry } = this.state;
     switch (activeStep) {
       case 0:
         return (
@@ -85,8 +87,15 @@ class ClientPage extends Component {
         )
       case 1:
         return (
-          <SelectType
+          <EncryptAttribute
             handleNext={this.handleNext}
+            handleBack={this.handleBack}
+            valueEntry={valueEntry}
+          />
+        )
+      case 2:
+        return (
+          <ResultPage 
             handleBack={this.handleBack}
           />
         )

@@ -15,13 +15,14 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Divider from "@material-ui/core/Divider";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import Input from "@material-ui/core/Input";
-import { DropzoneArea } from "material-ui-dropzone";
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import { LooksOne, LooksTwo } from "@material-ui/icons";
-import { SHA256 } from "crypto-js";
 import * as Utilities from "../../utilities";
+
+import AgeNode from "./EncryptAttributeAge";
+import DegreeNode from "./EncryptAttributeDegree";
+import LicenseNode from "./EncryptAttributeLicense";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -47,16 +48,16 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: "100%",
-    marginBottom: theme.spacing(8)
+    marginBottom: theme.spacing(4)
   },
   formControl: {
     width: "60%",
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(4)
   },
   divider: {
     width: "100%",
     borderTop: "1px dashed",
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(4),
     marginLeft: 0,
     marginRight: 0
@@ -103,8 +104,16 @@ class SelectTypePage extends Component {
     this.state = {
       type: 0,
       age: "",
+      proofOfAge: null,
       ageDirty: false,
-      notificationOpen: false
+      notificationOpen: false,
+      degree: "",
+      degreeDescription: "",
+      proofOfDegree: null,
+      license: "",
+      licenseDescription: "",
+      licenseExpireDate: null,
+      proofOfLicense: null
     };
   }
   componentDidMount() {
@@ -143,24 +152,16 @@ class SelectTypePage extends Component {
     });
   };
 
-  handleFileUpload = file => {
-    console.log(file[0]);
-    this.fileHash(file[0], SHA256, function(x) {
-      console.log(x);
-    });
-  };
-
-  fileHash = (file, hasher, callback) => {
-    //Instantiate a reader
-    var reader = new FileReader();
-
-    //What to do when we gets data?
-    reader.onload = function(e) {
-      var hash = hasher(e.target.result);
-      callback(hash);
-    };
-
-    reader.readAsBinaryString(file);
+  handleFileUpload = async (key, files) => {
+    let value = ""
+    if(files.length > 0) {
+      Utilities.hashFile(files[0], (result) => {
+        value = result;
+        this.setState({
+          [key]: value
+        });
+      })
+    }
   };
 
   handleClose = () => {
@@ -169,22 +170,152 @@ class SelectTypePage extends Component {
     });
   };
 
+  handleDateChange = date => {
+    this.setState({
+      licenseExpireDate: date
+    });
+  };
+
   handleSubmit = () => {
-    const { age } = this.state;
+    const { type } = this.state;
+    const { valueEntry } = this.props;
     const { handleNext, updateValueEntry } = this.props;
-    if (!age) {
-      this.setState({
-        notificationOpen: true
-      });
-    } else {
-      handleNext();
-      updateValueEntry("age", age);
+    let valueEntities = { };
+    const seed = valueEntry.seed;
+    let valueKey = '';
+    let isPassvalidation = false;
+    let values = {};
+    if (seed) {
+      switch (type) {
+        case 0:
+          valueKey = 'age'
+          values = {
+            age: this.state.age,
+            proofOfAge: this.state.proofOfAge
+          };
+
+          isPassvalidation = Object.keys(values).every(k => !!values[k]);
+          if (isPassvalidation) {
+            valueEntities = {
+              age: this.state.age,
+              proofOfAge: this.state.proofOfAge.originalValue,
+              ageResult: Utilities.hashWithKeccak(seed, this.state.age),
+              proofOfAgeResult: Utilities.hashWithKeccak(seed, this.state.proofOfAge),
+            }
+          }
+          break;
+        case 1:
+          valueKey = 'degree';
+          values = {
+            degree: this.state.degree,
+            degreeDescription: this.state.degreeDescription,
+            proofOfDegree: this.state.proofOfDegree
+          };
+          isPassvalidation = Object.keys(values).every(k => !!values[k]);
+          if(isPassvalidation) {
+            valueEntities = {
+              degree: this.state.degree,
+              degreeDescription: this.state.degreeDescription,
+              proofOfDegree: this.state.proofOfDegree.originalValue,
+              degreeResult: Utilities.hashWithKeccak(seed, this.state.degree),
+              degreeDescriptionResult: Utilities.hashWithKeccak(seed, this.state.degreeDescription),
+              proofOfDegreeResult: Utilities.hashWithKeccak(seed, this.state.proofOfDegree),
+            }
+          }
+          break;
+        case 2:
+          valueKey = 'license';
+          values = {
+            license: this.state.license,
+            licenseDescription: this.state.licenseDescription,
+            licenseExpireDate: this.state.licenseExpireDate,
+            proofOfLicense: this.state.proofOfLicense
+          };
+          isPassvalidation = Object.keys(values).every(k => !!values[k]);
+          if (isPassvalidation) {
+            valueEntities = {
+              license: this.state.license,
+              licenseDescription: this.state.licenseDescription,
+              proofOfLicense: this.state.proofOfLicense.originalValue,
+              licenseExpireDate: this.state.licenseExpireDate,
+              licenseResult: Utilities.hashWithKeccak(seed, this.state.license),
+              licenseDescriptionResult: Utilities.hashWithKeccak(seed, this.state.licenseDescription),
+              licenseExpireDate: Utilities.hashWithKeccak(seed, this.state.licenseExpireDate),
+              proofOfLicenseResult: Utilities.hashWithKeccak(seed, this.state.proofOfLicense),
+            }
+          }
+          break;
+  
+        default:
+          break;
+      }
+      if (!isPassvalidation) {
+        this.setState({
+          notificationOpen: true
+        });
+      } else {
+        handleNext();
+        // updateValueEntry("age", "9");
+      }
+    }
+  };
+
+  renderContent = type => {
+    const { classes, theme } = this.props;
+    const {
+      age,
+      degree,
+      degreeDescription,
+      license,
+      licenseDescription,
+      licenseExpireDate
+    } = this.state;
+    switch (type) {
+      case 0:
+        return (
+          <AgeNode
+            theme={theme}
+            classes={classes}
+            age={age}
+            handleChange={this.handleChange}
+            handleFileUpload={this.handleFileUpload}
+          />
+        );
+
+      case 1:
+        return (
+          <DegreeNode
+            theme={theme}
+            classes={classes}
+            degree={degree}
+            degreeDescription={degreeDescription}
+            handleChange={this.handleChange}
+            handleFileUpload={this.handleFileUpload}
+          />
+        );
+
+      case 2:
+        return (
+          <LicenseNode
+            theme={theme}
+            classes={classes}
+            license={license}
+            licenseDescription={licenseDescription}
+            licenseExpireDate={licenseExpireDate}
+            handleChange={this.handleChange}
+            handleFileUpload={this.handleFileUpload}
+            handleDateChange={this.handleDateChange}
+          />
+        );
+
+      default:
+        return "";
     }
   };
 
   render() {
     const { classes, theme, handleBack } = this.props;
-    const { type, age, notificationOpen } = this.state;
+    const { type, notificationOpen } = this.state;
     return (
       <React.Fragment>
         <CssBaseLine />
@@ -223,39 +354,7 @@ class SelectTypePage extends Component {
                 </Typography>
               </Typography>
 
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="client-age">Age</InputLabel>
-                <Input
-                  value={age}
-                  onChange={this.handleChange}
-                  inputProps={{
-                    name: "age",
-                    id: "client-age",
-                    placeholder: "Pleace Input Age"
-                  }}
-                />
-              </FormControl>
-
-              <FormControl className={classes.formControl}>
-                <Typography
-                  variant="caption"
-                  style={{
-                    marginBottom: theme.spacing(1),
-                    marginTop: theme.spacing(2)
-                  }}
-                >
-                  Proof of Age:{" "}
-                </Typography>
-                <DropzoneArea
-                  name="Proof of Age"
-                  onChange={this.handleFileUpload}
-                  dropzoneText="Drag and drop file here or click"
-                  dropzoneClass={classes.dropzone}
-                  useChipsForPreview
-                  showPreviewsInDropzone={false}
-                  showPreviews
-                />
-              </FormControl>
+              {this.renderContent(type)}
             </form>
 
             <Snackbar
@@ -269,7 +368,11 @@ class SelectTypePage extends Component {
               message="Please Fill the Information."
               action={
                 <React.Fragment>
-                  <Button color="secondary" size="small" onClick={this.handleClose}>
+                  <Button
+                    color="secondary"
+                    size="small"
+                    onClick={this.handleClose}
+                  >
                     CLOSE
                   </Button>
                   <IconButton
