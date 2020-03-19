@@ -4,14 +4,14 @@
  */
 import React from "react";
 import Input from "@material-ui/core/Input";
-import { DropzoneArea } from "material-ui-dropzone";
+import Upload from '../../components/Upload';
 import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from '@material-ui/core/TextField';
 
 export default function DegreeNode(props) {
-  const { theme, classes, degree, degreeDescription, handleChange, handleFileUpload } = props;
+  const { theme, classes, degree, degreeDescription, handleChange, handleFileUpload, proofOfDegreeOriginalValue } = props;
   return (
     <React.Fragment>
       <FormControl className={classes.formControl}>
@@ -50,14 +50,14 @@ export default function DegreeNode(props) {
         >
           Proof of Degree:
         </Typography>
-        <DropzoneArea
-          name="Proof of Degree"
-          onChange={(files) => { handleFileUpload("proofOfDegree", files) }}
-          dropzoneText="Drag and drop file here or click"
-          dropzoneClass={classes.dropzone}
-          useChipsForPreview
-          showPreviewsInDropzone={false}
-          showPreviews
+        <Upload 
+          handleFileUpload={files => {
+            handleFileUpload(
+              "proofOfDegree",
+              files.map(file => file.file)
+            );
+          }}
+          files={proofOfDegreeOriginalValue}
         />
       </FormControl>
     </React.Fragment>

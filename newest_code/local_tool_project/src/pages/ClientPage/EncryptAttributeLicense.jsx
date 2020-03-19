@@ -5,7 +5,7 @@
 import "date-fns";
 import React from "react";
 import Input from "@material-ui/core/Input";
-import { DropzoneArea } from "material-ui-dropzone";
+import Upload from '../../components/Upload';
 import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -25,7 +25,8 @@ export default function LicenseNode(props) {
     licenseExpireDate,
     handleChange,
     handleFileUpload,
-    handleDateChange
+    handleDateChange,
+    proofOfLicenseOriginalValue
   } = props;
   return (
     <React.Fragment>
@@ -66,7 +67,7 @@ export default function LicenseNode(props) {
           name="licenseDescription"
           placeholder="Pleace Input License Description"
           multiline
-        //   variant="outlined"
+          //   variant="outlined"
           rows="6"
           rowsMax="6"
         />
@@ -81,14 +82,14 @@ export default function LicenseNode(props) {
         >
           Proof of License:
         </Typography>
-        <DropzoneArea
-          name="Proof of License"
-          onChange={(files) => { handleFileUpload("proofOfLicense", files) }}
-          dropzoneText="Drag and drop file here or click"
-          dropzoneClass={classes.dropzone}
-          useChipsForPreview
-          showPreviewsInDropzone={false}
-          showPreviews
+        <Upload 
+          handleFileUpload={files => {
+            handleFileUpload(
+              "proofOfLicense",
+              files.map(file => file.file)
+            );
+          }}
+          files={proofOfLicenseOriginalValue}
         />
       </FormControl>
     </React.Fragment>

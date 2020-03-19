@@ -4,3 +4,4 @@
  */
 export const HOMEPAGE = '/';
 export const CLIENTPAGE = '/client';
+export const VALIDATORPAGE = '/validator'

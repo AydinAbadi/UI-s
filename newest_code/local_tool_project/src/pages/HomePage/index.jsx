@@ -4,13 +4,21 @@
  */
 import React, { Component } from 'react';
 import { withTheme, withStyles } from '@material-ui/core/styles';
+import {Link} from 'react-router-dom';
 import CssBaseLine from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import HttpsIcon from '@material-ui/icons/Https';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 import OrbBackground from '../../components/OrbBackground';
 import Logo from '../../assets/logo_placeholder.png';
+import theme from '../../theme';
 
 const styles = {
     root: {
@@ -45,15 +53,27 @@ const styles = {
     buttonContainer: {
         width: "100%",
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'flex-end',
+        "& a": {
+            textDecoration: 'none'
+        }
     },
     logoContainer: {
         width: '100%',
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'flex-end',
     },
     logo: {
         height: '150px',
+    },
+    card: {
+        backgroundColor: '#fff',
+        color: theme.palette.primary.main,
+        width: '200px',
+        "&:nth-child(2)": {
+            marginLeft: theme.spacing(4),
+            color: theme.palette.secondary.main,
+        }
     }
 
 }
@@ -61,7 +81,7 @@ const styles = {
 
 class HomePage extends Component{
     componentDidMount() {
-        console.log(this.props)
+        // console.log(this.props)
     }
     render() {
         const { classes } = this.props;
@@ -74,17 +94,45 @@ class HomePage extends Component{
                             <img className={classes.logo} src={Logo} alt="Logo"/>
                         </div>
                         <div className={classes.buttonContainer}>
-                            <Button 
-                                className={classes.clientButton}
-                                color="primary"
-                                variant="contained"
-                                href="/client"
-                                >I AM CLIENT</Button>
-                            <Button 
-                                className={classes.validatorButton}
-                                color="secondary"
-                                variant="contained"
-                                >I AM VALIDATOR</Button>
+                        <Card className={classes.card} variant="outlined">
+      <CardContent>
+        <Typography className={classes.title} gutterBottom>
+          For Encryption:
+        </Typography>
+        <Typography variant="h5">
+          CALCULATOR
+        </Typography>
+      </CardContent>
+      <CardActions>
+      <Link to="/client">
+        <Button 
+        startIcon={<HttpsIcon/>}
+        size="medium" variant="contained" color="primary">GET START</Button>
+      </Link>
+
+      </CardActions>
+
+    </Card>
+
+    <Card className={classes.card} variant="outlined">
+      <CardContent>
+        <Typography className={classes.title} gutterBottom>
+          For Validation:
+        </Typography>
+        <Typography variant="h5">
+          VALIDATOR
+        </Typography>
+      </CardContent>
+      <CardActions>
+      <Link to="/validator">
+        <Button 
+        startIcon={<VerifiedUserIcon/>}
+        size="medium" variant="contained" color="secondary">GET START</Button>
+        </Link>
+      </CardActions>
+    </Card>
+                            
+
                         </div>
                     </Box>
                 </Container>

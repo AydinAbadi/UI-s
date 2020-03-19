@@ -10,8 +10,8 @@ import Box from "@material-ui/core/Box";
 
 import Stepper from "../../components/Stepper";
 import InsertSeed from "./InsertSeed";
-import EncryptAttribute from './EncryptAttribute';
-import ResultPage from './ResultPage';
+import EncryptAttribute from "./EncryptAttribute";
+import ResultPage from "./ResultPage";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,12 +25,10 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(2)
   },
   stepContent: {
-      marginTop: theme.spacing(4),
-      marginBottom: theme.spacing(4)
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4)
   }
 }));
-
-
 
 function ClientPageWrapper(props) {
   const classes = useStyles();
@@ -38,19 +36,19 @@ function ClientPageWrapper(props) {
 }
 
 function getSteps() {
-  return ["Insert Seed", "Select Type", "Finish"];
+  return ["Insert Encryption Key", "Select Encryption Attribute", "Finish"];
 }
 
 class ClientPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 2,
+      activeStep: 0,
       valueEntry: {}
     };
   }
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   handleNext = () => {
@@ -67,47 +65,17 @@ class ClientPage extends Component {
 
   updateValueEntry = (key, value) => {
     const { valueEntry } = this.state;
-    this.setState({
-      valueEntry: Object.assign(valueEntry, {[key]: value})
-    }, () => {
-      console.log(this.state.valueEntry)
-    });
-  }
-  
+    this.setState(
+      {
+        valueEntry: Object.assign(valueEntry, { [key]: value })
+      }
+    );
+  };
 
-  handleStepContentRender = () => {
-    const { activeStep, valueEntry } = this.state;
-    switch (activeStep) {
-      case 0:
-        return (
-          <InsertSeed 
-                handleNext={this.handleNext}
-                updateValueEntry={this.updateValueEntry}
-              />
-        )
-      case 1:
-        return (
-          <EncryptAttribute
-            handleNext={this.handleNext}
-            handleBack={this.handleBack}
-            valueEntry={valueEntry}
-          />
-        )
-      case 2:
-        return (
-          <ResultPage 
-            handleBack={this.handleBack}
-          />
-        )
-    
-      default:
-        return ""
-    }
-  }
 
   render() {
     const { classes } = this.props;
-    const { activeStep } = this.state;
+    const { activeStep, valueEntry } = this.state;
     const steps = getSteps();
     return (
       <React.Fragment>
@@ -115,19 +83,28 @@ class ClientPage extends Component {
         <Container fixed className={classes.root} maxWidth="md">
           <Box className={classes.container}>
             <div className={classes.stepper}>
-              <Stepper
-                activeStep={activeStep}
-                steps={steps}
-              />
+              <Stepper activeStep={activeStep} steps={steps} />
             </div>
-
 
             <div className={classes.stepContent}>
-              {
-                this.handleStepContentRender()
-              }
+              <div style={{ display: activeStep === 0 ? "block" : 'none' }}>
+                <InsertSeed
+                  handleNext={this.handleNext}
+                  updateValueEntry={this.updateValueEntry}
+                />
+              </div>
+              <div style={{ display: activeStep === 1 ? "block" : 'none' }}>
+                <EncryptAttribute
+                  handleNext={this.handleNext}
+                  handleBack={this.handleBack}
+                  valueEntry={valueEntry}
+                  updateValueEntry={this.updateValueEntry}
+                />
+              </div>
+              <div style={{ display: activeStep === 2 ? "block" : 'none' }}>
+                <ResultPage handleBack={this.handleBack} valueEntry={valueEntry} />
+              </div>
             </div>
-
           </Box>
         </Container>
       </React.Fragment>

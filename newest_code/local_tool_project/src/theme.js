@@ -23,7 +23,11 @@ const theme = createMuiTheme({
     },
   },
   overrides: {
-    
+    MuiExpansionPanel: {
+      root: {
+        border: '1px solid rgba(0, 0, 0, 0.12)',
+      }
+    }
   }
 });
 

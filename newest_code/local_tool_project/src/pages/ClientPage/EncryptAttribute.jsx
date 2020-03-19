@@ -11,14 +11,14 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
-import Snackbar from "@material-ui/core/Snackbar";
 import Divider from "@material-ui/core/Divider";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
 import { LooksOne, LooksTwo } from "@material-ui/icons";
 import * as Utilities from "../../utilities";
+import Notification from '../../components/Notification';
+import moment from 'moment';
+
 
 import AgeNode from "./EncryptAttributeAge";
 import DegreeNode from "./EncryptAttributeDegree";
@@ -105,29 +105,30 @@ class SelectTypePage extends Component {
       type: 0,
       age: "",
       proofOfAge: null,
+      proofOfAgeOriginalValue: [],
       ageDirty: false,
       notificationOpen: false,
       degree: "",
       degreeDescription: "",
       proofOfDegree: null,
+      proofOfDegreeOriginalValue: [],
       license: "",
       licenseDescription: "",
       licenseExpireDate: null,
-      proofOfLicense: null
+      proofOfLicense: null,
+      proofOfLicenseOriginalValue: [],
+      notificationMessage: "Please Fill the Information."
     };
   }
-  componentDidMount() {
-    console.log("props", this.props);
-  }
+  // componentDidMount() {
+  //   console.log("props", this.props);
+  // }
 
   handleChange = e => {
     this.setState(
       {
         [e.target.name]: e.target.value,
         [`${e.target.name}Dirty`]: true
-      },
-      () => {
-        console.log(this.state);
       }
     );
   };
@@ -152,15 +153,21 @@ class SelectTypePage extends Component {
     });
   };
 
-  handleFileUpload = async (key, files) => {
+  handleFileUpload = (key, files) => {
     let value = ""
     if(files.length > 0) {
       Utilities.hashFile(files[0], (result) => {
         value = result;
         this.setState({
-          [key]: value
+          [key]: value,
+          [key+'OriginalValue']:files
         });
       })
+    } else {
+      this.setState({
+        [key]: '',
+        [key+'OriginalValue']:[]
+      });
     }
   };
 
@@ -172,7 +179,7 @@ class SelectTypePage extends Component {
 
   handleDateChange = date => {
     this.setState({
-      licenseExpireDate: date
+      licenseExpireDate: moment(new Date(date).valueOf()).format("YYYY-MM-DD")
     });
   };
 
@@ -198,9 +205,9 @@ class SelectTypePage extends Component {
           if (isPassvalidation) {
             valueEntities = {
               age: this.state.age,
-              proofOfAge: this.state.proofOfAge.originalValue,
               ageResult: Utilities.hashWithKeccak(seed, this.state.age),
               proofOfAgeResult: Utilities.hashWithKeccak(seed, this.state.proofOfAge),
+              proofOfAgeOriginalValue: this.state.proofOfAgeOriginalValue
             }
           }
           break;
@@ -216,10 +223,10 @@ class SelectTypePage extends Component {
             valueEntities = {
               degree: this.state.degree,
               degreeDescription: this.state.degreeDescription,
-              proofOfDegree: this.state.proofOfDegree.originalValue,
               degreeResult: Utilities.hashWithKeccak(seed, this.state.degree),
               degreeDescriptionResult: Utilities.hashWithKeccak(seed, this.state.degreeDescription),
               proofOfDegreeResult: Utilities.hashWithKeccak(seed, this.state.proofOfDegree),
+              proofOfDegreeOriginalValue: this.state.proofOfDegreeOriginalValue
             }
           }
           break;
@@ -236,12 +243,12 @@ class SelectTypePage extends Component {
             valueEntities = {
               license: this.state.license,
               licenseDescription: this.state.licenseDescription,
-              proofOfLicense: this.state.proofOfLicense.originalValue,
               licenseExpireDate: this.state.licenseExpireDate,
               licenseResult: Utilities.hashWithKeccak(seed, this.state.license),
               licenseDescriptionResult: Utilities.hashWithKeccak(seed, this.state.licenseDescription),
-              licenseExpireDate: Utilities.hashWithKeccak(seed, this.state.licenseExpireDate),
+              licenseExpireDateResult: Utilities.hashWithKeccak(seed, this.state.licenseExpireDate),
               proofOfLicenseResult: Utilities.hashWithKeccak(seed, this.state.proofOfLicense),
+              proofOfLicenseOriginalValue: this.state.proofOfLicenseOriginalValue
             }
           }
           break;
@@ -255,7 +262,8 @@ class SelectTypePage extends Component {
         });
       } else {
         handleNext();
-        // updateValueEntry("age", "9");
+        updateValueEntry(valueKey, valueEntities);
+        updateValueEntry("key", valueKey);
       }
     }
   };
@@ -268,7 +276,10 @@ class SelectTypePage extends Component {
       degreeDescription,
       license,
       licenseDescription,
-      licenseExpireDate
+      licenseExpireDate,
+      proofOfAgeOriginalValue,
+      proofOfDegreeOriginalValue,
+      proofOfLicenseOriginalValue
     } = this.state;
     switch (type) {
       case 0:
@@ -277,6 +288,7 @@ class SelectTypePage extends Component {
             theme={theme}
             classes={classes}
             age={age}
+            proofOfAgeOriginalValue={proofOfAgeOriginalValue}
             handleChange={this.handleChange}
             handleFileUpload={this.handleFileUpload}
           />
@@ -290,6 +302,7 @@ class SelectTypePage extends Component {
             degree={degree}
             degreeDescription={degreeDescription}
             handleChange={this.handleChange}
+            proofOfDegreeOriginalValue={proofOfDegreeOriginalValue}
             handleFileUpload={this.handleFileUpload}
           />
         );
@@ -305,6 +318,7 @@ class SelectTypePage extends Component {
             handleChange={this.handleChange}
             handleFileUpload={this.handleFileUpload}
             handleDateChange={this.handleDateChange}
+            proofOfLicenseOriginalValue={proofOfLicenseOriginalValue}
           />
         );
 
@@ -314,8 +328,8 @@ class SelectTypePage extends Component {
   };
 
   render() {
-    const { classes, theme, handleBack } = this.props;
-    const { type, notificationOpen } = this.state;
+    const { classes, handleBack } = this.props;
+    const { type, notificationOpen, notificationMessage } = this.state;
     return (
       <React.Fragment>
         <CssBaseLine />
@@ -357,35 +371,12 @@ class SelectTypePage extends Component {
               {this.renderContent(type)}
             </form>
 
-            <Snackbar
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right"
-              }}
-              open={notificationOpen}
-              autoHideDuration={6000}
-              onClose={this.handleClose}
-              message="Please Fill the Information."
-              action={
-                <React.Fragment>
-                  <Button
-                    color="secondary"
-                    size="small"
-                    onClick={this.handleClose}
-                  >
-                    CLOSE
-                  </Button>
-                  <IconButton
-                    size="small"
-                    aria-label="close"
-                    color="inherit"
-                    onClick={this.handleClose}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </React.Fragment>
-              }
+            <Notification 
+            open={notificationOpen}
+            onClose={this.handleClose}
+            message={notificationMessage}
             />
+
 
             <Divider variant="middle" style={{ width: "100%" }} />
 

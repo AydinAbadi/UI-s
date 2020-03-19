@@ -39,6 +39,7 @@ export function removeStorage(key = TEMP_STATE_KEY) {
 export function hashWithKeccak(seedString, message) {
   const seed = seedString || fetchStorage("seed");
   const message16 = message.toString(16);
+
   const concatMessageSeed = seed.concat(message16);
   const randomValue = SHA3(concatMessageSeed, { outputLength: 256 }).toString();
   const concatMessageRandomValue = message16.concat(randomValue);
@@ -50,6 +51,7 @@ export function hashWithKeccak(seedString, message) {
     hashValue
   };
 }
+
 
 export async function hashFile(file, callback) {
   await fileHash(file, MD5, function(x) {
@@ -66,6 +68,10 @@ async function fileHash(file, hasher, callback) {
     var hash = hasher(e.target.result);
     callback(hash);
   };
-
   reader.readAsBinaryString(file);
+}
+
+export function isAddress(str){
+  var re = new RegExp('^0(x|X)[0-9a-fA-F]{40}$');
+  return re.test(str);
 }

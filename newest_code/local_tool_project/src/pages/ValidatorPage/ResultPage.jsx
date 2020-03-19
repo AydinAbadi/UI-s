@@ -13,21 +13,24 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Chip from "@material-ui/core/Chip";
+import { SHA3 } from "crypto-js";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import * as Utilities from "../../utilities";
 import Zip from "jszip";
-import MailService from "./MailingService";
+import Notification from "../../components/Notification";
 
 import {
   LooksOne,
   LooksTwo,
   Looks3,
-  Looks4,
   CloudDownloadOutlined
 } from "@material-ui/icons";
 import FileSaver from "file-saver";
+
+import Forge from "node-forge";
 
 import Descriptionitem from "../../components/DescriptionItem";
 
@@ -71,10 +74,6 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     display: "flex",
     marginTop: theme.spacing(2)
-  },
-  formControl: {
-    width: "60%",
-    marginBottom: theme.spacing(4)
   }
 }));
 
@@ -91,17 +90,17 @@ class ResultPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      senderEmail: "",
-      recieverEmail: ""
+      message: "Default",
+      open: false
     };
   }
   componentDidMount() {
     // console.log("result page props", this.props);
   }
 
-  handleChange = e => {
+  handleClose = () => {
     this.setState({
-      [e.target.name]: e.target.value
+      open: false
     });
   };
 
@@ -171,94 +170,126 @@ class ResultPage extends Component {
     switch (valueEntry.key) {
       case "age":
         const {
-          age: { ageResult, proofOfAgeResult }
+          age: { age, ageRandomValue, proofOfAgeRandomValue, proofOfAge }
         } = valueEntry;
         randomValueList.push({
           label: "Random Value Of Age",
-          value: ageResult.randomValue
+          value: ageRandomValue
         });
         randomValueList.push({
           label: "Random Value Of Proof Of Age",
-          value: proofOfAgeResult.randomValue
+          value: proofOfAgeRandomValue
         });
         hashValueList.push({
-          label: "Hashed Value Of Age",
-          value: ageResult.hashValue
+          label: "Hash Value Of Age",
+          value: SHA3(age.concat(ageRandomValue), {
+            outputLength: 256
+          }).toString()
         });
         hashValueList.push({
-          label: "Hashed Value Of Proof Of Age",
-          value: proofOfAgeResult.hashValue
+          label: "Hash Value Of Proof Of Age",
+          value: SHA3(proofOfAge.concat(proofOfAgeRandomValue), {
+            outputLength: 256
+          }).toString()
         });
         break;
       case "degree":
         const {
-          degree: { degreeResult, degreeDescriptionResult, proofOfDegreeResult }
+          degree: {
+            degree,
+            proofOfDegree,
+            degreeRandomValue,
+            degreeDescription,
+            degreeDescriptionRandomValue,
+            proofOfDegreeRandomValue
+          }
         } = valueEntry;
         randomValueList.push({
           label: "Random Value Of DEGREE",
-          value: degreeResult.randomValue
+          value: degreeRandomValue
         });
         randomValueList.push({
           label: "Random Value Of DEGREE DESCRIPTION",
-          value: degreeDescriptionResult.randomValue
+          value: degreeDescriptionRandomValue
         });
         randomValueList.push({
           label: "Random Value Of PROOF OF DEGREE",
-          value: proofOfDegreeResult.randomValue
+          value: proofOfDegreeRandomValue
         });
         hashValueList.push({
-          label: "Hashed Value Of DEGREE",
-          value: degreeResult.hashValue
+          label: "Hash Value Of DEGREE",
+          value: SHA3(degree.concat(degreeRandomValue), {
+            outputLength: 256
+          }).toString()
         });
         hashValueList.push({
-          label: "Hashed Value Of DEGREE DESCRIPTION",
-          value: degreeDescriptionResult.hashValue
+          label: "Hash Value Of DEGREE DESCRIPTION",
+          value: SHA3(degreeDescription.concat(degreeDescriptionRandomValue), {
+            outputLength: 256
+          }).toString()
         });
         hashValueList.push({
-          label: "Hashed Value Of PROOF OF DEGREE",
-          value: proofOfDegreeResult.hashValue
+          label: "Hash Value Of PROOF OF DEGREE",
+          value: SHA3(proofOfDegree.concat(proofOfDegreeRandomValue), {
+            outputLength: 256
+          }).toString()
         });
         break;
       case "license":
         const {
           license: {
-            licenseResult,
-            licenseDescriptionResult,
-            licenseExpireDateResult,
-            proofOfLicenseResult
+            license,
+            proofOfLicense,
+            licenseRandomValue,
+            licenseDescription,
+            licenseDescriptionRandomValue,
+            licenseExpireDate,
+            licenseExpireDateRandomValue,
+            proofOfLicenseRandomValue
           }
         } = valueEntry;
         randomValueList.push({
           label: "Random Value Of LICENSE",
-          value: licenseResult.randomValue
+          value: licenseRandomValue
         });
         randomValueList.push({
           label: "Random Value Of LICENSE DESCRIPTION",
-          value: licenseDescriptionResult.randomValue
+          value: licenseDescriptionRandomValue
         });
         randomValueList.push({
           label: "Random Value Of LICENSE EXPIREDATE",
-          value: licenseExpireDateResult.randomValue
+          value: licenseExpireDateRandomValue
         });
         randomValueList.push({
           label: "Random Value Of PROOF OF LICENSE",
-          value: proofOfLicenseResult.randomValue
+          value: proofOfLicenseRandomValue
         });
         hashValueList.push({
-          label: "Hashed Value Of LICENSE",
-          value: licenseResult.hashValue
+          label: "Hash Value Of LICENSE",
+          value: SHA3(license.concat(licenseRandomValue), {
+            outputLength: 256
+          }).toString()
         });
         hashValueList.push({
-          label: "Hashed Value Of LICENSE DESCRIPTION",
-          value: licenseDescriptionResult.hashValue
+          label: "Hash Value Of LICENSE DESCRIPTION",
+          value: SHA3(
+            licenseDescription.concat(licenseDescriptionRandomValue),
+            {
+              outputLength: 256
+            }
+          ).toString()
         });
         hashValueList.push({
-          label: "Hashed Value Of LICENSE EXPIREDATE",
-          value: licenseExpireDateResult.hashValue
+          label: "Hash Value Of LICENSE EXPIREDATE",
+          value: SHA3(licenseExpireDate.concat(licenseExpireDateRandomValue), {
+            outputLength: 256
+          }).toString()
         });
         hashValueList.push({
-          label: "Hashed Value Of PROOF OF LICENSE",
-          value: proofOfLicenseResult.hashValue
+          label: "Hash Value Of PROOF OF LICENSE",
+          value: SHA3(proofOfLicense.concat(proofOfLicenseRandomValue), {
+            outputLength: 256
+          }).toString()
         });
 
         break;
@@ -276,40 +307,96 @@ class ResultPage extends Component {
     FileSaver.saveAs(file);
   };
 
-  handleResultDownload = () => {
+  generateApproval = async () => {
+    this.handleApprove(approval => {
+      this.setState(
+        {
+          open: true,
+          message: "Success, Approval has copied to clipboard automatically."
+        },
+        () => {
+          Utilities.copyStringToClipboard(approval);
+        }
+      );
+    });
+  };
+
+  handleApprove = callback => {
+    const {
+      valueEntry: { seedAndSign }
+    } = this.props;
+    const originalMessage = seedAndSign.seed
+      .concat(seedAndSign.clientAddress)
+      .concat(this.props.valueEntry.key);
+    const encryptedMessage = SHA3(originalMessage, {
+      outputLength: 256
+    }).toString();
+    const encryptedMessageWithInfo = encryptedMessage
+      .concat(this.props.valueEntry)
+      .concat("approved");
+    const privateKey = seedAndSign.privateKey[0];
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const keyInfo = Forge.pki.privateKeyFromPem(e.target.result);
+      const md = Forge.md.sha256.create();
+      md.update(encryptedMessageWithInfo, "utf8");
+      const pss = Forge.pss.create({
+        md: Forge.md.sha1.create(),
+        mgf: Forge.mgf.mgf1.create(Forge.md.sha1.create()),
+        saltLength: 20
+      });
+      const signature = keyInfo.sign(md, pss);
+      const signatureHex = Forge.util.bytesToHex(signature);
+      callback(SHA3(signatureHex, { outputLength: 256 }).toString());
+    };
+    reader.readAsBinaryString(privateKey);
+  };
+
+  handleResultDownload = async () => {
     const {
       valueEntry: { key }
     } = this.props;
     const resultEntities = this.props.valueEntry;
-    delete resultEntities.seed;
-    const valueString = JSON.stringify(resultEntities);
-    let zip = new Zip();
-    const folder = zip.folder("result");
-    folder.file(`encryption_result.txt`, valueString);
-    let file = null;
-    switch (key) {
-      case "age":
-        file = this.props.valueEntry[key].proofOfAgeOriginalValue[0];
-        break;
-      case "degree":
-        file = this.props.valueEntry[key].proofOfDegreeOriginalValue[0];
-        break;
-      case "license":
-        file = this.props.valueEntry[key].proofOfLicenseOriginalValue[0];
-        break;
-      default:
-        break;
-    }
-    folder.file('Original_' + file.name, file);
-    folder.generateAsync({ type: "blob" }).then(function(content) {
-      FileSaver.saveAs(content, `${key}_encryption_result.zip`);
+    delete resultEntities.seedAndSign;
+    const that = this;
+    this.handleApprove(approve => {
+      resultEntities.approve = approve;
+      const valueString = JSON.stringify(resultEntities);
+      let zip = new Zip();
+      const folder = zip.folder("result");
+      folder.file("result.txt", valueString);
+      let file = null;
+      switch (key) {
+        case "age":
+          file = that.props.valueEntry[key].proofOfAgeOriginalValue[0];
+          break;
+        case "degree":
+          file = that.props.valueEntry[key].proofOfDegreeOriginalValue[0];
+          break;
+        case "license":
+          file = that.props.valueEntry[key].proofOfLicenseOriginalValue[0];
+          break;
+        default:
+          break;
+      }
+      folder.file(file.name, file);
+      folder.generateAsync({ type: "blob" }).then(function(content) {
+        FileSaver.saveAs(content, `${key}_validation_result.zip`);
+      });
     });
   };
 
   render() {
     const { classes, theme, valueEntry } = this.props;
-    const { seed } = valueEntry;
-    const { senderEmail, recieverEmail } = this.state;
+    const { message, open } = this.state;
+    const seed =
+      valueEntry && valueEntry.seedAndSign && valueEntry.seedAndSign.seed;
+    const clientAddress =
+      valueEntry &&
+      valueEntry.seedAndSign &&
+      valueEntry.seedAndSign.clientAddress;
+
     return (
       <React.Fragment>
         <CssBaseLine />
@@ -318,13 +405,20 @@ class ResultPage extends Component {
             <Typography variant="caption" className={classes.instruction}>
               <LooksOne color="primary" />
               <Typography variant="caption" style={{ marginLeft: "8px" }}>
-                VALUE OF ENCRYPTION KEY.
+                VALUE OF ENCRYPTION KEY AND CLIENT ADDRESS.
               </Typography>
             </Typography>
 
             <Container>
-              <Grid container>
+              <Grid container className={classes.row}>
                 <Descriptionitem label="ENCRYPTION KEY" content={seed} />
+              </Grid>
+
+              <Grid container className={classes.row}>
+                <Descriptionitem
+                  label="CLIENT ADDRESS"
+                  content={clientAddress}
+                />
               </Grid>
             </Container>
 
@@ -375,7 +469,7 @@ class ResultPage extends Component {
             <Typography variant="caption" className={classes.instruction}>
               <Looks3 color="primary" />
               <Typography variant="caption" style={{ marginLeft: "8px" }}>
-                RESULT OF ENCRYPTION ATTRIBUTE.
+                VALIDATION OF ENCRYPTION ATTRIBUTE.
               </Typography>
             </Typography>
 
@@ -448,33 +542,19 @@ class ResultPage extends Component {
               >
                 Download Result
               </StepButton>
-            </div>
 
-            <Divider variant="middle" className={classes.divider} />
-
-            <Typography variant="caption" className={classes.instruction}>
-              <Looks4 color="primary" />
-              <Typography variant="caption" style={{ marginLeft: "8px" }}>
-                SEND RESULT TO VALIDATOR BY EMAIL. (OPTIONAL)
-              </Typography>
-            </Typography>
-
-            <Container>
-              <MailService
-                classes={classes}
-                handleChange={this.handleChange}
-                recieverEmail={recieverEmail}
-                senderEmail={senderEmail}
-              />
               <StepButton
                 variant="contained"
                 color="primary"
-                style={{ marginBottom: theme.spacing(2) }}
-                // onClick={this.handleResultDownload}
+                style={{
+                  marginBottom: theme.spacing(2),
+                  marginLeft: theme.spacing(2)
+                }}
+                onClick={this.generateApproval}
               >
-                SEND
+                Generate Encrypted Approval
               </StepButton>
-            </Container>
+            </div>
 
             <Divider variant="middle" style={{ width: "100%" }} />
 
@@ -494,6 +574,13 @@ class ResultPage extends Component {
             </div>
           </Box>
         </Container>
+
+        <Notification
+          onClose={this.handleClose}
+          open={open}
+          message={message}
+          type="success"
+        />
       </React.Fragment>
     );
   }
