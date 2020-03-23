@@ -98,7 +98,7 @@ export default function DegreeNode(props) {
             marginBottom: theme.spacing(1)
           }}
         >
-          Proof of Degree:
+          Upload Proof of Degree:
         </Typography>
         {canEdit ? (
           <Chip

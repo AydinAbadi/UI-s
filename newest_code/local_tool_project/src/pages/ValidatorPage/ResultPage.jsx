@@ -358,7 +358,6 @@ class ResultPage extends Component {
       valueEntry: { key }
     } = this.props;
     const resultEntities = this.props.valueEntry;
-    delete resultEntities.seedAndSign;
     const that = this;
     this.handleApprove(approve => {
       resultEntities.approve = approve;
@@ -402,6 +401,39 @@ class ResultPage extends Component {
         <CssBaseLine />
         <Container fixed className={classes.root}>
           <Box className={classes.container}>
+          <div className={classes.actions}>
+              <StepButton
+                variant="contained"
+                color="primary"
+                style={{ marginBottom: theme.spacing(4) }}
+                onClick={this.handleResultDownload}
+              >
+                Download Result
+              </StepButton>
+
+              <StepButton
+                variant="contained"
+                color="primary"
+                style={{
+                  marginBottom: theme.spacing(4),
+                  marginLeft: theme.spacing(2)
+                }}
+                onClick={this.generateApproval}
+              >
+                Generate Encrypted Approval
+              </StepButton>
+            </div>
+
+            <ExpansionPanel elevation={0}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography variant="body2">VALIDATION DETAIL</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+
             <Typography variant="caption" className={classes.instruction}>
               <LooksOne color="primary" />
               <Typography variant="caption" style={{ marginLeft: "8px" }}>
@@ -510,7 +542,7 @@ class ResultPage extends Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography variant="body2">Hashed Value List</Typography>
+                <Typography variant="body2">Encrypted Value List</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Container>
@@ -532,31 +564,9 @@ class ResultPage extends Component {
                 </Container>
               </ExpansionPanelDetails>
             </ExpansionPanel>
+            </ExpansionPanelDetails>
+            </ExpansionPanel>
 
-            <div className={classes.actions}>
-              <StepButton
-                variant="contained"
-                color="primary"
-                style={{ marginBottom: theme.spacing(2) }}
-                onClick={this.handleResultDownload}
-              >
-                Download Result
-              </StepButton>
-
-              <StepButton
-                variant="contained"
-                color="primary"
-                style={{
-                  marginBottom: theme.spacing(2),
-                  marginLeft: theme.spacing(2)
-                }}
-                onClick={this.generateApproval}
-              >
-                Generate Encrypted Approval
-              </StepButton>
-            </div>
-
-            <Divider variant="middle" style={{ width: "100%" }} />
 
             <div className={classes.stepButtons}>
               <Link to="/">

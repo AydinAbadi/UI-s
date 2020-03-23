@@ -36,7 +36,7 @@ function ClientPageWrapper(props) {
 }
 
 function getSteps() {
-  return ["Insert Encryption Key", "Select Encryption Attribute", "Finish"];
+  return ["Insert Encryption Key", "Select Attribute", "Finish"];
 }
 
 class ClientPage extends Component {

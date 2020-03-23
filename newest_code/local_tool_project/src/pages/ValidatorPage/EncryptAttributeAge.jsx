@@ -61,7 +61,7 @@ export default function AgeNode(props) {
             marginTop: theme.spacing(2)
           }}
         >
-          Proof of Age:
+          Upload Proof of Age:
         </Typography>
 
         {canEdit ? (

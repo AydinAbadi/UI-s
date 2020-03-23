@@ -330,6 +330,7 @@ class SelectTypePage extends Component {
   render() {
     const { classes, handleBack } = this.props;
     const { type, notificationOpen, notificationMessage } = this.state;
+    const Attribute = ['AGE', 'DEGREE', 'LICENSE'];
     return (
       <React.Fragment>
         <CssBaseLine />
@@ -364,7 +365,9 @@ class SelectTypePage extends Component {
               <Typography variant="caption" className={classes.instruction}>
                 <LooksTwo color="primary" />
                 <Typography variant="caption" style={{ marginLeft: "8px" }}>
-                  UPLOAD THE ORIGINAL DATA.
+                  INSERT {
+                    Attribute[type]
+                  }.
                 </Typography>
               </Typography>
 

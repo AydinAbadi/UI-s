@@ -131,7 +131,7 @@ export default function LicenseNode(props) {
             marginBottom: theme.spacing(1)
           }}
         >
-          Proof of License:
+          Upload Proof of License:
         </Typography>
         {canEdit ? (
           <Chip

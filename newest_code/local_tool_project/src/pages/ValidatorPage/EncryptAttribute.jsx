@@ -489,6 +489,8 @@ class SelectTypePage extends Component {
       configurationFile,
       mode
     } = this.state;
+    const Attribute = ['AGE', 'DEGREE', 'LICENSE'];
+
     return (
       <React.Fragment>
         <CssBaseLine />
@@ -554,7 +556,9 @@ class SelectTypePage extends Component {
                 <Typography variant="caption" className={classes.instruction}>
                   <LooksTwo color="primary" />
                   <Typography variant="caption" style={{ marginLeft: "8px" }}>
-                    UPLOAD THE ORIGINAL DATA AND RANDOM VALUE.
+                  INSERT {
+                    Attribute[type]
+                  } AND RANDOM VALUE.
                   </Typography>
                 </Typography>
 

@@ -131,7 +131,7 @@ class InsertSeedPage extends Component {
         <Container fixed className={classes.root}>
           <Box className={classes.container}>
             <Typography variant="h5" className={classes.title}>
-              INSERT or GENERATE SEED FOR ENCRYPTION
+              INSERT or GENERATE ENCRYPTION KEY FOR ENCRYPTION
             </Typography>
             <form noValidate className={classes.form}>
               <Box className={classes.fieldRow}>

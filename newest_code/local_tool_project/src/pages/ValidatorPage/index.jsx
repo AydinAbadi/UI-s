@@ -36,7 +36,7 @@ function ValidatorPageWrapper(props) {
 }
 
 function getSteps() {
-  return ["Insert Encryption Key & Sign", "Select Validation Attribute", "Finish"];
+  return ["Insert Encryption Key & Sign", "Select Attribute", "Finish"];
 }
 
 class ValidatorPage extends Component {

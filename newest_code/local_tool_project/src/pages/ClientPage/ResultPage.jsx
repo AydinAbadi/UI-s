@@ -24,7 +24,7 @@ import {
   LooksOne,
   LooksTwo,
   Looks3,
-  Looks4,
+  Email,
   CloudDownloadOutlined
 } from "@material-ui/icons";
 import FileSaver from "file-saver";
@@ -315,6 +315,27 @@ class ResultPage extends Component {
         <CssBaseLine />
         <Container fixed className={classes.root}>
           <Box className={classes.container}>
+
+          <div className={classes.actions}>
+              <StepButton
+                variant="contained"
+                color="primary"
+                style={{ marginBottom: theme.spacing(4) }}
+                onClick={this.handleResultDownload}
+              >
+                Download Result
+              </StepButton>
+            </div>
+
+          <ExpansionPanel elevation={0} style={{width: "100%",}}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography variant="body2">ENCRYPTION DETAIL.</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
             <Typography variant="caption" className={classes.instruction}>
               <LooksOne color="primary" />
               <Typography variant="caption" style={{ marginLeft: "8px" }}>
@@ -416,7 +437,7 @@ class ResultPage extends Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography variant="body2">Hashed Value List</Typography>
+                <Typography variant="body2">Encrypted Value List</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Container>
@@ -439,21 +460,15 @@ class ResultPage extends Component {
               </ExpansionPanelDetails>
             </ExpansionPanel>
 
-            <div className={classes.actions}>
-              <StepButton
-                variant="contained"
-                color="primary"
-                style={{ marginBottom: theme.spacing(2) }}
-                onClick={this.handleResultDownload}
-              >
-                Download Result
-              </StepButton>
-            </div>
+            </ExpansionPanelDetails>
+            </ExpansionPanel>
+
+            
 
             <Divider variant="middle" className={classes.divider} />
 
             <Typography variant="caption" className={classes.instruction}>
-              <Looks4 color="primary" />
+              <Email color="primary" />
               <Typography variant="caption" style={{ marginLeft: "8px" }}>
                 SEND RESULT TO VALIDATOR BY EMAIL. (OPTIONAL)
               </Typography>

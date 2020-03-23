@@ -310,7 +310,7 @@ class InsertSeedPage extends Component {
                   </React.Fragment>
                 ) : (
                   <StepButton variant="contained" color="primary" onClick={this.generateKeypair}>
-                    Generate RAS Keypair
+                    Generate RAS Key pair
                   </StepButton>
                 )}
               </FormControl>
